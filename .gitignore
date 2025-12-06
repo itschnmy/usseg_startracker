@@ -39,3 +39,31 @@
 
 # debug information files
 *.dwo
+
+# Build directories and CMake generated files
+/build/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+Testing/
+
+# IDE/editor directories and project files
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.VC.db
+*.VC.opendb
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+*~
+
+# OS generated files
+Thumbs.db
+Desktop.ini
+.DS_Store
