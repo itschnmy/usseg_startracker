@@ -1,62 +1,65 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+from pathlib import Path
 
-path = r"C:\Users\pc\Downloads\dark-skies-peagus2-web.webp"
+# ================== PATH ==================
+image_dir = Path(r"C:\Users\pc\OneDrive\Desktop\Engineering English\star tracker\star_image")
 
-# Load image
-image = cv2.imread(path)
-image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+# Folder lưu ảnh đã xử lý
+adjust_root = image_dir / "adjust"
+adjust_root.mkdir(exist_ok=True)
 
-# Convert to grayscale 
-gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+# ================== LOOP THROUGH BMP FILES ==================
+bmp_files = list(image_dir.glob("*.bmp"))
 
-blur = cv2.GaussianBlur(gray, (5, 5), 0)
+if not bmp_files:
+    raise ValueError("❌ Không tìm thấy file .bmp nào trong folder!")
 
-# Estimate background bằng blur mạnh
-background = cv2.GaussianBlur(blur, (51, 51), 0)
+for bmp_path in bmp_files:
+    print(f"🔹 Processing: {bmp_path.name}")
 
-# Trừ nền
-clean = cv2.subtract(blur, background)
+    # Subfolder cho từng ảnh
+    img_adjust_dir = adjust_root / bmp_path.stem
+    img_adjust_dir.mkdir(exist_ok=True)
 
-mean = np.mean(clean)
-std = np.std(clean)
+    # ================== LOAD IMAGE ==================
+    image = cv2.imread(str(bmp_path))
+    if image is None:
+        print("⚠️ Không load được ảnh:", bmp_path.name)
+        continue
 
-k = 4  # có thể chỉnh 3–5
-_, binary = cv2.threshold(
-    clean,
-    mean + k * std,
-    255,
-    cv2.THRESH_BINARY
-)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-plt.figure(figsize=(12, 8))
+    # ================== PREPROCESS ==================
+    gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+    blur = cv2.GaussianBlur(gray, (5, 5), 0)
+    background = cv2.GaussianBlur(blur, (51, 51), 0)
+    clean = cv2.subtract(blur, background)
 
-plt.subplot(231)
-plt.imshow(gray, cmap='gray')
-plt.title("Grayscale")
+    # ================== THRESHOLD ==================
+    mean = np.mean(clean)
+    std = np.std(clean)
+    k = 4
 
-plt.subplot(232)
-plt.imshow(blur, cmap='gray')
-plt.title("Gaussian Blur")
+    _, binary = cv2.threshold(
+        clean,
+        mean + k * std,
+        255,
+        cv2.THRESH_BINARY
+    )
 
-plt.subplot(233)
-plt.imshow(background, cmap='gray')
-plt.title("Background")
+    # ================== SAVE IMAGES ==================
+    cv2.imwrite(str(img_adjust_dir / "1_blur.png"), blur)
+    cv2.imwrite(str(img_adjust_dir / "2_clean.png"), clean)
+    cv2.imwrite(str(img_adjust_dir / "3_binary.png"), binary)
 
-plt.subplot(234)
-plt.imshow(clean, cmap='gray')
-plt.title("Background Subtracted")
+    # ================== OPTIONAL DISPLAY ==================
+    #plt.figure(figsize=(10, 6))
+    #plt.imshow(binary, cmap='gray')
+    # plt.title(f"Threshold – {bmp_path.name}")
+    # plt.axis("off")
+    # plt.show()
 
-plt.subplot(235)
-plt.imshow(binary, cmap='gray')
-plt.title("Threshold")
-
-
-for ax in plt.gcf().axes:
-    ax.set_xticks([])
-    ax.set_yticks([])
-
-plt.tight_layout()
-plt.show()
-
+print("✅ Xử lý xong tất cả ảnh .bmp")
