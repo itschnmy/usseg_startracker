@@ -20,7 +20,7 @@ from scipy.spatial import KDTree
 # -----------------------------------------------------------------------------
 # INPUT / OUTPUT PATHS
 # -----------------------------------------------------------------------------
-image_dir = Path(r"C:\Users\VINH\OneDrive - VNU-HCMUS\Attachments\Desktop\USSEG\usseg_startracker\star_img")
+image_dir = Path(r"your/absolute/path/to/image/folder")
 
 # Output root directory for all processed results
 adjust_root = image_dir / "adjust"
