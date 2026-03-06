@@ -311,7 +311,7 @@ class Tetra3():
             logger before creating the insance.
 
     """
-    def __init__(self, load_database='default_database', debug_folder=None):
+    def __init__(self, load_database='db_70deg', debug_folder=None):
         # Logger setup
         self._debug_folder = None
         self._logger = logging.getLogger('tetra3.Tetra3')
@@ -442,7 +442,7 @@ class Tetra3():
         """
         return self._db_props
 
-    def load_database(self, path='default_database'):
+    def load_database(self, path='db_70deg'):
         """Load database from file.
 
         Args:
