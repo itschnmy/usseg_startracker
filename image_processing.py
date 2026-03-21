@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import time
+import json
 from pathlib import Path
 from scipy.spatial import KDTree
 
@@ -20,9 +21,8 @@ from scipy.spatial import KDTree
 # -----------------------------------------------------------------------------
 # INPUT / OUTPUT PATHS
 # -----------------------------------------------------------------------------
-image_dir = Path(r"your/absolute/path/to/image/folder")
+image_dir = Path(r"C:\Users\VINH\OneDrive - VNU-HCMUS\Attachments\Desktop\USSEG\usseg_startracker\star_img")
 
-# Output root directory for all processed results
 adjust_root = image_dir / "adjust"
 adjust_root.mkdir(exist_ok=True)
 
@@ -204,7 +204,7 @@ for img_path in image_files:
                 break
 
         x_cog, y_cog = cx, cy
-        centroids.append((x_cog, y_cog))
+        centroids.append((x_cog, y_cog, float(sum_tcg)))
 
         # Draw detection bounding box and centroid marker
         cx_i, cy_i = int(round(x_cog)), int(round(y_cog))
@@ -253,7 +253,7 @@ for img_path in image_files:
 
     # Build KDTree from grayscale centroids for fast duplicate rejection
     if len(centroids) > 0:
-        gray_pts  = np.array([(cx, cy) for cx, cy in centroids], dtype=np.float32)
+        gray_pts  = np.array([(cx, cy) for cx, cy, _ in centroids], dtype=np.float32)
         gray_tree = KDTree(gray_pts)
     else:
         gray_tree = None
@@ -334,7 +334,7 @@ for img_path in image_files:
             if not is_new:
                 continue
 
-            new_color_centroids.append((ncx, ncy, ch_idx, max(4, int(max(w2, h2) * 0.5 + pad2))))
+            new_color_centroids.append((ncx, ncy, ch_idx, max(4, int(max(w2, h2) * 0.5 + pad2)), float(s2)))
             color_pts_for_tree.append([ncx, ncy])
 
             # Draw per-channel colored marker
@@ -352,7 +352,24 @@ for img_path in image_files:
 
     # Merge all detected centroids
     total_color  = len(new_color_centroids)
-    all_centroids = centroids + [(x, y) for x, y, _, _ in new_color_centroids]
+    
+    # Sort all centroids by brightness descending
+    all_centroids_with_brightness = centroids + [(x, y, s) for x, y, _, _, s in new_color_centroids]
+    all_centroids_with_brightness.sort(key=lambda item: item[2], reverse=True)
+    all_centroids = [(x, y) for x, y, _ in all_centroids_with_brightness]
+
+    # Export centroid data as JSON for tetra3 plate solver
+    export_data = {
+        "image_name": img_path.name,
+        "image_size_hw": [image.shape[0], image.shape[1]],
+        "centroids_xy": [[float(x), float(y)] for x, y in all_centroids],
+        "num_gray": len(centroids),
+        "num_color": total_color,
+        "num_total": len(all_centroids),
+    }
+    json_path = img_adjust_dir / "centroids.json"
+    with open(json_path, "w") as jf:
+        json.dump(export_data, jf, indent=2)
 
     # =========================================================================
     # UNIFIED VISUALIZATION (all detections on clean original image)
@@ -384,9 +401,9 @@ for img_path in image_files:
     end_time       = time.time()
     inference_time = (end_time - start_time) * 1000  # Convert to milliseconds
 
-    n_red   = sum(1 for _, _, c, _ in new_color_centroids if c == 2)
-    n_green = sum(1 for _, _, c, _ in new_color_centroids if c == 1)
-    n_blue  = sum(1 for _, _, c, _ in new_color_centroids if c == 0)
+    n_red   = sum(1 for _, _, c, _, _ in new_color_centroids if c == 2)
+    n_green = sum(1 for _, _, c, _, _ in new_color_centroids if c == 1)
+    n_blue  = sum(1 for _, _, c, _, _ in new_color_centroids if c == 0)
 
     print(f"  [Stage 1] Isolated stars (grayscale)  : {len(centroids)}")
     print(f"  [Stage 2] Color-shifted objects        : +{total_color}  "
@@ -397,7 +414,7 @@ for img_path in image_files:
     # =========================================================================
     # SAVE OUTPUT IMAGES
     # =========================================================================
-    cv2.imwrite(str(img_adjust_dir / "1_clean.png"),            clean)
+    cv2.imwrite(str(img_adjust_dir / "1_clean.png"),             clean)
     cv2.imwrite(str(img_adjust_dir / "2_binary.png"),           binary)
     cv2.imwrite(str(img_adjust_dir / "3_debug_centroids.png"),  debug_vis)
     cv2.imwrite(str(img_adjust_dir / "4_human_verify.png"),     raw_image_color)
@@ -408,11 +425,11 @@ for img_path in image_files:
     print(f"             4_human_verify.png  |  5_visualization.png")
 
     # Visualization on screen
-    plt.figure(figsize=(10, 6))
-    plt.imshow(debug_vis)
-    plt.title(f"Star Centroids — {img_path.name}")
-    plt.axis("off")
-    plt.show()
+    # plt.figure(figsize=(10, 6))
+    # plt.imshow(debug_vis)
+    # plt.title(f"Star Centroids — {img_path.name}")
+    # plt.axis("off")
+    # plt.show()
 
 print(f"\n{'='*60}")
 print(f"  All images processed successfully.")
