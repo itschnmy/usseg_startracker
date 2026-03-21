@@ -1,6 +1,6 @@
 import cv2
 
-image = cv2.imread("23.bmp", cv2.IMREAD_UNCHANGED)
+image = cv2.imread("1_clean_gemini.png", cv2.IMREAD_UNCHANGED)
 
 centroids = []
 with open("centroids.txt", "r") as f:
