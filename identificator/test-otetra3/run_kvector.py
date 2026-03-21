@@ -1,7 +1,13 @@
 import math
+from det_run import detector
+from det_visualize import visualizer
 from kvector import load_tetra_catalog, build_kvector_database, filter_catalog_by_magnitude
 from geometric_voting import Star, Camera, geometric_voting_star_id, load_stars_from_txt
 
+pic_name = "1_clean_gemini.png"
+
+detector(pic_name, 3, 5)
+visualizer(pic_name)
 
 # ---------------------------------
 # STEP 1: Load Tetra star catalog

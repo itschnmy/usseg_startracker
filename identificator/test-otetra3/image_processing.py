@@ -20,6 +20,7 @@ from scipy.spatial import KDTree
 # -----------------------------------------------------------------------------
 # INPUT / OUTPUT PATHS
 # -----------------------------------------------------------------------------
+
 image_dir = Path(r"/mnt/c/Users/TD/Dropbox/My PC (DESKTOP-V5HSTKP)/Desktop/usseg_startracker/identificator/test-otetra3/pic")
 
 # Output root directory for all processed results
