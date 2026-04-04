@@ -12,14 +12,14 @@ def load_centroids(txt_file):
     return np.array(rows, dtype=np.float32)
 
 centroids = load_centroids("centroids.txt")
-size = (320,240) # *** ADJUST HERE ***
+size = (2048, 1536) # *** ADJUST HERE ***
 
 t3 = Tetra3(load_database="default_database")
 
 result = t3.solve_from_centroids(
     star_centroids=centroids,
     size=size,
-    fov_estimate=65
+    fov_estimate=75
 )
 
 for key, value in result.items():
