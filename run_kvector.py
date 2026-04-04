@@ -6,12 +6,12 @@ from geometric_voting import Star, Camera, geometric_voting_star_id, load_stars_
 
 
 # parameters
-fov = 58.5 # horizontal, unit: degree
-resolution = (320, 240) # pixel
-pic_name = "1_clean_gemini.png" # need loop for automation when onboard
+fov = 50 # horizontal, unit: degree
+resolution = (2048, 1536) # pixel
+pic_name = "2b670e06-6068-480e-8e30-ad5a10f0e4e5.png" # need loop for automation when onboard
 sigma_threshold = 3 # detector's magnitude threshold
-min_area = 5 # detector's threshold on min area of star dots
-catalog_max_mag = 4.0 # magnitude threshold to filter the catalog
+min_area = 3 # detector's threshold on min area of star dots
+catalog_max_mag = .0 # magnitude threshold to filter the catalog, regenerate a filtered catalog before onboard
 
 
 # catalog
@@ -42,10 +42,7 @@ detector(pic_name, sigma_threshold, min_area)
 visualizer(pic_name)
 stars = load_stars_from_txt("centroids.txt")
 
-
-# ---------------------------------
-# STEP 5: Run identification
-# ---------------------------------
+# kvector
 results = geometric_voting_star_id(
     database_bytes=db_bytes,
     stars=stars,
