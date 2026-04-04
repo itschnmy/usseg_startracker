@@ -28,11 +28,11 @@ def load_processed_image(img_path: str):
 
 
 def main():
-    image_path = r"/mnt/c/Users/TD/Dropbox/My PC (DESKTOP-V5HSTKP)/Desktop/usseg_startracker/identificator/pic/adjust/ea5e33a7-93ae-4caa-986e-395ae7d625f1/2_clean.png"
+    image_path = r"/mnt/c/Users/TD/Dropbox/My PC (DESKTOP-V5HSTKP)/Desktop/usseg_startracker/identificator/pic/2_clean (3).png"
 
-    database = r"/mnt/c/Users/TD/Dropbox/My PC (DESKTOP-V5HSTKP)/Desktop/usseg_startracker/identificator/default_database"
+    database = r"/mnt/c/Users/TD/Dropbox/My PC (DESKTOP-V5HSTKP)/Desktop/usseg_startracker/identificator/db_70deg"
 
-    fov_estimate_deg = 80.0
+    fov_estimate_deg = 70.0
     fov_max_error_deg = 5.0
 
     img = load_processed_image(image_path)
@@ -50,9 +50,9 @@ def main():
     # sort brightest first
     detected_stars.sort(key=lambda s: s.intensity, reverse=True)
 
-    # keep only top K (helps a lot)
-    K = 50
-    detected_stars = detected_stars[:50]
+    # keep only top K 
+    K = 100
+    detected_stars = detected_stars[:K]
 
     centroids_xy = [(float(s.position[0]), float(s.position[1])) for s in detected_stars]
     print(f"[DETECT] Stars detected: {len(detected_stars)}")
