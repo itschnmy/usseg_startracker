@@ -26,21 +26,21 @@ Eigen::Quaterniond rot2q(const Eigen::Matrix3d& Q);
 class AttitudeEstimator {
 public:
     virtual Eigen::Quaterniond estimate(
-        const std::vector<Eigen::Vector3d>& bodyFrame,
-        const std::vector<Eigen::Vector3d>& inertialFrame) = 0; // pure virtual
+        const Eigen::Matrix3Xd& bodyFrame,
+        const Eigen::Matrix3Xd& inertialFrame) = 0;
     virtual ~AttitudeEstimator() = default;
 };
 
 class QUESTEstimator : public AttitudeEstimator {
 public:
     Eigen::Quaterniond estimate(
-        const std::vector<Eigen::Vector3d>& bodyFrame,
-        const std::vector<Eigen::Vector3d>& inertialFrame) override;
+        const Eigen::Matrix3Xd& bodyFrame,
+        const Eigen::Matrix3Xd& inertialFrame) override;
 };
 
 class TRIADEstimator : public AttitudeEstimator {
 public:
     Eigen::Quaterniond estimate(
-        const std::vector<Eigen::Vector3d>& bodyFrame,
-        const std::vector<Eigen::Vector3d>& inertialFrame) override;
+        const Eigen::Matrix3Xd& bodyFrame,
+        const Eigen::Matrix3Xd& inertialFrame) override;
 };
