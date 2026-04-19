@@ -1,8 +1,8 @@
 #include "header.h"
 
 Eigen::Quaterniond TRIADEstimator::estimate(
-    const std::vector<Eigen::Vector3d>& bodyFrame,
-    const std::vector<Eigen::Vector3d>& inertialFrame)
+    const Eigen::Matrix3Xd& bodyFrame,
+    const Eigen::Matrix3Xd& inertialFrame)
 {
     if (bodyFrame.size() < 2 || inertialFrame.size() < 2) {
         throw std::runtime_error("TRIAD estimate requires at least 2 vector pairs.");
@@ -22,45 +22,26 @@ Eigen::Quaterniond TRIADEstimator::estimate(
     // Q = Tn*Tb';
     Eigen::Matrix3d Q = Tn * Tb.transpose();
 
-    // Matrix -> Quaterniond
-    Eigen::Quaterniond q = rot2q(Q);
-    q.normalize();
-
-    return q;
+    return rot2q(Q);
 }
 
 Eigen::Quaterniond QUESTEstimator::estimate(
-    const std::vector<Eigen::Vector3d>& bodyFrame,
-    const std::vector<Eigen::Vector3d>& inertialFrame)
+    const Eigen::Matrix3Xd& bodyFrame,
+    const Eigen::Matrix3Xd& inertialFrame)
 {
-    const size_t N = bodyFrame.size();
-    if (N < 2 || inertialFrame.size() != N) {
+    const size_t N = bodyFrame.cols();
+    if (N < 2 || inertialFrame.cols() != N) {
         throw std::runtime_error("QUEST estimate requires N >= 2 matching vector pairs.");
     }
 
-    // TRIAD Fallback if N == 2
     if (N == 2) {
-        const Eigen::Vector3d& rN1 = inertialFrame[0];
-        const Eigen::Vector3d& rN2 = inertialFrame[1];
-        const Eigen::Vector3d& rB1 = bodyFrame[0];
-        const Eigen::Vector3d& rB2 = bodyFrame[1];
-
-        Eigen::Matrix3d Tn = buildTriadBasis(rN1, rN2);
-        Eigen::Matrix3d Tb = buildTriadBasis(rB1, rB2);
-        Eigen::Matrix3d Q  = Tn * Tb.transpose();
-
-        Eigen::Quaterniond q = rot2q(Q);
-        q.normalize();
-        return q;
+        TRIADEstimator triad;
+        return triad.estimate(bodyFrame, inertialFrame);
     }
-    // Use B = Σ ( rN_i * rB_i^T ) to match with TRIAD 
-    Eigen::Matrix3d B = Eigen::Matrix3d::Zero();
 
-    for (size_t i = 0; i < N; ++i) {
-        Eigen::Vector3d rB = bodyFrame[i].normalized();
-        Eigen::Vector3d rN = inertialFrame[i].normalized();
-        B += rN * rB.transpose();
-    }
+    // .noalias() prevents Eigen from creating a temporary hidden matrix.
+    Eigen::Matrix3d B;
+    B.noalias() = inertialFrame * bodyFrame.transpose();
 
     const double sigma = B.trace();
     const Eigen::Matrix3d S = B + B.transpose();
@@ -70,26 +51,44 @@ Eigen::Quaterniond QUESTEstimator::estimate(
          (B(2,0) - B(0,2)),
          (B(0,1) - B(1,0));
 
-    // Davenport K matrix
-    Eigen::Matrix4d K = Eigen::Matrix4d::Zero();
-    K.block<3,3>(0,0) = S - sigma * Eigen::Matrix3d::Identity();
-    K.block<3,1>(0,3) = z;
-    K.block<1,3>(3,0) = z.transpose();
-    K(3,3) = sigma;
+    // QUEST ALGORITHM
+    
+    // 1. Calculate coefficients for the characteristic polynomial
+    const double kappa = 0.5 * (S.trace() * S.trace() - (S * S).trace());
+    const double delta = S.determinant();
+    const double a = sigma * sigma - kappa;
+    const double b = sigma * sigma + z.squaredNorm();
+    const double c = delta + z.dot(S * z);
+    const double d = z.dot(S * S * z);
 
-    // Solve for max eigenvector
-    Eigen::SelfAdjointEigenSolver<Eigen::Matrix4d> eig(K);
-    if (eig.info() != Eigen::Success) {
-        throw std::runtime_error("QUEST: eigen decomposition failed.");
+    // 2. Newton-Raphson iteration for the maximum eigenvalue (lambda_max)
+    // Initial guess is the sum of the weights (which is N for unweighted vectors)
+    double lambda = static_cast<double>(N); 
+
+    for (int i = 0; i < 4; ++i) { // Usually converges in 1-2 iterations
+        double lambda2 = lambda * lambda;
+        
+        // f(lambda) and f'(lambda)
+        double f = lambda2 * lambda2 - (a + b) * lambda2 - c * lambda + (a * b + c * sigma - d);
+        double f_prime = 4.0 * lambda * lambda2 - 2.0 * (a + b) * lambda - c;
+        
+        if (std::abs(f_prime) < ERROR) break;
+        
+        double step = f / f_prime;
+        lambda -= step;
+        
+        if (std::abs(step) < ERROR) break;
     }
 
-    int idx = 0;
-    eig.eigenvalues().maxCoeff(&idx);
-    Eigen::Vector4d qv = eig.eigenvectors().col(idx);
+    // 3. Calculate Rodrigues parameters (Gibbs vector)
+    Eigen::Matrix3d denom = (lambda + sigma) * Eigen::Matrix3d::Identity() - S;
+    
+    // Note: If facing a near 180-degree rotation, denom.determinant() approaches 0.
+    Eigen::Vector3d p = denom.inverse() * z;
 
-    // Convert to Eigen::Quaterniond(w, x, y, z).
-    Eigen::Quaterniond q(qv(3), qv(0), qv(1), qv(2));
-    q.normalize();
-
-    return q;
+    // 4. Convert Gibbs vector directly to Quaternion
+    double factor = 1.0 / std::sqrt(1.0 + p.squaredNorm());
+    
+    // Eigen::Quaterniond constructor is (w, x, y, z)
+    return Eigen::Quaterniond(factor, p.x() * factor, p.y() * factor, p.z() * factor);
 }
