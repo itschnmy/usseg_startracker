@@ -92,3 +92,40 @@ Eigen::Quaterniond QUESTEstimator::estimate(
     // Eigen::Quaterniond constructor is (w, x, y, z)
     return Eigen::Quaterniond(factor, p.x() * factor, p.y() * factor, p.z() * factor);
 }
+// Enum defining the current ADCS Mode
+enum class ADCSMode {
+    DEGRADED_OR_COARSE, // Only 2 vectors available (TRIAD)
+    FINE_POINTING       // 3 or more vectors available (QUEST)
+};
+class AttitudeControlSystem {
+private:
+    TRIADEstimator triad;
+    QUESTEstimator quest;
+public:
+    Eigen::Quaterniond processSensorData(
+        const Eigen::Matrix3Xd& bodyFrame, 
+        const Eigen::Matrix3Xd& inertialFrame) 
+    {
+        size_t N = bodyFrame.cols();
+        
+        if (N < 2 || inertialFrame.cols() != N) {
+            // SAFE MODE: Not enough data to know where we are.
+            // Fire thrusters to stop spinning, wait for data.
+            throw std::runtime_error("ADCS Error: Less than 2 vectors provided.");
+        }
+        // Determine Mode based on available data
+        ADCSMode currentMode = (N == 2) ? ADCSMode::DEGRADED_OR_COARSE : ADCSMode::FINE_POINTING;
+        Eigen::Quaterniond q_estimated;
+        switch (currentMode) {
+            case ADCSMode::DEGRADED_OR_COARSE:
+                std::cout << "[ADCS] Operating in Coarse/Degraded Mode (TRIAD)...\n";
+                q_estimated = triad.estimate(bodyFrame, inertialFrame);
+                break;
+            case ADCSMode::FINE_POINTING:
+                std::cout << "[ADCS] Operating in Fine Pointing Mode (QUEST)...\n";
+                q_estimated = quest.estimate(bodyFrame, inertialFrame);
+                break;
+        }
+        return q_estimated;
+    }
+};
