@@ -1,25 +1,22 @@
 import cv2
 from detector import StarDetector
 
-def detector(image_name, sigma_threshold, min_area): #eg: "image.png"
-    # load image
+def detector(image_name, sigma_threshold, min_area):
     image = cv2.imread(image_name, cv2.IMREAD_GRAYSCALE)
 
-    # create detector
-    detector = StarDetector(sigma_threshold, min_area)
+    if image is None:
+        raise FileNotFoundError(f"Could not read image: {image_name}")
 
-    # detect stars
-    stars = detector.process(image)
+    star_detector = StarDetector(sigma_threshold, min_area)
+    stars = star_detector.process(image)
 
-    # extract centroid list
-    centroids = [star.position for star in stars]
+    # Sort brightest stars first
+    stars = sorted(stars, key=lambda s: s.intensity, reverse=True)
 
-    print("Number of stars:", len(centroids))
+    # Optional: keep only top N stars to reduce false detections
+    max_stars = 6
+    stars = stars[:max_stars]
 
-    for c in centroids:
-        print(c)
+    print("Number of stars:", len(stars))
 
-    with open("centroids.txt", "w") as f:
-        for star in stars:
-            x, y = star.position
-            f.write(f"{x} {y}\n")
+    return stars

@@ -1,14 +1,13 @@
 from dataclasses import dataclass
-from math import asin, sqrt, sin, cos, floor, pi
+from math import asin, sqrt, sin, cos, floor, pi, acos
 import struct
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 import numpy as np
 
-"""Acknowledgement: Utilized and edited from the LOST open source by University of Washington Husky Satallite Lab"""
 
 K_VECTOR_MAGIC_NUMBER = 0x4253F009
 
-# define stars in the catalog and pairs of stars used in kvector alg
+
 @dataclass
 class CatalogStar:
     raj2000: float
@@ -17,6 +16,7 @@ class CatalogStar:
     weird: bool = False
     name: int = -1
 
+
 @dataclass
 class KVectorPair:
     index1: int
@@ -24,12 +24,15 @@ class KVectorPair:
     distance: float
 
 
-# filter the default catalog with suitable magnitude -> effiencient running time & only visible stars in the given environment
-def filter_catalog_by_magnitude(catalog, max_mag):
+def filter_catalog_by_magnitude(catalog: List[CatalogStar], max_mag: float = 4.0) -> List[CatalogStar]:
     return [star for star in catalog if star.magnitude <= max_mag]
 
 
-# load npz default catalog (same folder) and define the in-use catalog with its parameters (ra, dec, mag, id)
+def filter_catalog_by_ids(catalog: List[CatalogStar], allowed_ids: List[int]) -> List[CatalogStar]:
+    allowed = set(allowed_ids)
+    return [star for star in catalog if star.name in allowed]
+
+
 def load_tetra_catalog(npz_path: str) -> List[CatalogStar]:
     data = np.load(npz_path)
 
@@ -55,12 +58,7 @@ def load_tetra_catalog(npz_path: str) -> List[CatalogStar]:
     return catalog
 
 
-# calc the angular distance between 2 stars on the celestial sphere
 def great_circle_distance(ra1: float, de1: float, ra2: float, de2: float) -> float:
-    """
-    Python version of GreatCircleDistance() from attitude-utils.cpp
-    Input/output units: radians
-    """
     return 2.0 * asin(
         sqrt(
             sin(abs(de1 - de2) / 2.0) ** 2
@@ -69,6 +67,18 @@ def great_circle_distance(ra1: float, de1: float, ra2: float, de2: float) -> flo
     )
 
 
+def vector_angle(u: Tuple[float, float, float], v: Tuple[float, float, float]) -> float:
+    dot = u[0] * v[0] + u[1] * v[1] + u[2] * v[2]
+    dot = max(-1.0, min(1.0, dot))
+    return acos(dot)
+
+
+def radec_to_unit_vector(ra: float, dec: float) -> Tuple[float, float, float]:
+    x = cos(dec) * cos(ra)
+    y = cos(dec) * sin(ra)
+    z = sin(dec)
+    return (x, y, z)
+
 
 def build_kvector_database(
     catalog: List[CatalogStar],
@@ -76,13 +86,6 @@ def build_kvector_database(
     max_distance: float,
     num_bins: int
 ) -> bytes:
-    """
-    Python version of BuildKVectorDatabase(...)
-
-    Returns:
-        bytes object containing the packed k-vector database.
-    """
-
     if num_bins <= 0:
         raise ValueError("num_bins must be > 0")
     if not (0.0 <= min_distance < max_distance <= pi):
@@ -91,23 +94,18 @@ def build_kvector_database(
     k_vector = [0] * (num_bins + 1)
     pairs: List[KVectorPair] = []
 
+    catalog_vectors = [radec_to_unit_vector(st.raj2000, st.dej2000) for st in catalog]
     bin_width = (max_distance - min_distance) / num_bins
 
-    # Generate all valid star pairs
     for i in range(len(catalog)):
         for k in range(i + 1, len(catalog)):
-            dist = great_circle_distance(
-                catalog[i].raj2000, catalog[i].dej2000,
-                catalog[k].raj2000, catalog[k].dej2000
-            )
+            dist = vector_angle(catalog_vectors[i], catalog_vectors[k])
 
             if min_distance <= dist <= max_distance:
                 pairs.append(KVectorPair(i, k, dist))
 
-    # Sort by distance
     pairs.sort(key=lambda p: p.distance)
 
-    # Build k-vector bins
     last_bin = 0
     for i, pair in enumerate(pairs):
         this_bin = int(floor((pair.distance - min_distance) / bin_width))
@@ -124,12 +122,7 @@ def build_kvector_database(
     for b in range(last_bin + 1, num_bins):
         k_vector[b + 1] = k_vector[last_bin + 1]
 
-    # Pack database as bytes
-    # Layout matches the C++ comment:
-    # magic(int32), numPairs(int32), minDistance(float), maxDistance(float), numBins(int32),
-    # pairs as int16,int16,... then bins as int32...
     output = bytearray()
-
     output += struct.pack("<i", K_VECTOR_MAGIC_NUMBER)
     output += struct.pack("<i", len(pairs))
     output += struct.pack("<f", min_distance)
@@ -146,10 +139,6 @@ def build_kvector_database(
 
 
 class KVectorDatabase:
-    """
-    Python version of the C++ KVectorDatabase parser.
-    """
-
     def __init__(self, database_bytes: bytes):
         offset = 0
 
@@ -170,19 +159,17 @@ class KVectorDatabase:
         self.num_bins, = struct.unpack_from("<i", database_bytes, offset)
         offset += 4
 
-        if self.min_distance <= 0.0:
-            raise ValueError("min_distance must be > 0")
+        if self.min_distance < 0.0:
+            raise ValueError("min_distance must be >= 0")
         if self.max_distance <= self.min_distance:
             raise ValueError("max_distance must be > min_distance")
 
-        # Read pairs
         self.pairs: List[Tuple[int, int]] = []
         for _ in range(self.num_pairs):
             i1, i2 = struct.unpack_from("<hh", database_bytes, offset)
             offset += 4
             self.pairs.append((i1, i2))
 
-        # Read bins
         self.bins: List[int] = []
         for _ in range(self.num_bins + 1):
             val, = struct.unpack_from("<i", database_bytes, offset)
@@ -192,7 +179,9 @@ class KVectorDatabase:
     def bin_for_distance(self, distance: float) -> int:
         bin_width = (self.max_distance - self.min_distance) / self.num_bins
         result = int(floor((distance - self.min_distance) / bin_width))
-        if result == self.num_bins:
+        if result < 0:
+            return 0
+        if result >= self.num_bins:
             return self.num_bins - 1
         return result
 
@@ -201,13 +190,6 @@ class KVectorDatabase:
         min_query_distance: float,
         max_query_distance: float
     ) -> List[Tuple[int, int]]:
-        """
-        Python version of FindPossibleStarPairsApprox(...)
-
-        Returns:
-            list of (index1, index2) catalog pairs
-        """
-
         if not (max_query_distance > min_query_distance):
             raise ValueError("Require max_query_distance > min_query_distance")
 
