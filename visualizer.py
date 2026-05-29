@@ -1,5 +1,5 @@
 import cv2
-
+# star detector's visualization tool
 def visualizer(image_name, stars, output_name="marked.png"):
     image = cv2.imread(image_name, cv2.IMREAD_UNCHANGED)
 

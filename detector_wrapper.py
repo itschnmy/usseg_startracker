@@ -10,10 +10,10 @@ def detector(image_name, sigma_threshold, min_area):
     star_detector = StarDetector(sigma_threshold, min_area)
     stars = star_detector.process(image)
 
-    # Sort brightest stars first
+    # Sort brightest stars
     stars = sorted(stars, key=lambda s: s.intensity, reverse=True)
 
-    # Optional: keep only top N stars to reduce false detections
+    # keep only top N stars to reduce false detections, comment out to skip this step
     max_stars = 6
     stars = stars[:max_stars]
 

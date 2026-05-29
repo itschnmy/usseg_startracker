@@ -4,8 +4,11 @@ import struct
 from typing import List, Tuple, Optional
 import numpy as np
 
-"""Acknowledgement: Utilized and edited from the LOST open source by University of Washington Husky Satallite Lab"""
-
+"""
+Acknowledgement:
+This implementation adapts the open-source LOST 
+developed by University of Washington Husky Satallite Lab
+"""
 K_VECTOR_MAGIC_NUMBER = 0x4253F009
 
 # define stars in the catalog and pairs of stars used in kvector alg
