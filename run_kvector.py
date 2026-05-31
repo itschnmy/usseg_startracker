@@ -1,6 +1,6 @@
 import math
-from det_run import detector
-from det_visualize import visualizer
+from detector_wrapper import detector
+from visualizer import visualizer
 from kvector import load_tetra_catalog, build_kvector_database, filter_catalog_by_magnitude, great_circle_distance
 from geometric_voting import Star, Camera, geometric_voting_star_id
 
