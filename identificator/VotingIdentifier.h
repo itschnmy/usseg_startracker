@@ -1,4 +1,5 @@
 #pragma once
+#include "DetectedStar.h"
 #include "PairCatalog.h"
 #include "StarCatalog.h"
 

@@ -4,15 +4,15 @@ Eigen::Quaterniond TRIADEstimator::estimate(
     const Eigen::Matrix3Xd& bodyFrame,
     const Eigen::Matrix3Xd& inertialFrame)
 {
-    if (bodyFrame.size() < 2 || inertialFrame.size() < 2) {
+    if (bodyFrame.cols() < 2 || inertialFrame.cols() < 2) {
         throw std::runtime_error("TRIAD estimate requires at least 2 vector pairs.");
     }
 
     // N is inertial, B is body 
-    const Eigen::Vector3d& rN1 = inertialFrame[0];
-    const Eigen::Vector3d& rN2 = inertialFrame[1];
-    const Eigen::Vector3d& rB1 = bodyFrame[0];
-    const Eigen::Vector3d& rB2 = bodyFrame[1];
+    Eigen::Vector3d rN1 = inertialFrame.col(0);
+    Eigen::Vector3d rN2 = inertialFrame.col(1);
+    Eigen::Vector3d rB1 = bodyFrame.col(0);
+    Eigen::Vector3d rB2 = bodyFrame.col(1);
 
     // Tn = [tN1 tN2 cross(tN1,tN2)/norm(...)]
     // Tb = [tB1 tB2 cross(tB1,tB2)/norm(...)]

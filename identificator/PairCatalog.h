@@ -1,18 +1,29 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <cstdint>
 
-struct Pair {
-    double id1; //id of catalog star 1
-    double id2; // id of catalog star 2
-    double cosTheta; //angular distance between 2 stars, cos(theta12) = the dot product of 2 unit vectors of 2 stars
+struct KVectorPair {
+    int16_t index1;
+    int16_t index2;
 };
 
 class PairCatalog {
 private:
-    std::vector<Pair> pairs;
-    auto queryPairs(double cosLow, double cosHigh); //find pairs whose cos(Theta) value in range [low, high] of the detected pair
+    int32_t magic;
+    int32_t num_pairs;
+    float min_distance;
+    float max_distance;
+    int32_t num_bins;
+    std::vector<KVectorPair> pairs;
+    std::vector<int32_t> bins;
+
+    int binForDistance(double distance) const;
+
 public:
-    bool loadFile(std::string path); //load precomputed data from a csv. file and store them in a vector. return false if errors occur, otherwise return true
-    std::vector<Pair> getPairs();
+    bool loadFile(std::string path); //load binary k-vector database
+    std::vector<KVectorPair> queryPairs(double minDistance, double maxDistance) const;
+
+    double getMinDistance() const { return min_distance; }
+    double getMaxDistance() const { return max_distance; }
 };

@@ -39,3 +39,13 @@
 
 # debug information files
 *.dwo
+
+# Local build artifacts
+build/
+__pycache__/
+
+# Large binary databases & raw test images
+*.npz
+**/*.bmp
+**/*.jfif
+**/*.png
