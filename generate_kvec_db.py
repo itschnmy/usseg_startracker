@@ -3,13 +3,13 @@ import sys
 import numpy as np
 
 # Add the subdirectory to python path so we can import kvector modules
-sys.path.append(os.path.join(os.getcwd(), "kvector", "usseg_startracker"))
+sys.path.append(os.path.join(os.getcwd(), "data"))
 
 from kvector import load_tetra_catalog, filter_catalog_by_magnitude, build_kvector_database
 from export_catalog import radec_to_unit_vector
 
 def main():
-    npz_path = "kvector/usseg_startracker/default_database.npz"
+    npz_path = "data/default_database.npz"
     max_mag = 4.0
     
     print(f"Loading catalog from {npz_path}...")
