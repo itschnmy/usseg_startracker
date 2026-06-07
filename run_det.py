@@ -2,7 +2,7 @@ import cv2
 from detector import StarDetector
 
 # load image
-image = cv2.imread("2b670e06-6068-480e-8e30-ad5a10f0e4e5.png", cv2.IMREAD_GRAYSCALE)
+image = cv2.imread("7b51bada-3192-4e1d-8757-edf577d06e89.jfif", cv2.IMREAD_GRAYSCALE)
 
 # create detector
 detector = StarDetector()
