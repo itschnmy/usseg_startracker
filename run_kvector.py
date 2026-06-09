@@ -5,11 +5,11 @@ from kvector import load_tetra_catalog, build_kvector_database, filter_catalog_b
 from geometric_voting import Star, Camera, geometric_voting_star_id
 
 # parameters
-fov = 21.5 # horizontal, unit: degree
-resolution = (640, 480) # pixel
-pic_name = "8233ba5b-84ae-4cd7-8440-428d6e22cd64.jfif" # need loop for automation when onboard
+fov = 75 # horizontal, unit: degree
+resolution = (640, 480) # pixel (width, height)
+pic_name = "faceb1b0-1eba-4234-a94e-25caa29ac5bc.jfif" # need loop for automation when onboard
 sigma_threshold = 6 # detector's magnitude threshold
-min_area = 2 # detector's threshold on min area of star dots
+min_area = 5 # detector's threshold on min area of star dots
 catalog_max_mag = 4 # magnitude threshold to filter the catalog, need to regenerate a filtered catalog before onboard
 
 
@@ -57,7 +57,7 @@ results = geometric_voting_star_id(
     catalog=catalog,
     camera=camera,
     tolerance=0.1,
-    top_k_per_star=8,
+    top_k_per_star=10,
     min_score_ratio=0.70
 )
 
