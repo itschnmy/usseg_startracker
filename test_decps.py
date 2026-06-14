@@ -18,7 +18,7 @@ t3 = Tetra3(load_database="default_database")
 result = t3.solve_from_centroids(
     star_centroids=centroids,
     size=size,
-    fov_estimate=70,
+    fov_estimate=17,
     fov_max_error=10,
     pattern_checking_stars=21,
     match_radius=0.03,

@@ -32,7 +32,7 @@ def calculate_uBody(x, y):
 
 class StarDetector:
 
-    def __init__(self, sigma_threshold=8, min_area=7): # *** ADJUST HERE ***
+    def __init__(self, sigma_threshold, min_area):
         self.sigma_threshold = sigma_threshold
         self.min_area = min_area
 
