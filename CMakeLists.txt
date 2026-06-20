@@ -44,3 +44,21 @@ add_executable(test_tracking test/test_tracking.cpp ${TEST_SOURCES})
 # )
 # add_executable(StarTracker main.cpp ${PROD_SOURCES})
 # target_link_libraries(StarTracker PRIVATE ${OpenCV_LIBS})
+
+# =====================================================================
+# OpenCV Target for Image Preprocessing Verification
+# =====================================================================
+find_package(OpenCV QUIET)
+if(OpenCV_FOUND)
+    message(STATUS "OpenCV found. Enabling test_image_preprocessing target.")
+    include_directories(${OpenCV_INCLUDE_DIRS})
+    add_executable(test_image_preprocessing 
+        test/test_image_preprocessing.cpp 
+        src/ImagePreprocessor/ImagePreprocessor.cpp
+    )
+    target_include_directories(test_image_preprocessing PRIVATE src/ImagePreprocessor)
+    target_link_libraries(test_image_preprocessing PRIVATE ${OpenCV_LIBS})
+else()
+    message(STATUS "OpenCV NOT found. Skipping test_image_preprocessing target.")
+endif()
+

@@ -50,3 +50,13 @@ cd ..
 ```bash
 .\build\Debug\test_tracking.exe
 ```
+
+- **Bước 5:** Chạy thử nghiệm Tiền xử lý ảnh (Image Preprocessing - Yêu cầu OpenCV C++):
+  Kiểm thử này yêu cầu thư viện OpenCV C++. Khi chạy CMake ở Bước 2, nếu hệ thống có OpenCV, target `test_image_preprocessing` sẽ tự động được kích hoạt và biên dịch.
+  Để thực thi kiểm thử này từ thư mục root của project:
+  ```bash
+  .\build\Debug\test_image_preprocessing.exe
+  ```
+  *(Trên Linux/macOS: `./build/test_image_preprocessing`)*
+
+  Sau khi chạy, kết quả ảnh lọc nền (`clean.png`), ảnh nhị phân băm lọc nhiễu (`binary.png`), và ảnh vẽ viền khoanh vùng ROI (`cropped_roi.png`) sẽ được xuất ra tại thư mục **`test/results/image_preprocessing/`** để kiểm tra trực quan.
