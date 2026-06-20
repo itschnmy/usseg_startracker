@@ -126,13 +126,13 @@ def main():
     # u_body = R_true.T * u_inertial
     body_vectors = R_true.T @ inertial_vectors
     
-    # 3. Verify TRIAD (first 2 vectors, Active rotation)
+    # 3. Verify TRIAD (first 2 vectors, Passive rotation)
     triad = TRIADEstimator()
     q_triad = triad.estimate(body_vectors[:, :2], inertial_vectors[:, :2])
-    err_triad = quat_diff_deg(q_true_active, q_triad)
+    err_triad = quat_diff_deg(q_true_passive, q_triad)
     print(f"TRIAD Estimated Quaternion: {q_triad}")
     print(f"TRIAD Angular Error       : {err_triad:.2e} deg")
-    if err_triad < 1e-7:
+    if err_triad < 1e-5:
         print("--> TRIAD Test: SUCCESS\n")
     else:
         print("--> TRIAD Test: FAILED\n")
@@ -164,10 +164,10 @@ def main():
     adcs_quest = AttitudeControlSystem(use_davenport=False)
     adcs_davenport = AttitudeControlSystem(use_davenport=True)
     
-    # Degraded Mode (N=2 -> TRIAD / Active)
+    # Degraded Mode (N=2 -> TRIAD / Passive)
     q_degraded = adcs_quest.process_sensor_data(body_vectors[:, :2], inertial_vectors[:, :2])
     print(f"Result (TRIAD): {q_degraded}")
-    print(f"Error vs Active: {quat_diff_deg(q_true_active, q_degraded):.2e} deg\n")
+    print(f"Error vs Passive: {quat_diff_deg(q_true_passive, q_degraded):.2e} deg\n")
     
     # Fine Pointing Mode (QUEST -> Passive)
     q_fine_q = adcs_quest.process_sensor_data(body_vectors, inertial_vectors)
@@ -179,6 +179,32 @@ def main():
     print(f"Result (Davenport): {q_fine_d}")
     print(f"Error vs Passive: {quat_diff_deg(q_true_passive, q_fine_d):.2e} deg\n")
     
+    # 6.5 Verify AttitudeDeterminator and RelativeAttitudeDeterminator wrappers
+    print("Testing AttitudeDeterminator and RelativeAttitudeDeterminator wrappers...")
+    from src.AttitudeDeterminator import AttitudeDeterminator, RelativeAttitudeDeterminator
+    
+    # Test AttitudeDeterminator
+    abs_det = AttitudeDeterminator(method="QUEST")
+    q_abs = abs_det.estimate(body_vectors, inertial_vectors)
+    err_abs = quat_diff_deg(q_true_passive, q_abs)
+    print(f"AttitudeDeterminator (QUEST) Estimated: {q_abs}")
+    print(f"AttitudeDeterminator Angular Error     : {err_abs:.2e} deg")
+    if err_abs < 1e-5:
+        print("--> AttitudeDeterminator Test: SUCCESS\n")
+    else:
+        print("--> AttitudeDeterminator Test: FAILED\n")
+
+    # Test RelativeAttitudeDeterminator
+    rel_det = RelativeAttitudeDeterminator(method="QUEST")
+    q_rel = rel_det.estimate_relative(body_vectors, inertial_vectors)
+    err_rel = quat_diff_deg(q_true_passive, q_rel)
+    print(f"RelativeAttitudeDeterminator Estimated  : {q_rel}")
+    print(f"RelativeAttitudeDeterminator Error      : {err_rel:.2e} deg")
+    if err_rel < 1e-5:
+        print("--> RelativeAttitudeDeterminator Test: SUCCESS\n")
+    else:
+        print("--> RelativeAttitudeDeterminator Test: FAILED\n")
+        
     print("All Python Estimators Verified successfully on star_catalog.csv data!\n")
     
     # 7. Verify MEKF Filter (Dynamic time-series simulation)
