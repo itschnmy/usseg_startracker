@@ -1,17 +1,19 @@
 import enum
 import numpy as np
-from .estimators import TRIADEstimator, QUESTEstimator, DavenportQEstimator
+from .estimators import TRIADEstimator, QUESTEstimator, DavenportQEstimator, SVDEstimator
 
 class ADCSMode(enum.Enum):
     DEGRADED_OR_COARSE = 1  # Only 2 vectors available (TRIAD)
     FINE_POINTING = 2       # 3 or more vectors available (QUEST/Davenport)
 
 class AttitudeControlSystem:
-    def __init__(self, use_davenport=False):
+    def __init__(self, use_davenport=False, use_svd=False):
         self.triad = TRIADEstimator()
         self.quest = QUESTEstimator()
         self.davenport = DavenportQEstimator()
+        self.svd = SVDEstimator()
         self.use_davenport = use_davenport
+        self.use_svd = use_svd
         
     def process_sensor_data(self, body_frame, inertial_frame):
         body_frame = np.asarray(body_frame, dtype=float)
@@ -27,7 +29,10 @@ class AttitudeControlSystem:
             print("[ADCS] Operating in Coarse/Degraded Mode (TRIAD)...")
             q_estimated = self.triad.estimate(body_frame, inertial_frame)
         else:
-            if self.use_davenport:
+            if self.use_svd:
+                print("[ADCS] Operating in Fine Pointing Mode (SVD)...")
+                q_estimated = self.svd.estimate(body_frame, inertial_frame)
+            elif self.use_davenport:
                 print("[ADCS] Operating in Fine Pointing Mode (Davenport Q)...")
                 q_estimated = self.davenport.estimate(body_frame, inertial_frame)
             else:
