@@ -1,5 +1,5 @@
 import numpy as np
-from .estimators import QUESTEstimator, DavenportQEstimator, TRIADEstimator
+from .estimators import QUESTEstimator, DavenportQEstimator, TRIADEstimator, SVDEstimator
 
 class AttitudeDeterminator:
     """
@@ -16,6 +16,8 @@ class AttitudeDeterminator:
             self.estimator = DavenportQEstimator()
         elif method_upper == "TRIAD":
             self.estimator = TRIADEstimator()
+        elif method_upper == "SVD":
+            self.estimator = SVDEstimator()
         else:
             raise ValueError(f"Unsupported attitude estimation method: {method}")
             

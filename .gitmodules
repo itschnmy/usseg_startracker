@@ -1,0 +1,6 @@
+[submodule "submodules/lost"]
+	path = submodules/lost
+	url = https://github.com/UWCubeSat/lost.git
+[submodule "submodules/lost-evals"]
+	path = submodules/lost-evals
+	url = https://github.com/UWCubeSat/lost-evals.git

@@ -1,5 +1,5 @@
 from .math_utils import hat, unhat, build_triad_basis, rot2q
-from .estimators import TRIADEstimator, QUESTEstimator, DavenportQEstimator
+from .estimators import TRIADEstimator, QUESTEstimator, DavenportQEstimator, SVDEstimator
 from .attitude_control_system import ADCSMode, AttitudeControlSystem
 from .mekf import MEKFEstimator
 from .attitude_determinator import AttitudeDeterminator

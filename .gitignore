@@ -43,9 +43,13 @@
 # Local build artifacts
 build/
 __pycache__/
+.venv/
+.pytest_cache/
+benchmark-results/
 
 # Large binary databases & raw test images
 *.npz
 **/*.bmp
 **/*.jfif
 **/*.png
+identificator/hip_main.dat*

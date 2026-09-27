@@ -25,6 +25,12 @@ from src.AttitudeDeterminator import TRIADEstimator, QUESTEstimator, DavenportQE
 CATALOG_PATH = os.path.join(PROJECT_ROOT, "star_catalog.csv")
 BODY_FRAME_PATH = os.path.join(PROJECT_ROOT, "body_frame_test_cases.csv")
 
+if not os.path.exists(BODY_FRAME_PATH):
+    pytest.skip(
+        "body_frame_test_cases.csv is not present on any audited repository branch",
+        allow_module_level=True,
+    )
+
 # Noise-profile → maximum acceptable attitude error (degrees)
 THRESHOLD_MAP = {
     "Ideal":          1e-4,
