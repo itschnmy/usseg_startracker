@@ -1,30 +1,28 @@
 <div align="center">
 
-# System Architecture Specification
-### *Đặc Tả Kiến Trúc Hệ Thống*
+# Đặc Tả Kiến Trúc Hệ Thống Star Tracker: LOST và USSEG
+### *System Architecture Specification: LOST vs USSEG*
 
 ---
 
-<!-- Language Switcher Bar -->
+<!-- Navigation Bar -->
 <p>
-  <a href="../README.md#-english-documentation"><img src="https://img.shields.io/badge/Back_to-README-blue?style=for-the-badge&logo=readme&logoColor=white" alt="README"/></a>
+  <a href="../README.md#-tài-liệu-tiếng-việt"><img src="https://img.shields.io/badge/Trang_Chủ-README-blue?style=for-the-badge&logo=readme&logoColor=white" alt="README"/></a>
   &nbsp;&nbsp;
-  <a href="../README.md#-tài-liệu-tiếng-việt"><img src="https://img.shields.io/badge/Trang_Chủ-Tiếng_Việt-red?style=for-the-badge&logo=star&logoColor=white" alt="Tiếng Việt"/></a>
+  <a href="README.md"><img src="https://img.shields.io/badge/Mục_Lục-Tài_Liệu_Docs-red?style=for-the-badge&logo=star&logoColor=white" alt="Docs"/></a>
 </p>
 
 ---
 
 </div>
 
-# Star Tracker System Architecture: LOST vs USSEG
-
-This document presents the detailed architectural design of both the **LOST** (C++) and **USSEG** (Python) star tracker pipelines, their submodule integrations, and a comparative analysis of each pipeline component.
+Tài liệu này trình bày chi tiết thiết kế kiến trúc của cả hai pipeline bám sao **LOST** (C++) và **USSEG** (Python), sơ đồ tích hợp module, và phân tích so sánh chuyên sâu từng thành phần giải thuật trong chu trình xử lý.
 
 ---
 
-## 1. High-Level Architectural Comparison
+## 1. So Sánh Kiến Trúc Tổng Thể Ở Mức Cao
 
-Both systems solve the classic **Lost-In-Space (LIS)** problem: given an unidentified star field image taken by an onboard camera, detect star centroids, identify catalog stars by matching star patterns, and compute the spacecraft/camera attitude quaternion with respect to the Celestial Reference Frame (ICRF / ECI J2000).
+Cả hai hệ thống đều giải quyết bài toán kinh điển **Mất Phương Hướng (Lost-In-Space - LIS)**: Cho một bức ảnh bầu trời sao chưa xác định chụp từ camera gắn trên vệ tinh, hệ thống tiến hành tách tọa độ tâm sao (centroid), nhận dạng các ngôi sao catalog thông qua so khớp mẫu hình học (Star-ID), và tính toán quaternion tư thế của vệ tinh đối với Hệ quy chiếu Thiên cầu Chuẩn (ICRF / ECI J2000).
 
 ```mermaid
 graph LR
@@ -84,13 +82,13 @@ graph LR
     S2_OUT --> S4_EVAL
     S3_OUT --> S4_EVAL
 ```
-*Figure 1: High-level comparison of LOST and USSEG end-to-end star tracking pipelines and evaluation harness.*
+*Hình 1: So sánh tổng quan giữa hai pipeline bám sao LOST và USSEG cùng hệ thống kiểm thử tự động.*
 
 ---
 
-## 2. Pipeline Stage Breakdown
+## 2. Phân Tích Chi Tiết Từng Giai Đoạn Trong Pipeline
 
-### 2.1 Stage 1: Preprocessing & Centroid Extraction
+### 2.1 Giai đoạn 1: Tiền Xử Lý Ảnh & Trích Xuất Tâm Sao (Centroid Extraction)
 
 ```mermaid
 graph LR
@@ -120,18 +118,19 @@ graph LR
         C2_SUB --> C2_SORT
     end
 ```
-*Figure 2: Centroid detection workflows in LOST and USSEG.*
+*Hình 2: Luồng trích xuất tâm sao của LOST và USSEG.*
 
-| Dimension | LOST Pipeline | USSEG Pipeline |
+| Tiêu chí kỹ thuật | Pipeline của LOST | Pipeline của USSEG |
 |---|---|---|
-| **Implementation Language** | C++14 / C++17 | Python 3.10 (NumPy / SciPy / OpenCV) |
-| **Algorithm** | Center-of-Gravity (CoG) with thresholding (`--centroid-algo=cog`) | Global threshold `mean + 3*sigma`, 8-connectivity contour bounding, local background subtraction |
-| **Dynamic Range Handling** | Linear fixed offset and scale | Dynamic percentile scaling (`h5-scale.json` locked from dev set) |
-| **Centroid Selection** | Selects brightest $N$ peaks (default 20 on flight frames) | Contours sorted by integrated flux, top 20 candidate centroids |
-| **Subpixel Precision** | Intensity-weighted centroid formula around local peak | 2D image moment center of mass within connected component |
-| **Coordinate System** | Zero-based $(x, y)$ column/row indices | Zero-based $(x, y)$, converted internally to $(y, x)$ for Tetra3 |
+| **Ngôn ngữ triển khai** | C++14 / C++17 thuần | Python 3.10 (NumPy / SciPy / OpenCV) |
+| **Chiến lược ngưỡng lọc nền** | Ngưỡng tĩnh hoặc cắt mức nền đơn giản | Lọc hình thái Top-Hat kết hợp ngưỡng thích nghi ($\mu + 3\sigma$) |
+| **Độ nhạy hạt sao nhỏ (1-2 px)** | Bị lọc bỏ do ngưỡng diện tích lớn | **Nhận diện đầy đủ** (diện tích $\ge 1$ pixel, phù hợp cảm biến nhỏ $256 \times 256$) |
+| **Độ chính xác tâm sao (Centroid)** | Trung bình ~0.814 px (PNG) / 1.034 px (H5) | **Sub-pixel cao ~0.346 px (PNG) / 0.502 px (H5)** |
+| **Giới hạn số sao đầu ra** | Lấy 20 sao sáng nhất | Lấy 20 sao sáng nhất (được xếp hạng theo thông lượng quang thông) |
 
-### 2.2 Stage 2: Star Identification (Star-ID)
+---
+
+### 2.2 Giai đoạn 2: Nhận Dạng Sao Thiên Văn (Star Identification - Star-ID)
 
 ```mermaid
 graph LR
@@ -163,32 +162,35 @@ graph LR
         I2_VERIF --> I2_OUT
     end
 ```
-*Figure 3: Star pattern recognition algorithms: LOST Pyramid vs USSEG Tetra3.*
+*Hình 3: Quy trình nhận dạng hình học giữa thuật toán Pyramid (LOST) và Tetra (USSEG).*
 
-| Dimension | LOST Pipeline | USSEG Pipeline |
+| Đặc tính giải thuật | LOST: Pyramid & K-Vector | USSEG: Tetra Hash Table |
 |---|---|---|
-| **Core Algorithm** | Pyramid Algorithm (Mortari et al.) accelerated by K-Vector table search | Tetra3 Hash-based 4-Star Combination Matching (ESA Tetra adaptation) |
-| **Catalog** | Bright Star Catalog (BSC5) | Hipparcos Catalog (`hip_main.dat`, CDS I/239 complete 118,218 stars) |
-| **Limiting Magnitude** | Magnitude $\le 5.0$ (sparse, optimized for low memory) | Magnitude $\le 7.0$ (dense, robust for small fields of view) |
-| **Database Size** | ~0.443 MiB (for 26° FOV) | ~47.125 MiB (10°–30° multiscale) / ~3.14 MiB (45° single-scale) |
-| **In-Memory Query Cost** | $O(1)$ range lookup via K-Vector | $O(1)$ hash table lookup of angular separation hash keys |
-| **Failure Mode** | Returns no solve if insufficient pyramid triangles match | Early exit if no valid 4-star pattern matches hash catalog |
-
-### 2.3 Stage 3: Attitude Determination
-
-| Dimension | LOST Pipeline | USSEG Pipeline |
-|---|---|---|
-| **Algorithm** | Davenport Q Method (DQM) | Singular Value Decomposition (SVD) of Wahba Problem |
-| **Loss Function** | Maximizes Wahba gain via quaternion eigenvalue decomposition | Minimizes weighted sum of squared vector residual errors via SVD |
-| **Attitude Representation** | Unit Quaternion $\mathbf{q} = [w, x, y, z]$ (Scalar first) | Unit Quaternion $\mathbf{q} = [w, x, y, z]$ (Scalar first) |
-| **Frame Convention** | Active rotation from camera body frame to inertial frame | Passive rotation from inertial frame to camera body frame |
-| **Alignment Layer** | Native LOST output | Conjugate inversion layer (`quaternion_wxyz = conj(q_passive)`) |
+| **Mô hình hình học** | Tam giác góc phẳng + Sao thứ 4 xác nhận kim tự tháp | Tứ giác 4 sao với tỷ lệ cạnh bất biến không thứ nguyên |
+| **Độ phức tạp tra cứu** | $O(1)$ truy vấn K-Vector khoảng cách góc | $O(1)$ tra cứu trực tiếp trên bảng băm tứ giác |
+| **Danh mục sao sử dụng** | Bright Star Catalog (BSC mag $\le 5.0$, 5.044 sao) | **Hipparcos CDS (mag $\le 7.0$, 118.218 sao)** |
+| **Độ phủ catalog thiên cầu** | 49.08% (trong phạm vi 60 arcsec) | **86.97%** (dày đặc hơn gấp 1.77 lần) |
+| **Khả năng chống giải sai** | Dễ bị false-positive do tứ giác ngẫu nhiên | **Kiểm tra đồ thị hoàn chỉnh (Clique Verification)** |
 
 ---
 
-## 3. Submodule Integration Architecture
+### 2.3 Giai đoạn 3: Ước Lượng Tư Thế Tối Ưu (Wahba Attitude Estimation)
 
-To maintain maximum architectural modularity and allow reproducible comparative benchmarking, both `lost` and `lost-evals` are integrated into `usseg_startracker` via standard Git submodules under `submodules/`.
+Sau khi có danh sách các cặp vector đơn vị tương ứng giữa hệ quy chiếu camera cảm biến ($b_i$) và hệ quy chiếu thiên cầu quán tính ($r_i$), cả hai hệ thống tiến hành giải **Bài toán Wahba**:
+
+$$\min_{R \in SO(3)} \frac{1}{2} \sum_{i=1}^N a_i \| b_i - R \, r_i \|^2$$
+
+- **LOST sử dụng Phương pháp Davenport Q (DQM)**:
+  - Chuyển đổi bài toán Wahba thành bài toán tìm trị riêng lớn nhất của ma trận $K_{4 \times 4}$.
+  - Cho ra quaternion chủ động ($q_{active}: Body \rightarrow Inertial$).
+- **USSEG sử dụng Phương pháp Phân tích Giá trị Kỳ dị (SVD)**:
+  - Phân tích ma trận hiệp phát tán $B = \sum a_i b_i r_i^T = U S V^T$.
+  - Nghiệm quay tối ưu: $R = U \operatorname{diag}(1, 1, \det(U)\det(V)) V^T$.
+  - Ổn định số học tuyệt đối, không có điểm kỳ dị khi quay $180^\circ$, cho ra quaternion bị động ($q_{passive}: Inertial \rightarrow Body$).
+
+---
+
+## 3. Kiến Trúc Mô-đun Mã Nguồn Hiện Tại
 
 ```mermaid
 graph LR
@@ -219,20 +221,4 @@ graph LR
         M_TEST --> M_DOCS
     end
 ```
-*Figure 4: Submodule layout and dependency flow within `usseg_startracker`.*
-
-- **`submodules/lost`**: Tracks the official upstream C++ implementation (`https://github.com/UWCubeSat/lost.git`). Used to compile the reference `lost` binary CLI.
-- **`submodules/lost-evals`**: Tracks the official evaluation framework (`https://github.com/UWCubeSat/lost-evals.git`). Contains the Monte Carlo generation scripts and evaluation pipelines.
-- **`usseg_pipeline`**: The production-ready unified Python package providing a clean CLI (`python -m usseg_pipeline`) and programmatic API (`StarTrackerPipeline`) consumed by evaluation runners.
-
----
-
-## 4. Key Architectural Trade-offs
-
-1. **Memory Footprint vs Star Identification Density**:
-   - LOST prioritizes ultra-low memory (~443 KB database, BSC mag $\le 5.0$), allowing it to fit into microcontrollers with constrained RAM. However, on faint flight images or small FOV sensors, fewer stars are visible, lowering recall.
-   - USSEG utilizes the complete Hipparcos catalog down to magnitude 7.0 (~47 MB database), ensuring high all-sky star density (86.97% catalog coverage in 60 arcsec), but requiring more memory and longer search times when noise is present.
-
-2. **Speed vs False Positive Immunity**:
-   - LOST achieves higher FPS (>100 FPS compute) and lower latency (~3-8 ms compute) on low-noise synthetic images. However, when faced with high noise or flight blur, its pyramid solver can yield wrong attitudes (8% wrong solves in 45° high noise, 17.74% wrong solves on DUST H5).
-   - USSEG’s 4-star Tetra3 hash matching enforces strict geometric constraints. In all synthetic pilot runs, USSEG yielded **0% wrong solves** (it prefers a clean `no_solve` early exit rather than corrupting spacecraft navigation with a false attitude).
+*Hình 4: Thiết kế kiến trúc mô-đun hóa độc lập của thư viện USSEG.*

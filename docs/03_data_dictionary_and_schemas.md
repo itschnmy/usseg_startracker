@@ -1,49 +1,47 @@
 <div align="center">
 
-# Data Dictionary, Coordinate Frames & Schemas
-### *Từ Điển Dữ Liệu, Hệ Quy Chiếu & Schemas*
+# Từ Điển Dữ Liệu, Hệ Quy Chiếu & Định Dạng Schemas
+### *Đặc Tả Cấu Trúc Dữ Liệu Đầu Vào / Đầu Ra Của Hệ Thống USSEG Star Tracker*
 
 ---
 
-<!-- Language Switcher Bar -->
+<!-- Navigation Bar -->
 <p>
-  <a href="../README.md#-english-documentation"><img src="https://img.shields.io/badge/Back_to-README-blue?style=for-the-badge&logo=readme&logoColor=white" alt="README"/></a>
+  <a href="../README.md#-tài-liệu-tiếng-việt"><img src="https://img.shields.io/badge/Trang_Chủ-README-blue?style=for-the-badge&logo=readme&logoColor=white" alt="README"/></a>
   &nbsp;&nbsp;
-  <a href="../README.md#-tài-liệu-tiếng-việt"><img src="https://img.shields.io/badge/Trang_Chủ-Tiếng_Việt-red?style=for-the-badge&logo=star&logoColor=white" alt="Tiếng Việt"/></a>
+  <a href="README.md"><img src="https://img.shields.io/badge/Mục_Lục-Tài_Liệu_Docs-red?style=for-the-badge&logo=star&logoColor=white" alt="Docs"/></a>
 </p>
 
 ---
 
 </div>
 
-# Star Tracker Data Dictionary & Schemas
-
-This document defines the formal data dictionary, input/output schemas, coordinate systems, and file formats used across the LOST and USSEG star tracking pipelines and the evaluation harness.
+Tài liệu này đặc tả tường minh từ điển dữ liệu chuẩn, cấu trúc schema đầu vào/đầu ra, các hệ quy chiếu tọa độ thiên văn, và quy ước quaternion được sử dụng xuyên suốt trong hệ thống pipeline USSEG và bộ công cụ đánh giá benchmark.
 
 ---
 
-## 1. Sensor Input Schemas
+## 1. Định Dạng & Quy Chuẩn Dữ Liệu Cảm Biến Đầu Vào
 
-### 1.1 Synthetic & Preprocessed Grayscale PNG
-- **File Format**: Portable Network Graphics (`.png`)
-- **Bit Depth**: 8-bit unsigned integer (`uint8`, values 0 to 255).
-- **Channels**: 1 (Grayscale single-channel).
-- **Coordinate System**: Image coordinates with $(0, 0)$ at the top-left pixel.
-  * $x \in [0, W-1]$: Horizontal column index (rightwards).
-  * $y \in [0, H-1]$: Vertical row index (downwards).
+### 1.1 Khung Ảnh Xám PNG Giả Lập & Đã Tiền Xử Lý
+- **Định dạng file**: Portable Network Graphics (`.png`)
+- **Độ sâu màu (Bit Depth)**: Số nguyên không dấu 8-bit (`uint8`, khoảng giá trị 0 đến 255).
+- **Kênh màu (Channels)**: 1 kênh (Ảnh mức xám grayscale đơn kênh).
+- **Hệ tọa độ ảnh (Image Coordinates)**: Gốc tọa độ $(0, 0)$ đặt tại điểm ảnh trên cùng bên trái (Top-Left):
+  * $x \in [0, W-1]$: Chỉ số cột pixel theo chiều ngang (hướng từ trái sang phải).
+  * $y \in [0, H-1]$: Chỉ số hàng pixel theo chiều dọc (hướng từ trên xuống dưới).
 
-### 1.2 DUST V2 Flight HDF5 (FAI Level-1)
-- **File Format**: Hierarchical Data Format 5 (`.h5` / `.hdf5`)
-- **Dataset Path**: `/images` or `/FAI_image` (2D or 3D array of unsigned 16-bit integers).
-- **Preprocessing Pipeline**:
-  1. **Spatial Cropping**: `raw_image[12:268, :]` extracts active CCD lines (256 vertical lines).
-  2. **Orientation Normalization**: `np.flipud(...)` corrects sensor mounting orientation.
-  3. **Quantization & Scaling**: Dynamic conversion to 8-bit using calibration scales in `h5-scale.json`:
+### 1.2 Ảnh Khoa Học HDF5 DUST V2 (FAI Level-1)
+- **Định dạng file**: Hierarchical Data Format 5 (`.h5` / `.hdf5`)
+- **Đường dẫn trường dữ liệu (Dataset Path)**: `/images` hoặc `/FAI_image` (mảng 2D hoặc 3D chứa số nguyên không dấu 16-bit).
+- **Quy trình chuẩn hóa ảnh đầu vào**:
+  1. **Cắt vùng pixel hữu ích (Spatial Cropping)**: `raw_image[12:268, :]` trích xuất 256 dòng CCD hoạt động tích cực.
+  2. **Chuẩn hóa hướng cảm biến (Orientation Normalization)**: `np.flipud(...)` đảo trục dọc để khớp hướng lắp đặt quang học của cảm biến trên vệ tinh.
+  3. **Lượng tử hóa & Thang đo (Quantization & Scaling)**: Chuyển đổi động sang 8-bit dựa vào hệ số hiệu chuẩn trong `h5-scale.json`:
      $$I_{8} = \text{clip}\left(\frac{I_{16} - I_{\min}}{I_{\max} - I_{\min}} \times 255, 0, 255\right)$$
 
 ---
 
-## 2. Centroid Extraction Data Schema
+## 2. Schema Dữ Liệu Tách Tâm Sao (Centroid Extraction)
 
 ```mermaid
 classDiagram
@@ -63,58 +61,58 @@ classDiagram
     }
     CentroidRecord --> Vector3D : projects to
 ```
-*Figure 6: Centroid data representation and vector projection model.*
+*Sơ đồ 6: Mô hình biểu diễn dữ liệu tâm sao và phép chiếu vector đơn vị 3D.*
 
-### 2.1 Centroid Fields Description
+### 2.1 Mô Tả Các Trường Dữ Liệu Của Centroid
 
-| Field Name | Data Type | Units | Range | Description |
+| Tên trường | Kiểu dữ liệu | Đơn vị | Khoảng giá trị | Diễn giải chi tiết |
 |---|---|---|---|---|
-| `x` | `float64` | pixels | $[0.0, W-1.0]$ | Subpixel horizontal position (zero-based). |
-| `y` | `float64` | pixels | $[0.0, H-1.0]$ | Subpixel vertical position (zero-based). |
-| `flux` | `float64` | ADU | $[0.0, \infty)$ | Integrated pixel intensity above local background. |
-| `snr` | `float64` | ratio | $[0.0, \infty)$ | Signal-to-noise ratio: peak intensity over local background variance. |
-| `star_rank` | `int32` | index | $[1, 20]$ | Brightness rank among extracted candidates (1 = brightest). |
+| `x` | `float64` | pixel | $[0.0, W-1.0]$ | Tọa độ ngang dưới điểm ảnh (sub-pixel, gốc 0). |
+| `y` | `float64` | pixel | $[0.0, H-1.0]$ | Tọa độ dọc dưới điểm ảnh (sub-pixel, gốc 0). |
+| `flux` | `float64` | ADU | $[0.0, \infty)$ | Tổng năng lượng tích phân của đốm sao sau khi trừ phông nền. |
+| `snr` | `float64` | tỉ số | $[0.0, \infty)$ | Tỉ số tín hiệu trên nhiễu: cường độ đỉnh so với phương sai phông nền. |
+| `star_rank` | `int32` | thứ tự | $[1, 20]$ | Thứ hạng độ sáng trong số các đốm sao trích xuất (1 = sáng nhất). |
 
 ---
 
-## 3. Star Catalog Schemas
+## 3. Schema Danh Mục Cơ Sở Dữ Liệu Sao
 
-### 3.1 Bright Star Catalog (BSC5) - Used by LOST
-- **Coverage**: All-sky, stars with Visual Magnitude $V \le 5.0$.
-- **Database Size**: ~0.443 MiB in custom binary format.
+### 3.1 Bright Star Catalog (BSC5) - Sử Dụng Bởi LOST
+- **Phạm vi bao phủ**: Toàn thiên cầu, các ngôi sao có cấp sao thị giác $V \le 5.0$.
+- **Dung lượng database**: ~0.443 MiB định dạng nhị phân chuyên dụng.
 
-| Field | Type | Description |
+| Trường dữ liệu | Kiểu | Diễn giải |
 |---|---|---|
-| `bsc_id` | `int32` | Bright Star Catalog identifier (Harvard Revised number). |
-| `ra_rad` | `float64` | Right Ascension in radians (ICRF / J2000 epoch). |
-| `dec_rad` | `float64` | Declination in radians (ICRF / J2000 epoch). |
-| `vmag` | `float32` | Visual magnitude. |
-| `unit_vector` | `float64[3]` | Cartesian unit vector $[v_x, v_y, v_z]$ on Celestial Sphere. |
+| `bsc_id` | `int32` | Mã định danh sao Bright Star Catalog (chỉ số Harvard Revised). |
+| `ra_rad` | `float64` | Góc xích kinh (Right Ascension) tính bằng radian (kỷ nguyên ICRF / J2000). |
+| `dec_rad` | `float64` | Góc xích vĩ (Declination) tính bằng radian (kỷ nguyên ICRF / J2000). |
+| `vmag` | `float32` | Cấp sao thị giác (Visual Magnitude). |
+| `unit_vector` | `float64[3]` | Vector đơn vị Descartes $[v_x, v_y, v_z]$ trên mặt cầu thiên văn. |
 
-### 3.2 Hipparcos Catalog (`hip_main.dat`, CDS I/239) - Used by USSEG
-- **Coverage**: Complete 118,218 stars down to Visual Magnitude $V \le 7.0$.
-- **Database File**: Compressed NumPy archive (`default_database.npz`, ~47.1 MiB).
+### 3.2 Hipparcos Catalog (`hip_main.dat`, CDS I/239) - Sử Dụng Bởi USSEG
+- **Phạm vi bao phủ**: Đầy đủ 118.218 ngôi sao với cấp sao thị giác $V \le 7.0$.
+- **Dung lượng file cơ sở dữ liệu**: Nén định dạng NumPy (`default_database.npz`, ~47.1 MiB).
 
-| Field | Type | Description |
+| Trường dữ liệu | Kiểu | Diễn giải |
 |---|---|---|
-| `hip_id` | `int32` | Hipparcos Catalog identifier (1 to 120404). |
-| `ra_deg` | `float64` | Right Ascension in degrees (J2000 epoch). |
-| `dec_deg` | `float64` | Declination in degrees (J2000 epoch). |
-| `vmag` | `float32` | Visual magnitude (Johnson V band). |
-| `bv_color` | `float32` | B-V color index. |
-| `star_table` | `float64[N, 3]` | Unit vectors in J2000 inertial frame. |
-| `pattern_catalog` | `int32[M, 4]` | 4-star combination indices corresponding to hash keys. |
+| `hip_id` | `int32` | Mã định danh sao Hipparcos (từ 1 đến 120404). |
+| `ra_deg` | `float64` | Góc xích kinh tính bằng độ (kỷ nguyên J2000). |
+| `dec_deg` | `float64` | Góc xích vĩ tính bằng độ (kỷ nguyên J2000). |
+| `vmag` | `float32` | Cấp sao thị giác (băng thông Johnson V). |
+| `bv_color` | `float32` | Chỉ số màu B-V. |
+| `star_table` | `float64[N, 3]` | Danh sách vector đơn vị trong hệ quy chiếu quán tính J2000. |
+| `pattern_catalog` | `int32[M, 4]` | Danh sách tổ hợp chỉ số 4 ngôi sao tương ứng với khóa bảng băm. |
 
 ---
 
-## 4. Attitude Quaternion & Coordinate Conventions
+## 4. Quy Ước Quaternion Thái Độ & Hệ Quy Chiếu Không Gian
 
-### 4.1 Quaternion Schema
-Attitudes are represented as normalized 4-element unit quaternions:
+### 4.1 Biểu Diễn Quaternion
+Thái độ của vệ tinh được biểu diễn dưới dạng quaternion đơn vị 4 phần tử đã chuẩn hóa:
 $$\mathbf{q} = [w, x, y, z]^T, \quad w^2 + x^2 + y^2 + z^2 = 1$$
-where $w$ is the scalar part and $[x, y, z]$ is the vector part.
+trong đó $w$ là phần vô hướng (scalar-first) và $[x, y, z]$ là phần vector 3 chiều.
 
-### 4.2 Convention Disambiguation
+### 4.2 Phân Biệt Quy Ước Quaternion Chủ Động & Bị Động
 
 ```mermaid
 flowchart LR
@@ -132,21 +130,21 @@ flowchart LR
     ECI -- "Passive Quaternion: q_passive" --> CAM
     CAM -- "Active / Inverse Quaternion: q_active = conj(q_passive)" --> ECI
 ```
-*Figure 7: Coordinate transformations between ECI J2000 and Camera Sensor Frame.*
+*Sơ đồ 7: Phép biến đổi tọa độ giữa hệ quy chiếu quán tính ECI J2000 và hệ quy chiếu camera cảm biến.*
 
-- **USSEG Internal Representation**: Passive quaternion $\mathbf{q}_{I \to C}$ transforming vectors from Inertial (ECI J2000) to Camera Frame:
+- **Biểu diễn nội bộ của USSEG**: Sử dụng quaternion bị động $\mathbf{q}_{I \to C}$ biến đổi vector từ hệ quán tính (ECI J2000) sang hệ tọa độ camera:
   $$\mathbf{v}_C = \mathbf{q}_{I \to C} \otimes \mathbf{v}_I \otimes \mathbf{q}_{I \to C}^*$$
-- **LOST Representation & Ground Truth**: Active rotation $\mathbf{q}_{C \to I}$ mapping Camera coordinates into Inertial:
+- **Biểu diễn của LOST & Ground Truth chuẩn**: Sử dụng quaternion chủ động $\mathbf{q}_{C \to I}$ ánh xạ tọa độ camera về hệ quán tính:
   $$\mathbf{v}_I = \mathbf{q}_{C \to I} \otimes \mathbf{v}_C \otimes \mathbf{q}_{C \to I}^*$$
-- **Conversion Identity**:
+- **Đẳng thức chuyển đổi**:
   $$\mathbf{q}_{C \to I} = \mathbf{q}_{I \to C}^* = [w, -x, -y, -z]^T$$
 
 ---
 
-## 5. Evaluation Harness Output Schemas
+## 5. Định Dạng Schemas Đầu Ra Của Bộ Đánh Giá Benchmark
 
-### 5.1 JSON Output Record (`usseg_pipeline` execution)
-Example of output JSON emitted per image:
+### 5.1 Bản Ghi JSON Đầu Ra (`usseg_pipeline` Execution)
+Mỗi khung ảnh sau khi giải nghiệm sẽ xuất ra một bản ghi JSON có cấu trúc chuẩn:
 ```json
 {
   "frame_id": "0.png",
@@ -167,15 +165,15 @@ Example of output JSON emitted per image:
 }
 ```
 
-### 5.2 Benchmark Summary Manifest (`smoke_test_usseg.summary.csv`)
-Columns:
-1. `scenario`: Scenario name (e.g. `20-low-noise`, `45-high-noise`, `dust-dev`).
-2. `algorithm`: `lost` or `usseg`.
-3. `total_frames`: Count of frames evaluated.
-4. `solve_count`: Count of successfully solved frames.
-5. `solve_rate`: Percentage of frames solved.
-6. `correct_sub_05_deg`: Percentage of solved frames with attitude error $< 0.5^\circ$.
-7. `wrong_solve_rate`: Percentage of solves with attitude error $\ge 0.5^\circ$.
-8. `attitude_error_p50_deg`: Median angular error in degrees.
-9. `compute_latency_p50_ms`: Median algorithm compute time in milliseconds.
-10. `compute_fps`: Processing speed in frames per second.
+### 5.2 Bảng Tổng Hợp Kết Quả Thực Nghiệm (`smoke_test_usseg.summary.csv`)
+Các cột dữ liệu tiêu chuẩn:
+1. `scenario`: Tên kịch bản thử nghiệm (ví dụ `20-low-noise`, `45-high-noise`, `dust-dev`).
+2. `algorithm`: Tên thuật toán (`lost` hoặc `usseg`).
+3. `total_frames`: Tổng số khung ảnh được nạp vào đánh giá.
+4. `solve_count`: Số lượng khung ảnh giải ra nghiệm.
+5. `solve_rate`: Tỷ lệ phần trăm khung ảnh giải thành công.
+6. `correct_sub_05_deg`: Tỷ lệ ảnh giải đúng có sai số thái độ $< 0.5^\circ$.
+7. `wrong_solve_rate`: Tỷ lệ nghiệm sai có sai số thái độ $\ge 0.5^\circ$.
+8. `attitude_error_p50_deg`: Trung vị sai số góc quay (độ).
+9. `compute_latency_p50_ms`: Trung vị thời gian tính toán của thuật toán (mili-giây).
+10. `compute_fps`: Tốc độ xử lý khung hình trên giây.

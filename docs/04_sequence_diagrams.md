@@ -1,30 +1,28 @@
 <div align="center">
 
-# System Sequence Diagrams & Runtime Workflows
-### *Sơ Đồ Tuần Tự & Quy Trình Thực Thi*
+# Sơ Đồ Tuần Tự & Quy Trình Thực Thi Hệ Thống
+### *Đặc Tả Quy Trình Thực Thi Runtime: Benchmark Giả Lập, Thẩm Định Dữ Liệu Bay & Vòng Lặp Bám Sao*
 
 ---
 
-<!-- Language Switcher Bar -->
+<!-- Navigation Bar -->
 <p>
-  <a href="../README.md#-english-documentation"><img src="https://img.shields.io/badge/Back_to-README-blue?style=for-the-badge&logo=readme&logoColor=white" alt="README"/></a>
+  <a href="../README.md#-tài-liệu-tiếng-việt"><img src="https://img.shields.io/badge/Trang_Chủ-README-blue?style=for-the-badge&logo=readme&logoColor=white" alt="README"/></a>
   &nbsp;&nbsp;
-  <a href="../README.md#-tài-liệu-tiếng-việt"><img src="https://img.shields.io/badge/Trang_Chủ-Tiếng_Việt-red?style=for-the-badge&logo=star&logoColor=white" alt="Tiếng Việt"/></a>
+  <a href="README.md"><img src="https://img.shields.io/badge/Mục_Lục-Tài_Liệu_Docs-red?style=for-the-badge&logo=star&logoColor=white" alt="Docs"/></a>
 </p>
 
 ---
 
 </div>
 
-# Star Tracker Sequence Diagrams: Execution & Runtime Flows
-
-This document details the step-by-step sequence diagrams showing the runtime and request flows for synthetic benchmarking, real-flight DUST V2 validation, and autonomous Lost-In-Space spacecraft operation.
+Tài liệu này chi tiết hóa các bước thực thi qua các sơ đồ tuần tự (Sequence Diagrams) thể hiện quy trình luân chuyển dữ liệu và xử lý thời gian thực giữa các module: từ quy trình benchmark giả lập, quy trình thẩm định mù ảnh chuyến bay thực tế DUST V2, cho đến chu kỳ điều khiển bám sao tự động Lost-In-Space trên vệ tinh.
 
 ---
 
-## 1. Synthetic Benchmarking Execution Flow
+## 1. Quy Trình Thực Thi Benchmark Dữ Liệu Giả Lập
 
-This workflow illustrates how the evaluation harness executes a batch of deterministic synthetic star scenes through the candidate algorithm and measures accuracy against ground truth.
+Sơ đồ này mô tả cách bộ điều phối benchmark nạp từng lô ảnh quang học xác định qua pipeline, trích xuất tâm sao, nhận dạng góc mẫu và đối chiếu với nghiệm chuẩn:
 
 ```mermaid
 sequenceDiagram
@@ -70,13 +68,13 @@ sequenceDiagram
     deactivate GT
     BR->>BR: record_metrics(timing, delta_theta)
 ```
-*Figure 8: Sequence diagram for synthetic star image evaluation flow.*
+*Sơ đồ 8: Sơ đồ tuần tự đánh giá dữ liệu ảnh sao giả lập.*
 
 ---
 
-## 2. Real-Flight DUST V2 Evaluation & Validation Flow
+## 2. Quy Trình Thẩm Định Mù Dữ Liệu Chuyến Bay Thực Tế DUST V2
 
-This workflow shows the blind evaluation protocol on CASSIOPE FAI flight images, where algorithms run completely blind before WCS pseudo-ground-truth and Tycho-2 catalogs are consulted.
+Quy trình thẩm định mù (Blind Evaluation Protocol) trên ảnh bay vệ tinh CASSIOPE FAI: Các thuật toán thực hiện giải nghiệm hoàn toàn độc lập trước khi mở khóa cơ sở dữ liệu nghiệm kiểm chứng WCS và danh mục Tycho-2.
 
 ```mermaid
 sequenceDiagram
@@ -117,13 +115,13 @@ sequenceDiagram
     deactivate Assessor
     Runner->>Runner: append_to_jsonl_and_summary()
 ```
-*Figure 9: Sequence diagram for blind DUST V2 flight evaluation and validation protocol.*
+*Sơ đồ 9: Sơ đồ tuần tự thẩm định mù và đánh giá độc lập dữ liệu bay DUST V2.*
 
 ---
 
-## 3. Autonomous Onboard Lost-In-Space (LIS) Operational Cycle
+## 3. Chu Kỳ Điều Khiển Bám Sao Tự Động Lost-In-Space Trên Vệ Tinh
 
-This workflow illustrates the autonomous realtime flight cycle aboard a CubeSat or Drone Star Tracker running the unified USSEG package.
+Quy trình mô tả chu kỳ thời gian thực tự động của hệ thống USSEG Star Tracker khi vận hành trên máy tính nhúng vệ tinh CubeSat hoặc máy bay không người lái UAV:
 
 ```mermaid
 sequenceDiagram
@@ -168,4 +166,4 @@ sequenceDiagram
     ADCS->>ADCS: update_extended_kalman_filter(quaternion)
     ADCS->>ADCS: command_reaction_wheels()
 ```
-*Figure 10: Sequence diagram for autonomous onboard Lost-in-Space (LIS) cycle.*
+*Sơ đồ 10: Sơ đồ tuần tự chu kỳ bám sao tự động Lost-In-Space (LIS) tích hợp máy tính điều khiển ADCS.*
