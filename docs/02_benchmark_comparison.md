@@ -108,7 +108,7 @@ flowchart TD
     end
 
     subgraph Failure_Modes["Failure Modes Breakdown"]
-        F1["Detector Star Starvation: threshold returns < 4 stars"]
+        F1["Detector Star Starvation: threshold returns fewer than 4 stars"]
         F2["Catalog Coordinate Distortion: uncalibrated pinhole projection mismatch"]
         F3["Pyramid Triplet False Matching: high noise generates phantom triangles"]
     end

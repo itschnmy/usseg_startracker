@@ -41,7 +41,7 @@ sequenceDiagram
 
     AD->>SD: detect_centroids(image_matrix)
     activate SD
-    SD-->>AD: return centroid_list [(x, y, flux)]
+    SD-->>AD: return centroid_list (x, y, flux)
     deactivate SD
 
     alt Centroids < 4
@@ -49,7 +49,7 @@ sequenceDiagram
     else Centroids >= 4
         AD->>PS: solve(centroid_list, fov, database)
         activate PS
-        PS-->>AD: return matched_pairs [(sensor_vec, catalog_vec)]
+        PS-->>AD: return matched_pairs (sensor_vec, catalog_vec)
         deactivate PS
 
         alt Star Identification Succeeded
@@ -89,7 +89,7 @@ sequenceDiagram
 
     Runner->>Preproc: load_frame(session_id, frame_idx)
     activate Preproc
-    Preproc->>Preproc: crop_spatial_roi([12:268, :])
+    Preproc->>Preproc: crop_spatial_roi(spatial slice 12 to 268)
     Preproc->>Preproc: flip_vertical_np()
     Preproc->>Preproc: apply_scale(h5_scale_calibration)
     Preproc-->>Runner: return normalized_uint8_image

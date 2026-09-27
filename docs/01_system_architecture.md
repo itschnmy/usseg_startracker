@@ -38,7 +38,7 @@ flowchart TD
         L_DET["Centroiding: Center-of-Gravity (CoG)"]
         L_FILTER["Brightness Filter (Top 20 Stars)"]
         L_ID["Star ID: Pyramid Algorithm + K-Vector Search"]
-        L_CAT[("BSC Catalog (mag <= 5.0, 0.44 MB)")]
+        L_CAT[("BSC Catalog: V-mag le 5.0, 0.44 MB")]
         L_ATT["Attitude Solver: Davenport Q Method (DQM)"]
         L_OUT["LOST Quaternion (Active Body to Inertial)"]
     end
@@ -48,7 +48,7 @@ flowchart TD
         U_DET["Adaptive Thresholding (mean + 3*sigma) & Contour Centroiding"]
         U_WRAP["Coordinate Mapper (x,y zero-based to Tetra3 y,x)"]
         U_ID["Plate Solver: Tetra3 4-Star Hash Matching"]
-        U_CAT[("Hipparcos Catalog (mag <= 7.0, 47.1 MB)")]
+        U_CAT[("Hipparcos Catalog: V-mag le 7.0, 47.1 MB")]
         U_ATT["Attitude Solver: Wahba SVD Estimator"]
         U_CONV["Conjugate Conversion for LOST/ECI Alignment"]
         U_OUT["USSEG Quaternion (Passive Inertial to Body)"]
@@ -161,24 +161,25 @@ To maintain maximum architectural modularity and allow reproducible comparative 
 
 ```mermaid
 flowchart TD
-    subgraph Repo["usseg_startracker (Root Repository)"]
+    subgraph Repo["usseg_startracker Architecture"]
         direction TB
-        CORE["src/AttitudeDeterminator/ (Python SVD/MEKF/QUEST)"]
-        PIPE["usseg_pipeline/ (Unified Python CLI & Pipeline)"]
-        DOCS["docs/ (Architectural, Schema, & Benchmark Documentation)"]
-        BENCH["scripts/ & test/ (Verification & Database Generation)"]
-        
-        subgraph Submodules["Git Submodules (submodules/)"]
-            SUB_LOST["submodules/lost (UWCubeSat/lost @ origin/master)"]
-            SUB_EVALS["submodules/lost-evals (UWCubeSat/lost-evals @ origin/master)"]
-        end
+        CORE["models/attitude/ (SVD, QUEST, Davenport Q, TRIAD, MEKF)"]
+        DET["models/detector/ (Top-Hat + Connected Components)"]
+        ID["models/identifier/ (Tetra Plate Solver)"]
+        PIPE["models/pipeline/ (Unified Pipeline & CLI)"]
+        CONFIG["configs/ (Default Parameters & Presets)"]
+        DATA["data/ (Catalogs & Tetra Database)"]
+        DOCS["docs/ (01 to 06 Numbered Documentation)"]
+        TESTS["examples/tests/ (Algorithmic Verification)"]
     end
 
+    DET --> PIPE
+    ID --> PIPE
     CORE --> PIPE
-    PIPE --> BENCH
-    SUB_LOST -.-> BENCH
-    SUB_EVALS -.-> BENCH
-    BENCH --> DOCS
+    CONFIG --> PIPE
+    DATA -.-> ID
+    PIPE --> TESTS
+    TESTS --> DOCS
 ```
 *Figure 4: Submodule layout and dependency flow within `usseg_startracker`.*
 
