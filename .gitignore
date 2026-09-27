@@ -53,3 +53,4 @@ benchmark-results/
 **/*.jfif
 **/*.png
 identificator/hip_main.dat*
+data/hip_main.dat*

@@ -3,6 +3,29 @@ Software module for CubeSat/Drone star tracker by USSEG
 
 ---
 
+## 📂 Repository Structure
+
+The repository is organized following standard modular computer vision and aerospace pipeline conventions:
+
+```text
+usseg_startracker/
+├── configs/            # Configuration presets and default parameters
+├── data/               # Star catalogs (Hipparcos, CSV) and pre-built Tetra databases (.npz, .db)
+├── dataset/            # Sample orbital test frames and synthetic fixtures
+├── models/             # Core algorithmic modules
+│   ├── detector/       # Morphological Top-Hat & connected-components star detection
+│   ├── identifier/     # Tetra hash-table star identification & plate solving
+│   └── attitude/       # Static solvers (SVD, QUEST, Davenport Q, TRIAD) & MEKF filter
+├── utils/              # Mathematical operations, SO(3) rotations, and image processing
+├── usseg_pipeline/     # High-level unified Lost-In-Space execution pipeline & CLI
+├── examples/           # Standalone demonstration scripts, database generators & OpenMV ports
+├── cpp/                # Legacy C++ embedded implementation & Eigen linear algebra headers
+├── docs/               # System architecture specifications, sequence & ER diagrams
+└── test/               # Pytest algorithmic validation and regression test suites
+```
+
+---
+
 ## 📚 Technical Documentation & System Design
 
 Detailed system design, benchmark analysis, schemas, and sequence diagrams have been partitioned into modular technical specifications inside the [`docs/`](docs/) directory:

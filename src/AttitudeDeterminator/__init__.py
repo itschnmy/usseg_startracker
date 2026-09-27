@@ -1,6 +1,30 @@
-from .math_utils import hat, unhat, build_triad_basis, rot2q
-from .estimators import TRIADEstimator, QUESTEstimator, DavenportQEstimator, SVDEstimator
-from .attitude_control_system import ADCSMode, AttitudeControlSystem
-from .mekf import MEKFEstimator
-from .attitude_determinator import AttitudeDeterminator
-from .relative_attitude_determinator import RelativeAttitudeDeterminator
+"""Backward-compatibility shim for legacy src.AttitudeDeterminator."""
+from models.attitude import (
+    AttitudeDeterminator,
+    QUESTEstimator,
+    DavenportQEstimator,
+    TRIADEstimator,
+    SVDEstimator,
+    MEKFEstimator,
+    AttitudeControlSystem,
+    ADCSMode,
+    RelativeAttitudeDeterminator,
+)
+from models.attitude import estimators, attitude_determinator, mekf
+from utils import math_utils
+
+__all__ = [
+    "AttitudeDeterminator",
+    "QUESTEstimator",
+    "DavenportQEstimator",
+    "TRIADEstimator",
+    "SVDEstimator",
+    "MEKFEstimator",
+    "AttitudeControlSystem",
+    "ADCSMode",
+    "RelativeAttitudeDeterminator",
+    "estimators",
+    "attitude_determinator",
+    "mekf",
+    "math_utils",
+]

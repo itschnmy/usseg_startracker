@@ -8,9 +8,14 @@ from typing import Any
 import cv2
 import numpy as np
 
-from identificator.plateSolver import PlateSolver, _compute_vectors
-from identificator.star_detector import StarDetector
-from src.AttitudeDeterminator import AttitudeDeterminator
+try:
+    from models.identifier.plate_solver import PlateSolver, _compute_vectors
+    from models.detector.star_detector import StarDetector
+    from models.attitude import AttitudeDeterminator
+except ImportError:
+    from identificator.plateSolver import PlateSolver, _compute_vectors
+    from identificator.star_detector import StarDetector
+    from src.AttitudeDeterminator import AttitudeDeterminator
 
 
 def _radec_to_unit_vectors(stars: np.ndarray) -> np.ndarray:
