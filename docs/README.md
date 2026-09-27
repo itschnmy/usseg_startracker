@@ -30,6 +30,7 @@
 | **04** | **[Sơ Đồ Tuần Tự Thực Thi (Sequence Diagrams)](04_sequence_diagrams.md)** | Sơ đồ tuần tự tương tác giữa các module: thực thi benchmark giả lập, quy trình thẩm định mù ảnh chuyến bay thực tế và chu kỳ bám sao tự động Lost-In-Space. |
 | **05** | **[Mô Hình Quan Hệ Thực Thể (Entity-Relationship Model)](05_entity_relationship.md)** | Lược đồ dữ liệu quan hệ kết nối giữa các kịch bản thử nghiệm, khung ảnh quang học, tọa độ tâm sao, sao danh mục và các chỉ số đánh giá sai số góc quay. |
 | **06** | **[Lộ Trình Cải Thiện & Sẵn Sàng Cho Production (Roadmap & Improvements)](06_roadmap_and_improvements.md)** | Phân tích 4 trụ cột kỹ thuật đưa hệ thống từ TRL 4-5 lên TRL 7-8 sẵn sàng phóng vào vũ trụ, cùng danh mục 5 giai đoạn công việc (Actionable Task Breakdown). |
+| **07** | **[Kiểm Toán Nhánh & Tối Ưu Hóa Pipeline (Branch Audit)](07_branch_audit.md)** | Báo cáo chi tiết các tối ưu hóa đã thực hiện (Top-Hat Centroiding, Sub-pixel, sửa lỗi tráo tọa độ, chuẩn hóa quaternion) và quy chuẩn an toàn khi merge nhánh. |
 
 ---
 
