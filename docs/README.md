@@ -32,7 +32,7 @@
 | **03** | **[Data Dictionary & Schemas](03_data_dictionary_and_schemas.md)** | Formal input/output JSON schemas, pixel coordinates, catalogs (BSC vs CDS Hipparcos), and quaternion conventions ($q_{active}$ vs $q_{passive}$). |
 | **04** | **[Sequence Diagrams](04_sequence_diagrams.md)** | Runtime execution sequence diagrams for synthetic benchmarking, blind orbital evaluation, and autonomous onboard LIS tracking. |
 | **05** | **[Entity-Relationship Model](05_entity_relationship.md)** | Relational data model connecting scenarios, image frames, centroids, matched stars, and attitude solution metrics. |
-| **06** | **[Branch Audit](06_branch_audit.md)** | Historical audit and rationale for consolidating features across repository branches. |
+| **06** | **[Roadmap & Improvements](06_roadmap_and_improvements.md)** | Production readiness analysis, optical calibration, embedded C++ porting, and flash database compression roadmap. |
 
 ---
 
@@ -67,4 +67,4 @@ graph LR
 | **03** | **[Từ điển Dữ liệu & Schemas](03_data_dictionary_and_schemas.md)** | Định dạng dữ liệu chuẩn JSON, hệ tọa độ ảnh, danh mục sao (BSC so với CDS Hipparcos), quy ước quaternion chủ động và bị động. |
 | **04** | **[Sơ đồ Tuần tự Thực thi](04_sequence_diagrams.md)** | Sơ đồ tuần tự các bước chạy thực nghiệm tổng hợp, quy trình đánh giá ảnh chuyến bay thực tế và chu kỳ bám sao tự động trên quỹ đạo. |
 | **05** | **[Mô hình Thực thể Quan hệ](05_entity_relationship.md)** | Mô hình dữ liệu quan hệ kết nối giữa các kịch bản thử nghiệm, khung ảnh, tọa độ tâm sao, sao danh mục và các chỉ số sai số thái độ. |
-| **06** | **[Kiểm toán Lịch sử Nhánh](06_branch_audit.md)** | Báo cáo kiểm toán lịch sử và căn cứ tích hợp các tính năng từ các nhánh phát triển trước đó. |
+| **06** | **[Lộ Trình Cải Thiện & Sẵn Sàng Cho Production](06_roadmap_and_improvements.md)** | Đánh giá mức độ trưởng thành (TRL 4-5 lên TRL 7-8), hiệu chuẩn méo thấu kính, viết lại C++ nhúng và nén cơ sở dữ liệu Flash. |
