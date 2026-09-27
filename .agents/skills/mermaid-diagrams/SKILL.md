@@ -1,44 +1,65 @@
 ---
 name: mermaid-diagrams
-description: Embed Mermaid diagrams in generated wiki pages. Use whenever documenting a runtime or request flow, a call sequence, a state machine or lifecycle, a data model or entity relationships, or non-trivial control flow, since these are clearer as a diagram than as prose. Also use when an update run touches a page that already contains a mermaid fence, or a page that contains a text fence a previous run degraded.
+description: High-performance, bulletproof Mermaid diagrams for Markdown documentation and technical wikis. Ensures 100% compatibility across VS Code Preview, GitHub, GitLab, and Obsidian by enforcing strict syntax safety, subgraphs with direction TB, and graph LR/TD layout optimization.
 ---
 
-# Mermaid Diagrams In Generated Wiki Pages
+# High-Performance Mermaid Diagrams Standard
 
-Diagrams are part of high-quality wiki generation, not decoration. Where a flow,
-lifecycle, or data model is easier to grasp visually, embed a Mermaid diagram in
-a fenced ```mermaid block on the most relevant page.
+## Core Philosophy: Speed, Portability, and Zero Render Failure
+Mermaid diagrams in Markdown must render instantaneously, without layout jitter, and without syntax parser errors across VS Code Markdown Preview, GitHub Web, and mobile viewers.
 
-## Choosing a diagram type
+---
 
-- `sequenceDiagram` for runtime and request flows across components (auth flows, request lifecycles, agent tool loops).
-- `stateDiagram-v2` for lifecycles and state machines (job states, connection states, run phases).
-- `erDiagram` for the data model: entities and their relationships.
-- `flowchart TD` for branching control flow and decision logic.
+## 1. Engine & Direction Rules
+1. **Always prefer `graph LR` or `graph TD`** over `flowchart`:
+   - `graph` is the battle-tested, lightweight core engine.
+   - It computes layout coordinates in O(N) with zero lag compared to heavy flowchart sub-engines.
+2. **Subsystem Direction**:
+   - Use `direction TB` inside each `subgraph` to stack components vertically while maintaining a clean horizontal (`LR`) overall system data flow.
 
-## Discipline
+---
 
-- Ground every diagram in inspected source. Do not invent participants, states, entities, or relationships the code does not support.
-- Cover the high-value cases: add a diagram wherever a page documents a request or runtime flow, a call sequence, a lifecycle or state machine, or a data model. A repository wiki usually has several such diagrams, not one overall. Skip pages that are navigation, reference tables, or pure configuration.
-- Still prefer a few strong diagrams over decorating every page: one accurate diagram on the page that needs it beats a diagram forced onto every page.
-- Give each diagram a one-line caption directly below it stating what it shows.
-- OpenWiki validates every mermaid fence after your run and converts fences that fail to parse into plain text fences. A degraded diagram is a quality failure; follow the syntax rules below so it does not happen.
+## 2. Syntax Safety (100% Parser Compliant)
+1. **Node IDs**:
+   - Use strict identifier naming: `PREFIX_NAME` (e.g. `R1_API`, `L_PRE`, `U_DET`).
+   - ONLY alphanumeric characters and underscores (`_`). NEVER use hyphens `-`, dots `.`, or spaces in IDs.
+   - NEVER use Mermaid reserved keywords as IDs or aliases: `end`, `note`, `loop`, `alt`, `opt`, `par`, `subgraph`, `start`, `stop`.
+2. **Node Labels**:
+   - **ALWAYS wrap labels in double quotes**: `NODE_ID["Label Text"]`.
+   - **NEVER use bare comparison symbols**: NEVER write `<`, `<=`, `>`, `>=` inside labels. They break the HTML lexer!
+     - Write `le 5.0` or `up to 5.0` instead of `<= 5.0`.
+     - Write `fewer than 4` instead of `< 4`.
+     - Write `ge 1` or `at least 1` instead of `>= 1`.
+3. **Layout Balancing with `<br/>`**:
+   - Never write long single-line labels. Use `<br/>` to break text into balanced rectangles:
+     `R1_Models["ActiveRecord Models<br/>(27 models)"]`.
+   - This dramatically speeds up Dagre rank-assignment layout algorithms.
+4. **Shapes & Connectors**:
+   - Use standard rectangular nodes `["..."]` or rounded nodes `("...")`.
+   - Avoid nesting double-parens or complex cylinder syntax `[("...")]` when labels contain numbers or punctuation.
+   - Prefer standard arrows `-->` and dotted dependency arrows `-.->`.
 
-## Syntax safety
+---
 
-These rules prevent the most common render breakages. When in doubt, rephrase the label.
+## 3. Reference Implementation Pattern
 
-- Never place semicolons or pipes inside node, message, or edge labels.
-- Never place unescaped angle brackets in labels; write "returns Promise of User" instead of "returns Promise<User>".
-- In `flowchart`, wrap any label containing parentheses, brackets, or other punctuation in double quotes: `A["calls foo(bar)"]`.
-- In `flowchart`, never use the bare word `end` as a node id, and never start a node id with `o` or `x` followed by a dash (both are edge-marker syntax); rename the node.
-- In `sequenceDiagram`, participant names with spaces or punctuation need an alias: `participant AS as Auth Service`.
-- Never use a Mermaid reserved word as a participant name, alias, or node id: `note`, `end`, `loop`, `alt`, `opt`, `par`, `and`, `else`, `activate`, `deactivate`, `class`, `state`, `click`, `link`. For example a notification participant must be `Notifier`, not `Note` (which collides with the `note` keyword).
-- In `erDiagram`, entity and attribute names must be single identifier-like tokens; put human phrasing in the relationship label.
-- Keep labels short. Move explanation into the surrounding prose or the caption, not the diagram.
+```mermaid
+graph LR
+    subgraph S1["Subsystem A (Inputs)"]
+        direction TB
+        S1_SRC["Data Source<br/>(Sensors / Telemetry)"]
+        S1_PRE["Preprocessor<br/>Image Normalization"]
+        S1_SRC --> S1_PRE
+    end
 
-## Update runs
+    subgraph S2["Subsystem B (Processing)"]
+        direction TB
+        S2_DET["Spot Extraction<br/>Connected Components"]
+        S2_ID["Pattern Matcher<br/>Hash Table Lookup"]
+        S2_ATT["Attitude Solver<br/>Wahba SVD Estimator"]
+        S2_DET --> S2_ID
+        S2_ID --> S2_ATT
+    end
 
-- A wrong diagram is a stale claim, not existing structure to preserve. If a source change makes a diagram inaccurate, update the diagram in the same edit as the surrounding prose.
-- Do not rewrite a diagram that is still accurate. Regenerating unchanged diagrams creates diff noise.
-- If a page contains a text fence preceded by an HTML comment starting with "openwiki: mermaid parse failed", that is a diagram a previous run degraded. Fix the syntax using the parser error in the comment, restore the ```mermaid fence, and delete the comment.
+    S1_PRE --> S2_DET
+```

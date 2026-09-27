@@ -27,58 +27,62 @@ This document presents the detailed architectural design of both the **LOST** (C
 Both systems solve the classic **Lost-In-Space (LIS)** problem: given an unidentified star field image taken by an onboard camera, detect star centroids, identify catalog stars by matching star patterns, and compute the spacecraft/camera attitude quaternion with respect to the Celestial Reference Frame (ICRF / ECI J2000).
 
 ```mermaid
-flowchart TD
-    subgraph Inputs["1. Raw Sensor Inputs"]
-        RAW_PNG["Synthetic or Flight PNG Image (8-bit grayscale)"]
-        RAW_H5["DUST V2 FAI Level-1 HDF5 (spatial slice 12:268)"]
+graph LR
+    subgraph S1["1. Raw Sensor Inputs"]
+        direction TB
+        S1_PNG["Synthetic / Flight PNG<br/>(8-bit Grayscale, 256x256)"]
+        S1_H5["DUST V2 Level-1 HDF5<br/>(Spatial Slice 12:268)"]
     end
 
-    subgraph LOST_Pipe["2. LOST Pipeline (C++ Core)"]
-        L_PRE["Image Normalization & Background Filter"]
-        L_DET["Centroiding: Center-of-Gravity (CoG)"]
-        L_FILTER["Brightness Filter (Top 20 Stars)"]
-        L_ID["Star ID: Pyramid Algorithm + K-Vector Search"]
-        L_CAT[("BSC Catalog: V-mag le 5.0, 0.44 MB")]
-        L_ATT["Attitude Solver: Davenport Q Method (DQM)"]
-        L_OUT["LOST Quaternion (Active Body to Inertial)"]
+    subgraph S2["2. LOST Pipeline (C++ Core)"]
+        direction TB
+        S2_PRE["Image Normalization<br/>& Background Filter"]
+        S2_DET["Centroiding Engine<br/>Center-of-Gravity (CoG)"]
+        S2_FILTER["Centroid Filter<br/>Top 20 Brightest Stars"]
+        S2_ID["Pyramid Star-ID<br/>K-Vector Distance Query"]
+        S2_CAT["BSC Bright Star Catalog<br/>(mag le 5.0, 0.44 MB)"]
+        S2_ATT["Attitude Estimator<br/>Davenport Q Method (DQM)"]
+        S2_OUT["Active Quaternion<br/>Body to Inertial (ECI)"]
+        S2_PRE --> S2_DET
+        S2_DET --> S2_FILTER
+        S2_FILTER --> S2_ID
+        S2_CAT -.-> S2_ID
+        S2_ID --> S2_ATT
+        S2_ATT --> S2_OUT
     end
 
-    subgraph USSEG_Pipe["3. USSEG Pipeline (Python Core)"]
-        U_PRE["Dynamic Scaling (h5-scale dev calibration)"]
-        U_DET["Adaptive Thresholding (mean + 3*sigma) & Contour Centroiding"]
-        U_WRAP["Coordinate Mapper (x,y zero-based to Tetra3 y,x)"]
-        U_ID["Plate Solver: Tetra3 4-Star Hash Matching"]
-        U_CAT[("Hipparcos Catalog: V-mag le 7.0, 47.1 MB")]
-        U_ATT["Attitude Solver: Wahba SVD Estimator"]
-        U_CONV["Conjugate Conversion for LOST/ECI Alignment"]
-        U_OUT["USSEG Quaternion (Passive Inertial to Body)"]
+    subgraph S3["3. USSEG Pipeline (Python Core)"]
+        direction TB
+        S3_PRE["Adaptive Scaling<br/>Top-Hat Morphological Filter"]
+        S3_DET["Centroiding Engine<br/>Connected Components (Area ge 1)"]
+        S3_WRAP["Coordinate Mapper<br/>Image (x, y) to Tetra (y, x)"]
+        S3_ID["Tetra Plate Solver<br/>4-Star Hash Table Lookup"]
+        S3_CAT["Hipparcos Star Catalog<br/>(mag le 7.0, 47.1 MB)"]
+        S3_ATT["Attitude Estimator<br/>Wahba SVD Optimal Solver"]
+        S3_OUT["Passive Quaternion<br/>Inertial to Body"]
+        S3_PRE --> S3_DET
+        S3_DET --> S3_WRAP
+        S3_WRAP --> S3_ID
+        S3_CAT -.-> S3_ID
+        S3_ID --> S3_ATT
+        S3_ATT --> S3_OUT
     end
 
-    subgraph Eval_Harness["4. Unified Evaluation Harness"]
-        HARNESS["Evaluation Runner & Ground Truth Assessor"]
-        WCS_REF[("Astrometry.net WCS Pseudo-Ground-Truth")]
-        CORR_REF[("Tycho-2 Corr Star Catalog")]
-        METRICS["Metric Evaluator: Availability, Solve Rate, Precision, Latency"]
+    subgraph S4["4. Evaluation & Verification"]
+        direction TB
+        S4_WCS["Astrometry.net WCS<br/>Pseudo-Ground-Truth"]
+        S4_CORR["Tycho-2 Catalog<br/>Centroid Ground Truth"]
+        S4_EVAL["Comparative Harness<br/>Boresight, Attitude & Timing"]
+        S4_WCS -.-> S4_EVAL
+        S4_CORR -.-> S4_EVAL
     end
 
-    RAW_PNG --> L_PRE
-    RAW_H5 --> L_PRE
-    RAW_PNG --> U_PRE
-    RAW_H5 --> U_PRE
-
-    L_PRE --> L_DET --> L_FILTER --> L_ID
-    L_CAT -.-> L_ID
-    L_ID --> L_ATT --> L_OUT
-
-    U_PRE --> U_DET --> U_WRAP --> U_ID
-    U_CAT -.-> U_ID
-    U_ID --> U_ATT --> U_CONV --> U_OUT
-
-    L_OUT --> HARNESS
-    U_OUT --> HARNESS
-    WCS_REF -.-> HARNESS
-    CORR_REF -.-> HARNESS
-    HARNESS --> METRICS
+    S1_PNG --> S2_PRE
+    S1_H5 --> S2_PRE
+    S1_PNG --> S3_PRE
+    S1_H5 --> S3_PRE
+    S2_OUT --> S4_EVAL
+    S3_OUT --> S4_EVAL
 ```
 *Figure 1: High-level comparison of LOST and USSEG end-to-end star tracking pipelines and evaluation harness.*
 
@@ -89,18 +93,31 @@ flowchart TD
 ### 2.1 Stage 1: Preprocessing & Centroid Extraction
 
 ```mermaid
-flowchart LR
-    subgraph LOST_Centroid["LOST Centroiding Flow"]
-        L1["Input Raster"] --> L2["Threshold Cutoff"]
-        L2 --> L3["Connected Component CoG"]
-        L3 --> L4["Flux Sort (Top 20 Brightest)"]
+graph LR
+    subgraph C1["LOST Centroiding Pipeline"]
+        direction TB
+        C1_IN["Input Raster Image"]
+        C1_TH["Global Threshold Cutoff"]
+        C1_CC["Connected Components & CoG"]
+        C1_SORT["Flux Sort (Top 20 Brightest)"]
+        C1_IN --> C1_TH
+        C1_TH --> C1_CC
+        C1_CC --> C1_SORT
     end
 
-    subgraph USSEG_Centroid["USSEG Centroiding Flow"]
-        U1["Input Raster"] --> U2["Adaptive Threshold (mean + 3*sigma)"]
-        U2 --> U3["Contour Extraction (Min Area 2)"]
-        U3 --> U4["Subpixel Center-of-Mass"]
-        U4 --> U5["Flux Ranking (Top 20 Stars)"]
+    subgraph C2["USSEG Centroiding Pipeline"]
+        direction TB
+        C2_IN["Input Raster Image"]
+        C2_TOP["Morphological Top-Hat Filter"]
+        C2_TH["Adaptive Threshold (mean + 3*sigma)"]
+        C2_CC["Connected Components (Area ge 1)"]
+        C2_SUB["Subpixel Center-of-Mass"]
+        C2_SORT["Flux Ranking (Top 20 Stars)"]
+        C2_IN --> C2_TOP
+        C2_TOP --> C2_TH
+        C2_TH --> C2_CC
+        C2_CC --> C2_SUB
+        C2_SUB --> C2_SORT
     end
 ```
 *Figure 2: Centroid detection workflows in LOST and USSEG.*
@@ -117,19 +134,33 @@ flowchart LR
 ### 2.2 Stage 2: Star Identification (Star-ID)
 
 ```mermaid
-flowchart LR
-    subgraph LOST_ID["LOST Pyramid / K-Vector Flow"]
-        LP1["Centroid Vectors"] --> LP2["Pick Primary Triangle"]
-        LP2 --> LP3["K-Vector Angular Distance Query"]
-        LP3 --> LP4["Validate 4th Star (Pyramid Confirmation)"]
-        LP4 --> LP5["Matched Star ID Set"]
+graph LR
+    subgraph I1["LOST: Pyramid & K-Vector"]
+        direction TB
+        I1_VEC["Centroid Unit Vectors"]
+        I1_TRI["Select Primary Triangle"]
+        I1_KVEC["K-Vector Angular Query"]
+        I1_CONF["4th Star Confirmation (Pyramid)"]
+        I1_OUT["Identified Catalog Star IDs"]
+        I1_VEC --> I1_TRI
+        I1_TRI --> I1_KVEC
+        I1_KVEC --> I1_CONF
+        I1_CONF --> I1_OUT
     end
 
-    subgraph USSEG_ID["USSEG Tetra3 Hash Flow"]
-        UP1["Centroid Vectors"] --> UP2["Generate 4-Star Combinations"]
-        UP2 --> UP3["Compute Dimensionless Edge Hashes"]
-        UP3 --> UP4["O(1) Hash Table Lookup (Hipparcos)"]
-        UP4 --> UP5["Largest Clique Verification"]
+    subgraph I2["USSEG: Tetra Hash Matching"]
+        direction TB
+        I2_VEC["Centroid Unit Vectors"]
+        I2_COMB["Generate 4-Star Combinations"]
+        I2_HASH["Dimensionless Edge Invariants"]
+        I2_LOOK["O(1) Hash Table Lookup"]
+        I2_VERIF["Largest Clique Verification"]
+        I2_OUT["Matched Catalog Vectors"]
+        I2_VEC --> I2_COMB
+        I2_COMB --> I2_HASH
+        I2_HASH --> I2_LOOK
+        I2_LOOK --> I2_VERIF
+        I2_VERIF --> I2_OUT
     end
 ```
 *Figure 3: Star pattern recognition algorithms: LOST Pyramid vs USSEG Tetra3.*
@@ -160,26 +191,33 @@ flowchart LR
 To maintain maximum architectural modularity and allow reproducible comparative benchmarking, both `lost` and `lost-evals` are integrated into `usseg_startracker` via standard Git submodules under `submodules/`.
 
 ```mermaid
-flowchart TD
-    subgraph Repo["usseg_startracker Architecture"]
+graph LR
+    subgraph M_CORE["Core Engine (models/)"]
         direction TB
-        CORE["models/attitude/ (SVD, QUEST, Davenport Q, TRIAD, MEKF)"]
-        DET["models/detector/ (Top-Hat + Connected Components)"]
-        ID["models/identifier/ (Tetra Plate Solver)"]
-        PIPE["models/pipeline/ (Unified Pipeline & CLI)"]
-        CONFIG["configs/ (Default Parameters & Presets)"]
-        DATA["data/ (Catalogs & Tetra Database)"]
-        DOCS["docs/ (01 to 06 Numbered Documentation)"]
-        TESTS["examples/tests/ (Algorithmic Verification)"]
+        M_DET["models/detector<br/>Top-Hat + Connected Components"]
+        M_ID["models/identifier<br/>Tetra Hash Table Solver"]
+        M_ATT["models/attitude<br/>SVD, QUEST, Davenport Q, MEKF"]
+        M_PIPE["models/pipeline<br/>Unified StarTrackerPipeline"]
+        M_DET --> M_PIPE
+        M_ID --> M_PIPE
+        M_ATT --> M_PIPE
     end
 
-    DET --> PIPE
-    ID --> PIPE
-    CORE --> PIPE
-    CONFIG --> PIPE
-    DATA -.-> ID
-    PIPE --> TESTS
-    TESTS --> DOCS
+    subgraph M_DATA["Data & Configs"]
+        direction TB
+        M_CONF["configs/<br/>Default Camera & Pipeline Presets"]
+        M_CAT["data/<br/>Hipparcos Catalog & Tetra DB"]
+        M_CONF --> M_CORE
+        M_CAT -.-> M_ID
+    end
+
+    subgraph M_OUT["Documentation & Tests"]
+        direction TB
+        M_TEST["examples/tests<br/>Algorithmic Pytest Suite"]
+        M_DOCS["docs/<br/>01 to 06 Technical Series"]
+        M_PIPE --> M_TEST
+        M_TEST --> M_DOCS
+    end
 ```
 *Figure 4: Submodule layout and dependency flow within `usseg_startracker`.*
 

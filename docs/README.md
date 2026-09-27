@@ -39,16 +39,13 @@
 ### 🏛️ Architecture Overview
 
 ```mermaid
-flowchart LR
-    A["Camera Sensor / Flight Image"] --> B["Centroid Extraction"]
-    B --> C["Star Pattern Matcher"]
-    C --> D["Wahba Attitude Estimator"]
-    D --> E["Spacecraft ADCS Quaternion"]
-
-    subgraph USSEG_Module["USSEG Unified Package"]
-        B
-        C
-        D
+graph LR
+    subgraph USSEG["USSEG Star Tracker Engine"]
+        direction TB
+        E1["Camera Sensor / Flight Frame"] --> E2["Top-Hat Centroid Extraction"]
+        E2 --> E3["Tetra 4-Star Hash Matcher"]
+        E3 --> E4["Wahba SVD Attitude Estimator"]
+        E4 --> E5["Spacecraft ADCS Quaternion"]
     end
 ```
 
