@@ -49,7 +49,12 @@ class StarTrackerPipeline:
 
     def __init__(self, config: PipelineConfig):
         self.config = config
-        self.solver = PlateSolver(Path(config.database).resolve())
+        db_path = Path(config.database).resolve()
+        if not db_path.exists():
+            candidate = db_path.parent.parent / "data" / db_path.name
+            if candidate.exists():
+                db_path = candidate
+        self.solver = PlateSolver(db_path)
         props = self.solver.database_properties
         min_fov = float(props["min_fov"])
         max_fov = float(props["max_fov"])
