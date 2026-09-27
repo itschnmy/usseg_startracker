@@ -1,3 +1,21 @@
+<div align="center">
+
+# System Sequence Diagrams & Runtime Workflows
+### *Sơ Đồ Tuần Tự & Quy Trình Thực Thi*
+
+---
+
+<!-- Language Switcher Bar -->
+<p>
+  <a href="../README.md#-english-documentation"><img src="https://img.shields.io/badge/Back_to-README-blue?style=for-the-badge&logo=readme&logoColor=white" alt="README"/></a>
+  &nbsp;&nbsp;
+  <a href="../README.md#-tài-liệu-tiếng-việt"><img src="https://img.shields.io/badge/Trang_Chủ-Tiếng_Việt-red?style=for-the-badge&logo=star&logoColor=white" alt="Tiếng Việt"/></a>
+</p>
+
+---
+
+</div>
+
 # Star Tracker Sequence Diagrams: Execution & Runtime Flows
 
 This document details the step-by-step sequence diagrams showing the runtime and request flows for synthetic benchmarking, real-flight DUST V2 validation, and autonomous Lost-In-Space spacecraft operation.

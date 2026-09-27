@@ -1,3 +1,21 @@
+<div align="center">
+
+# System Architecture Specification
+### *Đặc Tả Kiến Trúc Hệ Thống*
+
+---
+
+<!-- Language Switcher Bar -->
+<p>
+  <a href="../README.md#-english-documentation"><img src="https://img.shields.io/badge/Back_to-README-blue?style=for-the-badge&logo=readme&logoColor=white" alt="README"/></a>
+  &nbsp;&nbsp;
+  <a href="../README.md#-tài-liệu-tiếng-việt"><img src="https://img.shields.io/badge/Trang_Chủ-Tiếng_Việt-red?style=for-the-badge&logo=star&logoColor=white" alt="Tiếng Việt"/></a>
+</p>
+
+---
+
+</div>
+
 # Star Tracker System Architecture: LOST vs USSEG
 
 This document presents the detailed architectural design of both the **LOST** (C++) and **USSEG** (Python) star tracker pipelines, their submodule integrations, and a comparative analysis of each pipeline component.

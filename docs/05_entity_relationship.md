@@ -1,3 +1,21 @@
+<div align="center">
+
+# Entity-Relationship Model & Domain Schema
+### *Mô Hình Quan Hệ Thực Thể & Lược Đồ Dữ Liệu*
+
+---
+
+<!-- Language Switcher Bar -->
+<p>
+  <a href="../README.md#-english-documentation"><img src="https://img.shields.io/badge/Back_to-README-blue?style=for-the-badge&logo=readme&logoColor=white" alt="README"/></a>
+  &nbsp;&nbsp;
+  <a href="../README.md#-tài-liệu-tiếng-việt"><img src="https://img.shields.io/badge/Trang_Chủ-Tiếng_Việt-red?style=for-the-badge&logo=star&logoColor=white" alt="Tiếng Việt"/></a>
+</p>
+
+---
+
+</div>
+
 # Star Tracker Entity-Relationship Diagram & Data Model
 
 This document defines the relational data model connecting benchmark scenarios, image frames, detected centroids, catalog stars, identified matches, attitude solutions, and evaluation metrics across the star tracking system.

@@ -1,3 +1,21 @@
+<div align="center">
+
+# Branch Audit & Consolidation Rationale
+### *Kiểm Toán Lịch Sử Nhánh & Căn Cứ Hợp Nhất*
+
+---
+
+<!-- Language Switcher Bar -->
+<p>
+  <a href="../README.md#-english-documentation"><img src="https://img.shields.io/badge/Back_to-README-blue?style=for-the-badge&logo=readme&logoColor=white" alt="README"/></a>
+  &nbsp;&nbsp;
+  <a href="../README.md#-tài-liệu-tiếng-việt"><img src="https://img.shields.io/badge/Trang_Chủ-Tiếng_Việt-red?style=for-the-badge&logo=star&logoColor=white" alt="Tiếng Việt"/></a>
+</p>
+
+---
+
+</div>
+
 # Branch audit and integration decisions
 
 Audit date: 2026-08-24. Integration branch: `integration/unified-startracker-eval`, based on

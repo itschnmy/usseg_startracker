@@ -1,3 +1,21 @@
+<div align="center">
+
+# Data Dictionary, Coordinate Frames & Schemas
+### *Từ Điển Dữ Liệu, Hệ Quy Chiếu & Schemas*
+
+---
+
+<!-- Language Switcher Bar -->
+<p>
+  <a href="../README.md#-english-documentation"><img src="https://img.shields.io/badge/Back_to-README-blue?style=for-the-badge&logo=readme&logoColor=white" alt="README"/></a>
+  &nbsp;&nbsp;
+  <a href="../README.md#-tài-liệu-tiếng-việt"><img src="https://img.shields.io/badge/Trang_Chủ-Tiếng_Việt-red?style=for-the-badge&logo=star&logoColor=white" alt="Tiếng Việt"/></a>
+</p>
+
+---
+
+</div>
+
 # Star Tracker Data Dictionary & Schemas
 
 This document defines the formal data dictionary, input/output schemas, coordinate systems, and file formats used across the LOST and USSEG star tracking pipelines and the evaluation harness.
