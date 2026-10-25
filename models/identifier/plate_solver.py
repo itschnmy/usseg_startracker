@@ -341,10 +341,20 @@ class PlateSolver():
     def solve_from_centroids(self, star_centroids, size, fov_estimate=None, fov_max_error=None,
                              pattern_checking_stars=8, match_radius=.01, match_threshold=1e-3,
                              solve_timeout=None, target_pixel=None, distortion=None,
-                             return_matches=True, return_visual=False):
+                             return_matches=True, return_visual=False,
+                             max_input_stars=None, verification_catalog_stars=None):
         """Solve for the sky location using a list of centroids. For the details and examples, please visit the open source: https://github.com/esa/tetra3/blob/master/tetra3/tetra3.py"""
 
+        # max_input_stars=None preserves the database's legacy input cap.
+        # verification_catalog_stars=None preserves the legacy catalog cap
+        # (number of input centroids). These controls do not add sky hints.
+
         assert self.has_database, 'No database loaded'
+        for name, value in (('max_input_stars', max_input_stars),
+                            ('verification_catalog_stars', verification_catalog_stars)):
+            if value is not None and (isinstance(value, bool)
+                    or not isinstance(value, (int, np.integer)) or value < 4):
+                raise ValueError(name + ' must be an integer >= 4, or None')
         self._logger.debug('Got solve from centroids with input: '
                            + str((len(star_centroids), size, fov_estimate, fov_max_error,
                                  pattern_checking_stars, match_radius, match_threshold,
@@ -387,7 +397,7 @@ class PlateSolver():
         presorted = self._db_props['presort_patterns']
         upper_tri_index = np.triu_indices(p_size, 1)
 
-        image_centroids = image_centroids[:num_stars, :]
+        image_centroids = image_centroids[:num_stars if max_input_stars is None else max_input_stars, :]
         self._logger.debug('Trimmed centroid input shape to: ' + str(image_centroids.shape))
         t0_solve = precision_timestamp()
 
@@ -599,10 +609,14 @@ class PlateSolver():
                     (nearby_star_centroids, kept) = _compute_centroids(nearby_star_vectors_derot, (height, width), fov)
                     nearby_star_vectors = nearby_star_vectors[kept, :]
                     nearby_star_inds = nearby_star_inds[kept]
-                    # Only keep as many as the centroids, they should ideally both be the num_stars brightest
-                    nearby_star_centroids = nearby_star_centroids[:len(image_centroids)]
-                    nearby_star_vectors = nearby_star_vectors[:len(image_centroids)]
-                    nearby_star_inds = nearby_star_inds[:len(image_centroids)]
+                    # Legacy assumes the brightest catalog stars are all detected.
+                    # An explicit wider pool tolerates missing bright stars. The
+                    # probability below must use the ACTUAL enlarged pool size.
+                    catalog_limit = (len(image_centroids) if verification_catalog_stars is None
+                                     else verification_catalog_stars)
+                    nearby_star_centroids = nearby_star_centroids[:catalog_limit]
+                    nearby_star_vectors = nearby_star_vectors[:catalog_limit]
+                    nearby_star_inds = nearby_star_inds[:catalog_limit]
 
                     # Match these centroids to the image
                     matched_stars = _find_centroid_matches(image_centroids_undist, nearby_star_centroids, width*match_radius)

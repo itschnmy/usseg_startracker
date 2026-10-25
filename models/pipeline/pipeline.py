@@ -37,12 +37,18 @@ class PipelineConfig:
     star_ranking: str = "peak"
     max_stars: int = 20
     pattern_checking_stars: int = 12
+    max_input_stars: int | None = None
+    verification_catalog_stars: int | None = None
     match_radius: float = 0.015
     match_threshold: float = 1e-3
     solve_timeout_ms: float | None = 600.0
     attitude_method: str = "SVD"
 
     def __post_init__(self):
+        for name in ("max_input_stars", "verification_catalog_stars"):
+            value = getattr(self, name)
+            if value is not None and (isinstance(value, bool) or not isinstance(value, int) or value < 4):
+                raise ValueError(f"{name} must be an integer >= 4, or null")
         if not math.isfinite(self.fov_deg) or not 0 < self.fov_deg < 180:
             raise ValueError("fov_deg must be horizontal FOV between 0 and 180 degrees")
         if not math.isfinite(self.fov_max_error_deg) or self.fov_max_error_deg < 0:
@@ -200,6 +206,8 @@ class StarTrackerPipeline:
             fov_estimate=self.config.fov_deg,
             fov_max_error=self.config.fov_max_error_deg,
             pattern_checking_stars=min(self.config.pattern_checking_stars, len(detected)),
+            max_input_stars=self.config.max_input_stars,
+            verification_catalog_stars=self.config.verification_catalog_stars,
             match_radius=self.config.match_radius,
             match_threshold=self.config.match_threshold,
             solve_timeout=self.config.solve_timeout_ms,

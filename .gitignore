@@ -63,3 +63,7 @@ data/hip_main.dat*
 # Small, intentional example fixtures; generated annotations remain ignored.
 !dataset/03.bmp
 !dataset/stellarium_test/stellarium_view.png
+
+# Reviewed documentation snapshots only; other generated images stay ignored.
+!docs/assets/image03-input.png
+!docs/assets/image03-result.png

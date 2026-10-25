@@ -18,11 +18,17 @@ bash examples/materialize_assets.sh
 .venv/bin/python examples/run_image_examples.py --output-dir out/image-examples
 ```
 
-The runner uses `configs/examples/stellarium.json` and `configs/examples/image03.json`.
-Stellarium now solves blind (16 verified matches); image03 is still an unresolved
-diagnostic, not a validated attitude result. See [configuration notes](docs/image-example-configs.md).
+The runner uses `configs/examples/stellarium.json` and `configs/examples/image03-experimental.json`.
+Stellarium solves blind (16 verified matches). Image03 is a **hardware/camera capture**
+provided by the user; the current experimental example returns 7 matches
+using the supplied Astrometry FOV, without center/roll/label hints. Full image03
+attitude accuracy awaits the original WCS. See [experimental notes](docs/image03-experimental.md)
+and [configuration notes](docs/image-example-configs.md).
 The historical benchmark defaults are unchanged; example presets are development tuning.
-Image03 is retained only as an unresolved test fixture. Test with
+The historical `image03.json` preset is retained for comparison and still returns no_solve.
+See the [fixture README with original and solver-result images](dataset/README.md#image03-hardware-camera-capture)
+for the measured result and acquisition limitations.
+Image03 is retained as a development test fixture, not a held-out benchmark. Test with
 `.venv/bin/python -m pytest -q`; two optional external-CSV suites are skipped
 when their data is absent. The Windows-only `tools/stellarium/extract_star.py` is a separate
 label-collection utility with optional dependencies, not the blind pipeline.

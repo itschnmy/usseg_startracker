@@ -31,6 +31,8 @@ def build_parser(config: PipelineConfig | None = None) -> argparse.ArgumentParse
     parser.add_argument("--border-margin-px", type=int, default=defaults["border_margin_px"])
     parser.add_argument("--star-ranking", choices=("peak", "flux"), default=defaults["star_ranking"])
     parser.add_argument("--max-stars", type=int, default=defaults["max_stars"])
+    parser.add_argument("--max-input-stars", type=int, default=defaults["max_input_stars"])
+    parser.add_argument("--verification-catalog-stars", type=int, default=defaults["verification_catalog_stars"])
     parser.add_argument("--pattern-checking-stars", type=int, default=defaults["pattern_checking_stars"])
     parser.add_argument("--match-radius", type=float, default=defaults["match_radius"])
     parser.add_argument("--match-threshold", type=float, default=defaults["match_threshold"])

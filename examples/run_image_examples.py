@@ -25,7 +25,8 @@ def main():
     records = []
     for name, image_path in (("image03", ROOT/"dataset/03.bmp"),
                               ("stellarium", ROOT/"dataset/stellarium_test/stellarium_view.png")):
-        config_path = ROOT/"configs/examples"/f"{name}.json"
+        preset = "image03-experimental" if name == "image03" else name
+        config_path = ROOT/"configs/examples"/f"{preset}.json"
         config = PipelineConfig.from_json(config_path)
         result = StarTrackerPipeline(config).run(image_path)
         record = {"case": name, "config_file": str(config_path), "result": result,
@@ -35,6 +36,8 @@ def main():
                                     for p in sorted((ROOT/"models").rglob("*.py"))}}
         records.append(record)
         image = cv2.imread(str(image_path), cv2.IMREAD_GRAYSCALE)
+        if name == "image03" and not cv2.imwrite(str(args.output_dir/"image03-input.png"), image):
+            raise OSError("Failed to write lossless input preview")
         gain = 8 if name == "image03" else 1  # Display only; NEVER solver input.
         overlay = cv2.cvtColor(np.clip(image.astype(float)*gain,0,255).astype(np.uint8), cv2.COLOR_GRAY2BGR)
         for rank, point in enumerate(result["centroids_xy"], 1):
@@ -56,20 +59,33 @@ def main():
     labels = json.loads((ROOT/"dataset/stellarium_test/stars_labels.json").read_text())
     ref, _, _ = reference(labels)
     records[1]["metrics"] = score(records[1]["result"], labels, ref)
-    records[0]["reference_status"] = "unavailable: historical manual annotation is not verified ground truth"
+    records[0]["acquisition"] = "hardware/camera capture, as confirmed by the user; camera/exposure metadata unavailable"
+    records[0]["reference_status"] = "rounded Astrometry screenshot center only; original WCS unavailable; full attitude error unavailable"
+    result03 = records[0]["result"]
+    if result03["status"] == "ok":
+        ra, dec = np.deg2rad([result03["ra_deg"], result03["dec_deg"]])
+        ref_ra, ref_dec = np.deg2rad([48.773, 41.364])
+        cosine = np.sin(dec)*np.sin(ref_dec) + np.cos(dec)*np.cos(ref_dec)*np.cos(ra-ref_ra)
+        records[0]["approx_boresight_error_deg"] = float(np.rad2deg(np.arccos(np.clip(cosine, -1, 1))))
     for record in records:
         (args.output_dir/f"{record['case']}.json").write_text(json.dumps(record, indent=2, allow_nan=False)+"\n", encoding="utf-8")
     rows = ["# Configured USSEG image examples", "",
             "Development examples tuned on these images, NOT a held-out benchmark. Original benchmark defaults remain unchanged.", "",
-            "| Case | Status | Matches | Attitude error vs labels |",
-            "|---|---|---:|---:|"]
+            "| Case | Status | Matches | Full attitude error vs labels | Approx. center error vs screenshot |",
+            "|---|---|---:|---:|---:|"]
     for record in records:
         error = record.get("metrics", {}).get("attitude_error_deg")
-        rows.append(f"| {record['case']} | {record['result']['status']} | {record['result']['num_matches']} | {f'{error:.6f} deg' if error is not None else 'unavailable'} |")
+        center_error = record.get("approx_boresight_error_deg")
+        rows.append(f"| {record['case']} | {record['result']['status']} | {record['result']['num_matches']} | {f'{error:.6f} deg' if error is not None else 'unavailable'} | {f'{center_error:.6f} deg' if center_error is not None else '—'} |")
     rows.extend(["", "FOV is horizontal. Stellarium label VFOV 16.9761 deg becomes HFOV 29.717817 deg.",
-                 "Image03 preset FOV is an exploratory assumption, NOT a measured calibration. A no_solve is retained honestly.",
+                 "Image03 is a hardware/camera capture supplied by the user, not a direct software screenshot fixture. Camera model/exposure and physical-sky versus screen-capture provenance are not documented.",
+                 "Image03 uses image03-experimental.json with HFOV16.8° from the supplied Astrometry screenshot. Center/roll/labels are not solver inputs. Historical image03.json remains unchanged for comparison.",
+                 "Image03 approximate center discrepancy is NOT full quaternion/roll accuracy; original WCS is still unavailable.",
                  "Overlays: yellow = selected detections, green HIP IDs = actual solver matches. Image03 display gain 8x does not affect solving.",
-                 "Stellarium labels are a pseudo-reference. These per-image presets must not be reported as an unbiased DUST/LOST-evals improvement."])
+                 "Stellarium labels are a pseudo-reference. These per-image presets must not be reported as an unbiased DUST/LOST-evals improvement.",
+                 "", "## Image03 hardware capture", "", "Original pixels, lossless PNG preview (no brightness gain):", "",
+                 "![Image03 original](image03-input.png)", "", "Actual solver output; display gain8 only:", "",
+                 "![Image03 solver result](image03-overlay.png)"])
     (args.output_dir/"summary.md").write_text("\n".join(rows)+"\n", encoding="utf-8")
 
 

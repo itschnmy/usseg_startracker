@@ -1,0 +1,21 @@
+{
+  "database": "../../data/default_database.npz",
+  "fov_deg": 16.8,
+  "fov_max_error_deg": 0.8,
+  "sigma_threshold": 3.0,
+  "min_area": 3,
+  "max_area": 300,
+  "use_tophat": true,
+  "tophat_kernel_size": 31,
+  "component_mask": true,
+  "border_margin_px": 12,
+  "star_ranking": "flux",
+  "max_stars": 40,
+  "pattern_checking_stars": 16,
+  "max_input_stars": 40,
+  "verification_catalog_stars": 90,
+  "match_radius": 0.003,
+  "match_threshold": 0.001,
+  "solve_timeout_ms": 10000,
+  "attitude_method": "SVD"
+}

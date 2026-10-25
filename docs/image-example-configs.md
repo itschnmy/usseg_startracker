@@ -4,6 +4,16 @@ Python 3.10; branch `dev/version01`. This is a development-example upgrade,
 not a new LOST-evals/DUST benchmark. No label coordinates, sky center or
 reference quaternion are used to solve either image.
 
+**Current examples runner:** `examples/run_image_examples.py` now selects
+`image03-experimental.json` for the hardware/camera image03 (7 matches) and
+`stellarium.json` for the direct Stellarium screenshot (16 verified matches).
+See the [fixture README with images](../dataset/README.md#image03-hardware-camera-capture).
+
+**Follow-up:** the separate [image03 experimental preset](image03-experimental.md)
+now solves 7 stars with HFOV16.8°, an extended verification input and a tighter
+gate. The historical image03 preset and results below are preserved, not
+silently replaced. Full quaternion accuracy still needs the original WCS.
+
 ## Changes
 
 - JSON configuration loads through `PipelineConfig.from_json` and CLI `--config`.
@@ -65,7 +75,7 @@ Changing a parameter does not require editing source:
 CLI exit 0 means processing completed, including `no_solve`. Check the JSON
 `status`; it is not a guarantee that attitude was found.
 
-## Measured example results
+## Historical measured example results (before verifier experiment)
 
 Stellarium blind pipeline: 16 matches; 16/16 labelled centroid/catalog pairs
 agree within 3px and 0.05 degrees. Full attitude error against the label-derived
@@ -90,7 +100,7 @@ The current artifacts are stored in the sibling evaluator under
 These presets were tuned on the example images: no held-out accuracy/FPS claim
 is made, and DUST must be reevaluated separately before claiming improvements.
 
-## Image03 deeper follow-up
+## Historical image03 deeper follow-up (before Astrometry calibration)
 
 A systematic follow-up completed 568 solver calls: 432 coarse parameter sweeps,
 40 extended calls with a 5-second deadline and 96 virtual pixel-aspect trials.
