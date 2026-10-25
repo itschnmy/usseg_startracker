@@ -12,11 +12,11 @@
 // =============================================================================
 
 #include "header.h"
-#include "identificator/CameraModel.h"
-#include "identificator/DetectedStar.h"
-#include "identificator/StarCatalog.h"
-#include "identificator/PairCatalog.h"
-#include "identificator/VotingIdentifier.h"
+#include "CameraModel.h"
+#include "DetectedStar.h"
+#include "StarCatalog.h"
+#include "PairCatalog.h"
+#include "VotingIdentifier.h"
 
 #include <iostream>
 #include <Eigen/Geometry>

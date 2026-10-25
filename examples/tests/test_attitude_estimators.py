@@ -5,29 +5,27 @@ Loads test scenarios from body_frame_test_cases.csv, aligns them with the
 star catalog, and verifies TRIAD / QUEST attitude estimates against ground-truth
 quaternions with noise-adaptive thresholds.
 """
-import sys
-import os
+from pathlib import Path
 import numpy as np
 import pandas as pd
 import pytest
 
 # ---------------------------------------------------------------------------
-# Path setup — allow imports from the project root
+# Dataset paths (imports use the installed package / pytest configuration).
 # ---------------------------------------------------------------------------
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-sys.path.insert(0, PROJECT_ROOT)
+DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
-from src.AttitudeDeterminator import TRIADEstimator, QUESTEstimator, DavenportQEstimator
+from models.attitude import TRIADEstimator, QUESTEstimator, DavenportQEstimator
 
 # ---------------------------------------------------------------------------
 # Data fixtures (loaded once per session)
 # ---------------------------------------------------------------------------
-CATALOG_PATH = os.path.join(PROJECT_ROOT, "star_catalog.csv")
-BODY_FRAME_PATH = os.path.join(PROJECT_ROOT, "body_frame_test_cases.csv")
+CATALOG_PATH = DATA_DIR / "star_catalog.csv"
+BODY_FRAME_PATH = DATA_DIR / "body_frame_test_cases.csv"
 
-if not os.path.exists(BODY_FRAME_PATH):
+if not BODY_FRAME_PATH.is_file():
     pytest.skip(
-        "body_frame_test_cases.csv is not present on any audited repository branch",
+        f"Optional estimator fixture is missing: {BODY_FRAME_PATH}",
         allow_module_level=True,
     )
 

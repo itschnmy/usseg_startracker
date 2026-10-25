@@ -1,0 +1,16 @@
+{
+  "database": "../../data/default_database.npz",
+  "fov_deg": 28.0,
+  "fov_max_error_deg": 10.0,
+  "sigma_threshold": 3.0,
+  "min_area": 3,
+  "max_area": 300,
+  "use_tophat": true,
+  "tophat_kernel_size": 31,
+  "component_mask": true,
+  "border_margin_px": 12,
+  "star_ranking": "flux",
+  "max_stars": 20,
+  "pattern_checking_stars": 16,
+  "solve_timeout_ms": 10000
+}

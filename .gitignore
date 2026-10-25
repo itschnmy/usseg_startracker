@@ -46,6 +46,10 @@ __pycache__/
 .venv/
 .pytest_cache/
 benchmark-results/
+*.egg-info/
+out/
+scratch/
+*:Zone.Identifier
 
 # Large binary databases & raw test images
 *.npz
@@ -54,3 +58,7 @@ benchmark-results/
 **/*.png
 identificator/hip_main.dat*
 data/hip_main.dat*
+
+# Small, intentional example fixtures; generated annotations remain ignored.
+!dataset/03.bmp
+!dataset/stellarium_test/stellarium_view.png

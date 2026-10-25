@@ -1,12 +1,9 @@
 import sys
-import os
 import csv
+from pathlib import Path
 import numpy as np
 
-# Adjust path to find src package
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-from src.AttitudeDeterminator import (
+from models.attitude import (
     TRIADEstimator,
     QUESTEstimator,
     DavenportQEstimator,
@@ -66,8 +63,8 @@ def main():
     print("==================================================")
     
     # 1. Load Real Reference/Inertial Vectors from star_catalog.csv
-    csv_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../star_catalog.csv"))
-    if not os.path.exists(csv_path):
+    csv_path = Path(__file__).resolve().parents[2] / "data" / "star_catalog.csv"
+    if not csv_path.is_file():
         print(f"Error: star_catalog.csv not found at {csv_path}")
         sys.exit(1)
         
@@ -181,7 +178,7 @@ def main():
     
     # 6.5 Verify AttitudeDeterminator and RelativeAttitudeDeterminator wrappers
     print("Testing AttitudeDeterminator and RelativeAttitudeDeterminator wrappers...")
-    from src.AttitudeDeterminator import AttitudeDeterminator, RelativeAttitudeDeterminator
+    from models.attitude import AttitudeDeterminator, RelativeAttitudeDeterminator
     
     # Test AttitudeDeterminator
     abs_det = AttitudeDeterminator(method="QUEST")

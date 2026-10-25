@@ -12,7 +12,7 @@ Notes:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Optional, Tuple
+from typing import List
 
 import numpy as np
 
@@ -78,12 +78,20 @@ class StarDetector:
         max_area: int = 50,
         use_tophat: bool = True,
         tophat_kernel_size: int = 7,
+        component_mask: bool = False,
+        border_margin_px: int = 0,
     ):
         self.sigma_threshold = float(sigma_threshold)
         self.min_area = int(min_area)
         self.max_area = int(max_area)
         self.use_tophat = bool(use_tophat)
         self.tophat_kernel_size = int(tophat_kernel_size)
+        self.component_mask = bool(component_mask)
+        self.border_margin_px = int(border_margin_px)
+        if self.border_margin_px < 0:
+            raise ValueError("border_margin_px must be nonnegative")
+        if self.use_tophat and (self.tophat_kernel_size < 1 or self.tophat_kernel_size % 2 == 0):
+            raise ValueError("Top-Hat kernel size must be a positive odd integer (1 disables it)")
 
         # Default intrinsics used by calculate_uBody (same as C++ placeholder)
         self.cx = 320.0
@@ -147,8 +155,17 @@ class StarDetector:
             x, y, w, h, area = stats[i]
             if area < self.min_area or area > self.max_area:
                 continue
+            margin = self.border_margin_px
+            if margin and (x < margin or y < margin or
+                           x + w > gray.shape[1] - margin or
+                           y + h > gray.shape[0] - margin):
+                continue
 
             roi = filtered[y : y + h, x : x + w].astype(np.float32)
+            if self.component_mask:
+                # Do not let background or a second component in the bounding
+                # rectangle pull the centroid or inflate the ranking flux.
+                roi *= (_labels[y:y+h, x:x+w] == i)
             m00 = float(np.sum(roi))
             if m00 <= 0.0:
                 continue

@@ -1,5 +1,39 @@
 # 🛰️ USSEG Star Tracker
 
+> `dev/version01` validation: the v4 performance and readiness claims below are
+> historical; fresh LOST-evals/DUST runs are documented in the audit. They must
+> not be treated as validated full-test results. See
+> [version01 audit](docs/version01-validation.md) for the source fixes and current evidence.
+
+### Image-specific examples (Python 3.10)
+
+From a fresh checkout, install the package in a Python 3.10 virtual environment
+and restore the checksum-verified database before running the examples:
+
+```bash
+python3.10 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
+bash examples/materialize_assets.sh
+.venv/bin/python examples/run_image_examples.py --output-dir out/image-examples
+```
+
+The runner uses `configs/examples/stellarium.json` and `configs/examples/image03.json`.
+Stellarium now solves blind (16 verified matches); image03 is still an unresolved
+diagnostic, not a validated attitude result. See [configuration notes](docs/image-example-configs.md).
+The historical benchmark defaults are unchanged; example presets are development tuning.
+Image03 is retained only as an unresolved test fixture. Test with
+`.venv/bin/python -m pytest -q`; two optional external-CSV suites are skipped
+when their data is absent. The Windows-only `data/extract_star.py` is a separate
+label-collection utility with optional dependencies, not the blind pipeline.
+
+Run one image, overriding any preset parameter if needed:
+
+```bash
+.venv/bin/python -m models.pipeline.cli --config configs/examples/stellarium.json \
+  --image dataset/stellarium_test/stellarium_view.png --output out/stellarium.json
+```
+
 <div align="center">
 
 **Autonomous Embedded Star Tracker & Attitude Determination Engine**  

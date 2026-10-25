@@ -12,8 +12,8 @@
 // =============================================================================
 
 #include "header.h"
-#include "identificator/CameraModel.h"
-#include "identificator/StarCatalog.h"
+#include "CameraModel.h"
+#include "StarCatalog.h"
 #include "CentroidMatcher.h"
 
 #include <iostream>

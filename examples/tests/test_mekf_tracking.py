@@ -1,8 +1,8 @@
 import pytest
 import numpy as np
 import pandas as pd
-import os
-from src.AttitudeDeterminator.mekf import MEKFEstimator
+from pathlib import Path
+from models.attitude.mekf import MEKFEstimator
 
 # Helper to multiply quaternions (Active, Scalar First [w, x, y, z])
 def q_mult(q1, q2):
@@ -17,12 +17,12 @@ def q_mult(q1, q2):
 
 @pytest.fixture(scope="module")
 def mekf_data():
-    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    gyro_path = os.path.join(base_dir, "mekf_gyro_truth.csv")
-    meas_path = os.path.join(base_dir, "mekf_measurements.csv")
-    catalog_path = os.path.join(base_dir, "star_catalog.csv")
+    base_dir = Path(__file__).resolve().parents[2] / "data"
+    gyro_path = base_dir / "mekf_gyro_truth.csv"
+    meas_path = base_dir / "mekf_measurements.csv"
+    catalog_path = base_dir / "star_catalog.csv"
     
-    if not (os.path.exists(gyro_path) and os.path.exists(meas_path) and os.path.exists(catalog_path)):
+    if not all(path.is_file() for path in (gyro_path, meas_path, catalog_path)):
         pytest.skip("MEKF CSV test data not found.")
         
     gyro_df = pd.read_csv(gyro_path)

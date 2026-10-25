@@ -27,10 +27,15 @@ set(TEST_SOURCES
 )
 
 # LIS Mode Test (Star Identificator + Attitude Determinator)
-add_executable(test_lis ../test/test_lis.cpp ${TEST_SOURCES})
+add_executable(test_lis ../../examples/tests/test_lis.cpp ${TEST_SOURCES})
 
 # Tracking Mode Test (CentroidMatcher + Attitude Determinator)
-add_executable(test_tracking ../test/test_tracking.cpp ${TEST_SOURCES})
+add_executable(test_tracking ../../examples/tests/test_tracking.cpp ${TEST_SOURCES})
+
+enable_testing()
+add_test(NAME lis COMMAND test_lis)
+add_test(NAME tracking COMMAND test_tracking)
+set_tests_properties(lis tracking PROPERTIES WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/../../data")
 
 # =====================================================================
 # OpenCV Target for Image Preprocessing Verification
@@ -40,7 +45,7 @@ if(OpenCV_FOUND)
     message(STATUS "OpenCV found. Enabling test_image_preprocessing target.")
     include_directories(${OpenCV_INCLUDE_DIRS})
     add_executable(test_image_preprocessing 
-        ../test/test_image_preprocessing.cpp 
+        ../../examples/tests/test_image_preprocessing.cpp
         ImagePreprocessor/ImagePreprocessor.cpp
     )
     target_include_directories(test_image_preprocessing PRIVATE ImagePreprocessor)
