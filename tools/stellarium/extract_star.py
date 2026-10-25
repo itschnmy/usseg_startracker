@@ -5,6 +5,7 @@ astroquery. This tool uses Stellarium API sky hints; it is NOT the blind USSEG
 image pipeline. Run it separately on the Windows host with Stellarium open.
 """
 
+import argparse
 import ctypes
 import ctypes.wintypes
 import json
@@ -12,14 +13,11 @@ import math
 import time
 import warnings
 import os
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
 import cv2
-import mss
 import numpy as np
-import pygetwindow as gw
-import requests
-from astropy.coordinates import SkyCoord
-import astropy.units as u
-from astroquery.vizier import Vizier
 from scipy.spatial import cKDTree
 
 # 1. Bật DPI Awareness chuẩn 1920x1080 trên Windows
@@ -33,6 +31,40 @@ except Exception:
 
 STELLARIUM_URL = "http://localhost:8090/api"
 MATCH_RADIUS_PX = 3.0
+API_AUTH = None
+
+
+def build_parser():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--api-url", default=STELLARIUM_URL,
+                        help="API base URL for the SAME Windows Stellarium instance being captured")
+    parser.add_argument("--output-dir", required=True, type=Path,
+                        help="New capture directory; existing capture files are never overwritten")
+    parser.add_argument("--hold-for-camera", action="store_true",
+                        help="Keep the clean frozen scene while you take lab camera images; Enter to finish")
+    return parser
+
+
+def prepare_output(directory):
+    directory = directory.resolve()
+    filenames = ("stellarium_view.png", "stars_labels.json", "stellarium_debug_hip.png",
+                 "stellarium_debug_names.png")
+    for name in filenames:
+        if (directory / name).exists():
+            raise FileExistsError(f"Refusing to overwrite {directory / name}; use a new capture directory")
+    directory.mkdir(parents=True, exist_ok=True)
+    return directory
+
+
+def load_capture_dependencies():
+    # Help and geometry tests work on Linux; actual capture remains Windows-only.
+    global mss, gw, requests, SkyCoord, u, Vizier
+    import mss
+    import pygetwindow as gw
+    import requests
+    from astropy.coordinates import SkyCoord
+    import astropy.units as u
+    from astroquery.vizier import Vizier
 
 COMMON_STAR_NAMES = {
     677: "Alpheratz (alpha And)",
@@ -118,7 +150,7 @@ COMMON_STAR_NAMES = {
 
 def api_request(path, data=None):
     method = requests.get if data is None else requests.post
-    response = method(f"{STELLARIUM_URL}/{path}", timeout=10,
+    response = method(f"{STELLARIUM_URL}/{path}", timeout=10, auth=API_AUTH,
                       **({} if data is None else {"data": data}))
     response.raise_for_status()
     if response.text.strip().lower().startswith("error"):
@@ -489,14 +521,35 @@ def solve_global_alignment(cat_uv, blobs, w, h):
     raise RuntimeError("Không tìm được alignment tin cậy; không xuất label.")
 
 
-def main():
+def main(argv=None):
+    global STELLARIUM_URL, API_AUTH
+    args = build_parser().parse_args(argv)
+    if sys.platform != "win32":
+        raise SystemExit("Capture requires Windows Python on the Stellarium desktop (not WSL). See docs/stellarium_image.md.")
+    # WSL/PowerShell redirection can give Windows Python a cp1252 stdout.
+    # Vietnamese progress messages must not abort capture before API setup.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
+    load_capture_dependencies()
+    STELLARIUM_URL = args.api_url.rstrip("/")
+    password = os.environ.get("STELLARIUM_API_PASSWORD")
+    API_AUTH = ("", password) if password else None
+    output_dir = prepare_output(args.output_dir)
+    # Check connectivity before changing Stellarium state.
+    api_request("main/status")
     saved = {}
     try:
         freeze_and_clean_stellarium(saved)
+        if args.hold_for_camera:
+            # Foreground the same Stellarium window before the user photographs it.
+            focus_and_capture_stellarium()
+            input("Cảnh đã dừng/ẩn GUI. Chụp camera lab, không pan/zoom. Nhấn Enter khi xong: ")
         print("[2/5] Đang chụp vùng ảnh Stellarium...")
         img = focus_and_capture_stellarium()
         h, w = img.shape[:2]
         ra0, dec0, fov = get_stellarium_camera_params()
+        captured_at = datetime.now(timezone.utc).isoformat()
     finally:
         restore_stellarium_gui(saved)
 
@@ -600,6 +653,15 @@ def main():
             )
 
     output_json = {
+        "capture_source": "stellarium_windows_client_screenshot",
+        "captured_at_utc": captured_at,
+        "fov_axis": "vertical",
+        "pixel_origin": "zero_based_top_left",
+        "label_method": "Hipparcos catalog + known center/FOV + RANSAC + screenshot blob association",
+        "label_blob_threshold_uint8": 140,
+        "catalog_mag_limit": 6.0,
+        "camera_images_are_not_labelled": True,
+        "frozen_stellarium_time": saved.get("time"),
         "projection": "ProjectionPerspective",
         "match_radius_px": MATCH_RADIUS_PX,
         "alignment_matrix": M.tolist(),
@@ -616,16 +678,18 @@ def main():
 
     print(f"      + Giữ {len(labeled_stars)} label; loại {len(rejected_stars)} ứng viên.")
 
-    cv2.imwrite("stellarium_view.png", img)
-    with open("stars_labels.json", "w", encoding="utf-8") as f:
-        json.dump(output_json, f, indent=2, ensure_ascii=False)
-
-    cv2.imwrite("stellarium_debug_hip.png", overlay_hip_img)
-    cv2.imwrite("stellarium_debug_names.png", overlay_name_img)
+    for filename, image in (("stellarium_view.png", img),
+                            ("stellarium_debug_hip.png", overlay_hip_img),
+                            ("stellarium_debug_names.png", overlay_name_img)):
+        if not cv2.imwrite(str(output_dir / filename), image):
+            raise OSError(f"Cannot write {output_dir / filename}")
+    with (output_dir / "stars_labels.json").open("w", encoding="utf-8") as f:
+        json.dump(output_json, f, indent=2, ensure_ascii=False, allow_nan=False)
 
     print(f"\n[✓] Hoàn tất! Đã lưu {len(labeled_stars)} sao vào 'stars_labels.json'.")
     print("[✓] Ảnh 1 (Theo mã HIP):  'stellarium_debug_hip.png'")
     print("[✓] Ảnh 2 (Theo Tên Sao): 'stellarium_debug_names.png'")
+    print(f"[✓] Thư mục: {output_dir}")
 
 
 if __name__ == "__main__":

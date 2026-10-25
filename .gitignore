@@ -49,6 +49,7 @@ benchmark-results/
 *.egg-info/
 out/
 scratch/
+captures/
 *:Zone.Identifier
 
 # Large binary databases & raw test images

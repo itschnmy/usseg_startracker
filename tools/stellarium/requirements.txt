@@ -1,0 +1,7 @@
+# Install with Windows Python 3.10, not inside WSL.
+-r ../../requirements.txt
+mss
+pygetwindow
+requests
+astropy
+astroquery

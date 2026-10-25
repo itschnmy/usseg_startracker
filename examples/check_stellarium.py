@@ -1,6 +1,6 @@
 """Blind image runs followed by separate Stellarium-label diagnostics.
 
-The supplied FOV is vertical, following data/extract_star.py. Label positions,
+The supplied FOV is vertical, following tools/stellarium/extract_star.py. Label positions,
 sky center, alignment and catalog coordinates are read only after inference.
 No detector/solver settings are tuned using these labels.
 """
@@ -96,6 +96,7 @@ def main():
     parser.add_argument("--database", required=True, type=Path)
     parser.add_argument("--vertical-fov", type=float, default=17)
     parser.add_argument("--output-dir", required=True, type=Path)
+    parser.add_argument("--config", type=Path, help="Optional configured blind run, in addition to baseline diagnostics")
     args = parser.parse_args()
     cv2.setNumThreads(1)
     image_path = args.dataset / "stellarium_view.png"
@@ -110,7 +111,7 @@ def main():
     load_ms = (perf_counter()-start)*1000
     runs = []
     # Only pixels, dimensions and the user-supplied FOV enter these runs.
-    for name, fov, timeout in (("17_as_horizontal", args.vertical_fov, 600),
+    for name, fov, timeout in (("supplied_vertical_as_horizontal", args.vertical_fov, 600),
                                ("vertical_to_horizontal", hfov, 600),
                                ("vertical_to_horizontal_5s", hfov, 5000)):
         pipeline.config = replace(config, fov_deg=fov, solve_timeout_ms=timeout)
@@ -118,6 +119,15 @@ def main():
         runs.append({"name": name, "config": {**asdict(pipeline.config), "database": str(config.database)},
                      "result": result})
         print(name, result["status"], result["num_matches"], flush=True)
+
+    if args.config:
+        pipeline.config = PipelineConfig.from_json(args.config)
+        if pipeline.config.database.resolve() != config.database.resolve():
+            pipeline = StarTrackerPipeline(pipeline.config)
+        result = pipeline.run_array(image, source=str(image_path.resolve()))
+        runs.append({"name": "configured_blind", "config": {
+            **asdict(pipeline.config), "database": str(pipeline.config.database)}, "result": result})
+        print("configured_blind", result["status"], result["num_matches"], flush=True)
 
     # Scoring starts here, after ALL blind inference calls have completed.
     labels = json.loads((args.dataset / "stars_labels.json").read_text())
@@ -195,6 +205,16 @@ def main():
     args.output_dir.mkdir(parents=True, exist_ok=True)
     if not cv2.imwrite(str(args.output_dir / "selected-centroids.png"), overlay):
         raise OSError("Failed to save overlay")
+    if args.config:
+        configured = next(run for run in runs if run["name"] == "configured_blind")
+        configured_overlay = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+        for rank, xy in enumerate(configured["result"]["centroids_xy"], 1):
+            x, y = np.rint(xy).astype(int)
+            cv2.circle(configured_overlay, (x, y), 12, (0, 255, 0), 1)
+            cv2.putText(configured_overlay, str(rank), (x+13, y), cv2.FONT_HERSHEY_SIMPLEX,
+                        .5, (0, 255, 255), 1)
+        if not cv2.imwrite(str(args.output_dir / "configured-selected-centroids.png"), configured_overlay):
+            raise OSError("Failed to save configured overlay")
     report = {
         "python": platform.python_version(), "opencv_threads": cv2.getNumThreads(),
         "image": str(image_path.resolve()), "image_sha256": hashlib.sha256(image_path.read_bytes()).hexdigest(),
@@ -238,6 +258,9 @@ def main():
                   "Labels/alignment are pseudo-reference, not independent truth. Do not subtract raw roll fields with different conventions.",
                   "This single-image diagnostic is not a dataset accuracy or FPS benchmark.", "",
                   "[Full results](results.json) | [Selected detector centroids](selected-centroids.png)"])
+    if args.config:
+        lines.extend(["", "The detector-diagnosis numbers and selected-centroids.png above describe the historical baseline, not the configured run.",
+                      "[Configured selected centroids](configured-selected-centroids.png). See the configured_blind metrics in results.json for the preset."])
     (args.output_dir / "summary.md").write_text("\n".join(lines)+"\n", encoding="utf-8")
 
 

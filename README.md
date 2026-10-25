@@ -24,8 +24,28 @@ diagnostic, not a validated attitude result. See [configuration notes](docs/imag
 The historical benchmark defaults are unchanged; example presets are development tuning.
 Image03 is retained only as an unresolved test fixture. Test with
 `.venv/bin/python -m pytest -q`; two optional external-CSV suites are skipped
-when their data is absent. The Windows-only `data/extract_star.py` is a separate
+when their data is absent. The Windows-only `tools/stellarium/extract_star.py` is a separate
 label-collection utility with optional dependencies, not the blind pipeline.
+
+### Stellarium image: tự thu ảnh và kiểm tra trong lab
+
+Ảnh `dataset/stellarium_test/stellarium_view.png` do người dùng thu bằng
+script `data/extract_star.py` trước đây, nay chuyển sang
+[`tools/stellarium/extract_star.py`](tools/stellarium/extract_star.py).
+Script dùng Remote Control API để giữ cảnh/đọc metadata rồi chụp **client area
+trên màn hình Windows**; không phải driver camera và không phải solver blind.
+
+Xem [hướng dẫn Stellarium riêng](docs/stellarium_image.md): bật plugin/API cổng
+8090, cài Python Windows 3.10, thu screenshot/nhãn mới, chạy USSEG và quy trình
+camera chụp màn hình trong lab.
+
+Để ảnh này chạy được, preset đã đổi Top-Hat 7x7 → tắt, area 1–50 → 3–500,
+chỉ tính centroid/flux trong đúng component, bỏ biên 12px, xếp sao theo flux
+thay vì peak, timeout 600 → 5000ms. VFOV 16.9761° được đổi thành **HFOV
+29.717817°** cho pipeline. Không đưa nhãn/RA/Dec vào solver; Tetra/database/SVD
+không thay đổi cho preset này. Kết quả trên fixture hiện tại: 16 cặp match đúng,
+sai số attitude 0.002738° so với reference dựng từ nhãn. Đây là tuning trên
+ảnh development, không phải cải thiện đã kiểm chứng trên toàn DUST.
 
 Run one image, overriding any preset parameter if needed:
 
@@ -90,6 +110,7 @@ usseg_startracker/
 │   ├── download_dust.py
 │   ├── generate_tetra_database.py
 │   └── tests/          # Algorithmic test suite
+├── tools/stellarium/   # Windows screenshot/label collector + optional dependencies
 ├── models/             # Core algorithmic modules (detector, identifier, attitude, pipeline)
 │   └── cpp/            # Embedded C++ implementation & Eigen headers
 ├── utils/              # Mathematical utilities (SO(3), quaternions) & image processing

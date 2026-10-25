@@ -221,3 +221,14 @@ being committed on `dev/version01`. Image03 remains an unresolved test only.
 Remaining limits: no verified image03 reference, non-uint8 detector clipping,
 ideal pinhole model and method-specific raw SVD convention. Passing tests and the
 Stellarium example are not evidence of general DUST performance improvement.
+
+## Stellarium collection documentation follow-up
+
+The collector mentioned historically as `data/extract_star.py` has moved to
+`tools/stellarium/extract_star.py`. It now accepts an explicit API URL and new
+output directory, supports optional Basic-auth credentials from an environment
+variable and a camera-session hold, and refuses to overwrite existing captures.
+See [Stellarium image guide](stellarium_image.md). Capture dependencies remain
+optional and Windows-only; screenshot labels do not automatically label lab
+camera frames. The bundled image/labels and pipeline numerical settings were
+not changed by the documentation/tool relocation.

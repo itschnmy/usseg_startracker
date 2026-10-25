@@ -8,6 +8,9 @@
   screenshot with `stars_labels.json`. The label FOV is **vertical** 16.9761 deg;
   the matching pipeline preset uses horizontal 29.717817 deg. Labels are read
   only after blind inference and are a pseudo-reference, not physical ground truth.
+  The screenshot was collected with the former `data/extract_star.py`, now
+  `tools/stellarium/extract_star.py`. See `docs/stellarium_image.md` to collect
+  your own captures via Remote Control API.
 
 The original source files are preserved. Generated annotated/debug images are
 not fixtures and are ignored by Git. Run `examples/run_image_examples.py` to
