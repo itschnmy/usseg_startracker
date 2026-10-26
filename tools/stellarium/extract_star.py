@@ -1,8 +1,8 @@
-"""Windows-only Stellarium screenshot/label collection utility.
+"""Desktop Stellarium screenshot/label collection utility.
 
 Optional collection dependencies: mss, pygetwindow, requests, astropy and
 astroquery. This tool uses Stellarium API sky hints; it is NOT the blind USSEG
-image pipeline. Run it separately on the Windows host with Stellarium open.
+image pipeline. Run it separately in an Ubuntu X11 or Windows desktop session with Stellarium open.
 """
 
 import argparse
@@ -14,6 +14,7 @@ import time
 import warnings
 import os
 import sys
+import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 import cv2
@@ -37,7 +38,7 @@ API_AUTH = None
 def build_parser():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--api-url", default=STELLARIUM_URL,
-                        help="API base URL for the SAME Windows Stellarium instance being captured")
+                        help="API base URL for the SAME desktop Stellarium instance being captured")
     parser.add_argument("--output-dir", required=True, type=Path,
                         help="New capture directory; existing capture files are never overwritten")
     parser.add_argument("--hold-for-camera", action="store_true",
@@ -57,10 +58,11 @@ def prepare_output(directory):
 
 
 def load_capture_dependencies():
-    # Help and geometry tests work on Linux; actual capture remains Windows-only.
+    # Desktop dependencies are optional for the blind pipeline.
     global mss, gw, requests, SkyCoord, u, Vizier
     import mss
-    import pygetwindow as gw
+    if sys.platform == "win32":
+        import pygetwindow as gw
     import requests
     from astropy.coordinates import SkyCoord
     import astropy.units as u
@@ -221,7 +223,53 @@ def restore_stellarium_gui(saved):
         warnings.warn("Không khôi phục được hết trạng thái: " + "; ".join(errors))
 
 
+def linux_capture_region():
+    """Focus one verified Stellarium X11 client and return physical pixel bounds."""
+    if os.environ.get("XDG_SESSION_TYPE", "").lower() == "wayland" or not os.environ.get("DISPLAY"):
+        raise RuntimeError("Stellarium capture requires an X11 desktop; log into an Xorg session. The blind pipeline works on Wayland/headless Ubuntu.")
+
+    def xdo(*args):
+        try:
+            return subprocess.check_output(["xdotool", *args], text=True, timeout=10).strip()
+        except FileNotFoundError as exc:
+            raise RuntimeError("Install xdotool: sudo apt install xdotool") from exc
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
+            raise RuntimeError("Cannot locate/focus Stellarium on this X11 desktop") from exc
+
+    candidates = xdo("search", "--onlyvisible", "--class", "^stellarium$").splitlines()
+    verified = []
+    for window in candidates:
+        pid = xdo("getwindowpid", window)
+        if not pid.isdecimal():
+            continue
+        try:
+            executable = Path(f"/proc/{pid}/exe").resolve(strict=True).name.lower()
+        except OSError:
+            continue
+        if executable == "stellarium":
+            verified.append(window)
+    if len(verified) != 1:
+        raise RuntimeError("Open exactly one visible Stellarium window in this desktop session")
+    window = verified[0]
+    xdo("windowactivate", "--sync", window)
+    time.sleep(0.5)
+    if xdo("getactivewindow") != window:
+        raise RuntimeError("Stellarium is not the foreground window; capture cancelled")
+    geometry = dict(line.split("=", 1) for line in
+                    xdo("getwindowgeometry", "--shell", window).splitlines() if "=" in line)
+    region = {name: int(geometry[key]) for name, key in
+              (("left", "X"), ("top", "Y"), ("width", "WIDTH"), ("height", "HEIGHT"))}
+    if region["width"] <= 0 or region["height"] <= 0:
+        raise RuntimeError("Invalid Stellarium client geometry")
+    return region
+
+
 def focus_and_capture_stellarium():
+    if sys.platform == "linux":
+        monitor = linux_capture_region()
+        with mss.MSS() as sct:
+            return cv2.cvtColor(np.array(sct.grab(monitor)), cv2.COLOR_BGRA2BGR)
+
     def is_stellarium_window(win):
         pid = ctypes.wintypes.DWORD()
         ctypes.windll.user32.GetWindowThreadProcessId(win._hWnd, ctypes.byref(pid))
@@ -524,8 +572,8 @@ def solve_global_alignment(cat_uv, blobs, w, h):
 def main(argv=None):
     global STELLARIUM_URL, API_AUTH
     args = build_parser().parse_args(argv)
-    if sys.platform != "win32":
-        raise SystemExit("Capture requires Windows Python on the Stellarium desktop (not WSL). See docs/stellarium_image.md.")
+    if sys.platform not in ("win32", "linux"):
+        raise SystemExit("Capture requires Ubuntu X11 or Windows. See docs/ubuntu.md.")
     # WSL/PowerShell redirection can give Windows Python a cp1252 stdout.
     # Vietnamese progress messages must not abort capture before API setup.
     for stream in (sys.stdout, sys.stderr):
@@ -653,7 +701,8 @@ def main(argv=None):
             )
 
     output_json = {
-        "capture_source": "stellarium_windows_client_screenshot",
+        "capture_source": ("stellarium_linux_x11_client_screenshot" if sys.platform == "linux"
+                           else "stellarium_windows_client_screenshot"),
         "captured_at_utc": captured_at,
         "fov_axis": "vertical",
         "pixel_origin": "zero_based_top_left",

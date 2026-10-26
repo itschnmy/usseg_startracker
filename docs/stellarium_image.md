@@ -1,3 +1,10 @@
+# Ubuntu Linux / dev/version2
+
+For native Ubuntu X11 capture, use the [Ubuntu setup guide](ubuntu.md).
+The Windows-specific instructions and historical validation below remain useful
+for Windows; Linux uses xdotool and MSS instead of Win32/PyGetWindow.
+The Remote Control API, scene preparation and labeling workflow are shared.
+
 # Stellarium image — thu ảnh, tạo nhãn và kiểm tra USSEG
 
 ## 1. Nguồn ảnh và phạm vi

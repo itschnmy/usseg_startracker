@@ -5,13 +5,19 @@
 > not be treated as validated full-test results. See
 > [version01 audit](docs/version01-validation.md) for the source fixes and current evidence.
 
-### Image-specific examples (Python 3.10)
+### Ubuntu Linux (dev/version2)
 
-From a fresh checkout, install the package in a Python 3.10 virtual environment
+See [Ubuntu installation, C++ build and desktop capture](docs/ubuntu.md).
+The original code is preserved on `dev/version01`; this branch supports Python
+3.10–3.14 and adds native Stellarium capture on Ubuntu X11.
+
+### Image-specific examples
+
+From a fresh checkout, install the package in a Python 3.10–3.14 virtual environment
 and restore the checksum-verified database before running the examples:
 
 ```bash
-python3.10 -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
 bash examples/materialize_assets.sh
@@ -30,7 +36,7 @@ See the [fixture README with original and solver-result images](dataset/README.m
 for the measured result and acquisition limitations.
 Image03 is retained as a development test fixture, not a held-out benchmark. Test with
 `.venv/bin/python -m pytest -q`; two optional external-CSV suites are skipped
-when their data is absent. The Windows-only `tools/stellarium/extract_star.py` is a separate
+when their data is absent. The Ubuntu X11/Windows `tools/stellarium/extract_star.py` is a separate
 label-collection utility with optional dependencies, not the blind pipeline.
 
 ### Stellarium image: tự thu ảnh và kiểm tra trong lab
@@ -39,10 +45,10 @@ label-collection utility with optional dependencies, not the blind pipeline.
 script `data/extract_star.py` trước đây, nay chuyển sang
 [`tools/stellarium/extract_star.py`](tools/stellarium/extract_star.py).
 Script dùng Remote Control API để giữ cảnh/đọc metadata rồi chụp **client area
-trên màn hình Windows**; không phải driver camera và không phải solver blind.
+trên màn hình Ubuntu X11 hoặc Windows**; không phải driver camera và không phải solver blind.
 
 Xem [hướng dẫn Stellarium riêng](docs/stellarium_image.md): bật plugin/API cổng
-8090, cài Python Windows 3.10, thu screenshot/nhãn mới, chạy USSEG và quy trình
+8090, xem [thiết lập Ubuntu](docs/ubuntu.md) hoặc cài Python Windows, thu screenshot/nhãn mới, chạy USSEG và quy trình
 camera chụp màn hình trong lab.
 
 Để ảnh này chạy được, preset đã đổi Top-Hat 7x7 → tắt, area 1–50 → 3–500,
@@ -116,7 +122,7 @@ usseg_startracker/
 │   ├── download_dust.py
 │   ├── generate_tetra_database.py
 │   └── tests/          # Algorithmic test suite
-├── tools/stellarium/   # Windows screenshot/label collector + optional dependencies
+├── tools/stellarium/   # Ubuntu X11/Windows screenshot/label collector + optional dependencies
 ├── models/             # Core algorithmic modules (detector, identifier, attitude, pipeline)
 │   └── cpp/            # Embedded C++ implementation & Eigen headers
 ├── utils/              # Mathematical utilities (SO(3), quaternions) & image processing

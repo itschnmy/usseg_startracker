@@ -1,9 +1,9 @@
 #include "header.h"
 #include "StarDetector.h"
-#include "identificator/CameraModel.h"
-#include "identificator/StarCatalog.h"
-#include "identificator/PairCatalog.h"
-#include "identificator/VotingIdentifier.h"
+#include "CameraModel.h"
+#include "StarCatalog.h"
+#include "PairCatalog.h"
+#include "VotingIdentifier.h"
 
 #include <opencv2/opencv.hpp>
 #include <iostream>

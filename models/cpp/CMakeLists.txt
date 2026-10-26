@@ -5,7 +5,9 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # MSVC does not define M_PI unless this is set
-add_definitions(-D_USE_MATH_DEFINES)
+if(MSVC)
+    add_definitions(-D_USE_MATH_DEFINES)
+endif()
 
 # Include directories (Eigen is header-only, bundled locally)
 include_directories(
@@ -48,6 +50,10 @@ if(OpenCV_FOUND)
         ../../examples/tests/test_image_preprocessing.cpp
         ImagePreprocessor/ImagePreprocessor.cpp
     )
+    add_test(NAME image_preprocessing COMMAND test_image_preprocessing
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../dataset/03.bmp")
+    add_executable(star_tracker main.cpp StarDetector.cpp ${TEST_SOURCES})
+    target_link_libraries(star_tracker PRIVATE ${OpenCV_LIBS})
     target_include_directories(test_image_preprocessing PRIVATE ImagePreprocessor)
     target_link_libraries(test_image_preprocessing PRIVATE ${OpenCV_LIBS})
 else()

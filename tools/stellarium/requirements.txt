@@ -1,7 +1,7 @@
-# Install with Windows Python 3.10, not inside WSL.
+# Install in the desktop capture virtual environment (Ubuntu X11 or Windows).
 -r ../../requirements.txt
 mss
-pygetwindow
+pygetwindow; sys_platform == "win32"
 requests
 astropy
 astroquery

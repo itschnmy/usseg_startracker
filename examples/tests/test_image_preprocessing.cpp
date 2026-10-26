@@ -18,7 +18,7 @@ void createDirectory(const std::string& path) {
 #endif
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     std::cout << "==================================================\n";
     std::cout << "  TEST: IMAGE PREPROCESSOR (ESA Tetra3 Model)\n";
     std::cout << "==================================================\n\n";
@@ -29,7 +29,7 @@ int main() {
     createDirectory("test/results/image_preprocessing");
 
     // 2. Define image paths
-    std::string input_path = "test/img/9cee97e5-44a4-4193-9384-586386b7ab85.bmp";
+    std::string input_path = argc > 1 ? argv[1] : "dataset/03.bmp";
     std::string output_clean_path = "test/results/image_preprocessing/clean.png";
     std::string output_binary_path = "test/results/image_preprocessing/binary.png";
     std::string output_roi_path = "test/results/image_preprocessing/cropped_roi.png";
