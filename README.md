@@ -11,6 +11,11 @@ See [Ubuntu installation, C++ build and desktop capture](docs/ubuntu.md).
 The original code is preserved on `dev/version01`; this branch supports Python
 3.10–3.14 and adds native Stellarium capture on Ubuntu X11.
 
+### OpenMV dark-frame calibration
+
+See [master dark creation and subtraction](docs/dark-frame.md) for optional
+sensor-background correction before star detection.
+
 ### Image-specific examples
 
 From a fresh checkout, install the package in a Python 3.10–3.14 virtual environment

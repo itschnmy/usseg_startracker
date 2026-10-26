@@ -15,6 +15,8 @@ def build_parser(config: PipelineConfig | None = None) -> argparse.ArgumentParse
         defaults.update(vars(config))
     parser = argparse.ArgumentParser(description="Run the unified USSEG star-tracker pipeline")
     parser.add_argument("--image", required=True, type=Path)
+    parser.add_argument("--dark-frame", type=Path, default=defaults["dark_frame"],
+                        help="Optional 8-bit grayscale master dark (.npy); subtract before detection")
     parser.add_argument("--config", type=Path, help="Pipeline JSON; database path is relative to this file")
     parser.add_argument("--database", required=config is None, type=Path,
                         default=config.database if config else None)

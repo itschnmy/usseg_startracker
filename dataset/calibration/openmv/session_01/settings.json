@@ -1,0 +1,23 @@
+{
+  "session_id": "session_01",
+  "camera_model": null,
+  "firmware_version": null,
+  "captured_at": null,
+  "dark_frames_directory": "dark",
+  "expected_dark_frame_count": 30,
+  "exposure_us": null,
+  "gain_db": null,
+  "auto_exposure": null,
+  "auto_gain": null,
+  "auto_white_balance": null,
+  "frame_width_px": null,
+  "frame_height_px": null,
+  "pixel_format": null,
+  "sensor_bit_depth": null,
+  "saved_image_bit_depth": null,
+  "sensor_temperature_c": null,
+  "lens_cap_on": null,
+  "black_level_correction": null,
+  "gamma_correction": null,
+  "notes": "Điền theo cấu hình thực tế lúc chụp. null nghĩa là chưa biết; giữ null nếu không xác định được. Ảnh sao và dark frame cần cùng exposure, gain, kích thước, pixel format và xử lý trong camera; nhiệt độ cảm biến nên gần nhau."
+}

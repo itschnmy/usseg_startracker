@@ -12,6 +12,7 @@ import numpy as np
 from models.identifier.plate_solver import PlateSolver, _compute_vectors
 from models.detector.star_detector import StarDetector
 from models.attitude import AttitudeDeterminator
+from utils.dark_frame import load_master_dark, subtract_dark
 
 
 def _radec_to_unit_vectors(stars: np.ndarray) -> np.ndarray:
@@ -43,6 +44,7 @@ class PipelineConfig:
     match_threshold: float = 1e-3
     solve_timeout_ms: float | None = 600.0
     attitude_method: str = "SVD"
+    dark_frame: Path | None = None
 
     def __post_init__(self):
         for name in ("max_input_stars", "verification_catalog_stars"):
@@ -90,6 +92,8 @@ class PipelineConfig:
             raise ValueError("config must be a JSON object")
         if "database" in values:
             values["database"] = (path.parent / values["database"]).resolve()
+        if values.get("dark_frame") is not None:
+            values["dark_frame"] = (path.parent / values["dark_frame"]).resolve()
         return cls(**values)
 
 
@@ -98,6 +102,7 @@ class StarTrackerPipeline:
 
     def __init__(self, config: PipelineConfig):
         self.config = config
+        self.master_dark = load_master_dark(config.dark_frame) if config.dark_frame is not None else None
         db_path = Path(config.database).resolve()
         if not db_path.exists():
             candidate = db_path.parent.parent / "data" / db_path.name
@@ -162,6 +167,8 @@ class StarTrackerPipeline:
             border_margin_px=self.config.border_margin_px,
         )
         detector.set_intrinsics(width / 2.0, height / 2.0, focal_px)
+        if self.master_dark is not None:
+            image = subtract_dark(image, self.master_dark)
         detected = detector.process(image)
         if self.config.star_ranking == "flux":
             detected.sort(key=lambda star: (star.intensity, star.peak), reverse=True)
@@ -288,7 +295,8 @@ class StarTrackerPipeline:
             "mismatch_probability": float(solution["Prob"]),
             "fps": 1e9 / total_ns if total_ns else None,
             "timings": timings,
-            "config": {**asdict(self.config), "database": str(self.config.database)},
+            "config": {**asdict(self.config), "database": str(self.config.database),
+                       "dark_frame": str(self.config.dark_frame) if self.config.dark_frame is not None else None},
         }
 
     def _failure(
@@ -307,7 +315,8 @@ class StarTrackerPipeline:
         return {
             "status": status,
             "message": message,
-            "config": {**asdict(self.config), "database": str(self.config.database)},
+            "config": {**asdict(self.config), "database": str(self.config.database),
+                       "dark_frame": str(self.config.dark_frame) if self.config.dark_frame is not None else None},
             "num_centroids": num_centroids,
             "num_matches": 0,
             "centroids_xy": centroids_xy.tolist() if centroids_xy is not None else [],

@@ -67,3 +67,6 @@ data/hip_main.dat*
 # Reviewed documentation snapshots only; other generated images stay ignored.
 !docs/assets/image03-input.png
 !docs/assets/image03-result.png
+
+# Local camera calibration arrays
+/data/calibration/**/*.npy
