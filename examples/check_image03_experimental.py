@@ -141,9 +141,11 @@ def main():
     for record in records:
         if record["case"].startswith("stellarium_"):
             metrics = record["metrics"]
+            attitude_error = metrics["attitude_error_deg"]
+            attitude_text = f"{attitude_error:.6f}" if attitude_error is not None else "—"
             rows.append(f"| {record['case']} | {record['result']['num_matches']} | "
                         f"{metrics['pairwise_star_id_correct']}/{metrics['pairwise_star_id_labelled']} | "
-                        f"{metrics['attitude_error_deg']:.6f} |")
+                        f"{attitude_text} |")
     rows.append("")
     for mode in ("baseline", "opt_in"):
         subset = [r for r in records if r["case"].startswith("synthetic_") and r["case"].endswith(mode)]

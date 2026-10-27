@@ -1,0 +1,182 @@
+[
+  {
+    "source": "dark_frame_1.bmp",
+    "original_mean": 1.8719303385416666,
+    "corrected_mean": 0.00031901041666666666,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_10.bmp",
+    "original_mean": 1.8796940104166666,
+    "corrected_mean": 0.000498046875,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_11.bmp",
+    "original_mean": 1.86509765625,
+    "corrected_mean": 0.000224609375,
+    "corrected_max": 2
+  },
+  {
+    "source": "dark_frame_12.bmp",
+    "original_mean": 1.8570865885416667,
+    "corrected_mean": 0.00029947916666666664,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_13.bmp",
+    "original_mean": 1.8702473958333334,
+    "corrected_mean": 0.00022786458333333334,
+    "corrected_max": 2
+  },
+  {
+    "source": "dark_frame_14.bmp",
+    "original_mean": 1.9219694010416666,
+    "corrected_mean": 0.00038736979166666667,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_15.bmp",
+    "original_mean": 1.8817350260416668,
+    "corrected_mean": 0.000322265625,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_16.bmp",
+    "original_mean": 1.8727018229166668,
+    "corrected_mean": 0.0003125,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_17.bmp",
+    "original_mean": 1.8738411458333333,
+    "corrected_mean": 0.00036783854166666665,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_18.bmp",
+    "original_mean": 1.8976692708333334,
+    "corrected_mean": 0.000302734375,
+    "corrected_max": 2
+  },
+  {
+    "source": "dark_frame_19.bmp",
+    "original_mean": 1.8194596354166668,
+    "corrected_mean": 0.00015625,
+    "corrected_max": 2
+  },
+  {
+    "source": "dark_frame_2.bmp",
+    "original_mean": 1.8218912760416666,
+    "corrected_mean": 0.00018229166666666667,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_20.bmp",
+    "original_mean": 1.900625,
+    "corrected_mean": 0.0002897135416666667,
+    "corrected_max": 2
+  },
+  {
+    "source": "dark_frame_21.bmp",
+    "original_mean": 1.8793391927083334,
+    "corrected_mean": 0.0005891927083333334,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_22.bmp",
+    "original_mean": 1.876435546875,
+    "corrected_mean": 0.00030598958333333335,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_23.bmp",
+    "original_mean": 1.9013020833333334,
+    "corrected_mean": 0.00046875,
+    "corrected_max": 2
+  },
+  {
+    "source": "dark_frame_24.bmp",
+    "original_mean": 1.87791015625,
+    "corrected_mean": 0.0002734375,
+    "corrected_max": 2
+  },
+  {
+    "source": "dark_frame_25.bmp",
+    "original_mean": 1.90828125,
+    "corrected_mean": 0.00037760416666666666,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_26.bmp",
+    "original_mean": 1.9055045572916667,
+    "corrected_mean": 0.00041341145833333334,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_27.bmp",
+    "original_mean": 1.9095182291666666,
+    "corrected_mean": 0.000517578125,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_28.bmp",
+    "original_mean": 1.9010546875,
+    "corrected_mean": 0.0002897135416666667,
+    "corrected_max": 2
+  },
+  {
+    "source": "dark_frame_29.bmp",
+    "original_mean": 1.840478515625,
+    "corrected_mean": 0.0003125,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_3.bmp",
+    "original_mean": 1.8715657552083333,
+    "corrected_mean": 0.00013671875,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_30.bmp",
+    "original_mean": 1.8785481770833334,
+    "corrected_mean": 0.00038736979166666667,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_4.bmp",
+    "original_mean": 1.8617513020833334,
+    "corrected_mean": 0.00024088541666666667,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_5.bmp",
+    "original_mean": 1.8737955729166667,
+    "corrected_mean": 0.00017903645833333332,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_6.bmp",
+    "original_mean": 1.9083072916666666,
+    "corrected_mean": 0.00031901041666666666,
+    "corrected_max": 2
+  },
+  {
+    "source": "dark_frame_7.bmp",
+    "original_mean": 1.896376953125,
+    "corrected_mean": 0.00028645833333333333,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_8.bmp",
+    "original_mean": 1.89591796875,
+    "corrected_mean": 0.000283203125,
+    "corrected_max": 3
+  },
+  {
+    "source": "dark_frame_9.bmp",
+    "original_mean": 1.8773404947916668,
+    "corrected_mean": 0.00032877604166666667,
+    "corrected_max": 5
+  }
+]
