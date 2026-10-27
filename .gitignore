@@ -73,3 +73,7 @@ data/hip_main.dat*
 
 # Calibrated image03 regression fixture
 !dataset/calibration/openmv/session_01/03_calibrated.bmp
+
+# Image200701 input and calibrated fixture
+!dataset/200701.bmp
+!dataset/calibration/openmv/session_01/200701_calibrated.bmp
