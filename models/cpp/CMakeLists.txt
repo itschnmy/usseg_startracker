@@ -51,7 +51,7 @@ if(OpenCV_FOUND)
         ImagePreprocessor/ImagePreprocessor.cpp
     )
     add_test(NAME image_preprocessing COMMAND test_image_preprocessing
-        "${CMAKE_CURRENT_SOURCE_DIR}/../../dataset/03.bmp")
+        "${CMAKE_CURRENT_SOURCE_DIR}/../../dataset/calibration/openmv/session_01/03_calibrated.bmp")
     add_executable(star_tracker main.cpp StarDetector.cpp ${TEST_SOURCES})
     target_link_libraries(star_tracker PRIVATE ${OpenCV_LIBS})
     target_include_directories(test_image_preprocessing PRIVATE ImagePreprocessor)

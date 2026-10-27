@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
     createDirectory("test/results/image_preprocessing");
 
     // 2. Define image paths
-    std::string input_path = argc > 1 ? argv[1] : "dataset/03.bmp";
+    std::string input_path = argc > 1 ? argv[1] : "dataset/calibration/openmv/session_01/03_calibrated.bmp";
     std::string output_clean_path = "test/results/image_preprocessing/clean.png";
     std::string output_binary_path = "test/results/image_preprocessing/binary.png";
     std::string output_roi_path = "test/results/image_preprocessing/cropped_roi.png";

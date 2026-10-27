@@ -24,6 +24,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, default=ROOT / "out/image03-experimental")
     parser.add_argument("--noise-trials", type=int, default=20)
+    parser.add_argument("--image", type=Path,
+                        default=ROOT / "dataset/calibration/openmv/session_01/03_calibrated.bmp")
     args = parser.parse_args()
     if args.noise_trials < 0:
         parser.error("noise-trials must be nonnegative")
@@ -43,7 +45,10 @@ def main():
         ("extended_candidates_only", replace(calibrated, max_stars=40, max_input_stars=40)),
         ("experimental_top40", experiment),
     ]
-    image_path = ROOT / "dataset/03.bmp"
+    image_path = args.image.resolve()
+    if cv2.imread(str(image_path), cv2.IMREAD_GRAYSCALE) is None:
+        parser.error(f"Cannot read image: {image_path}")
+    is_image03 = image_path == (ROOT / "dataset/calibration/openmv/session_01/03_calibrated.bmp").resolve()
     for name, config in configs:
         pipeline.config = config
         result = pipeline.run(image_path)
@@ -95,13 +100,15 @@ def main():
         result = record["result"]
         if record["case"].startswith("stellarium_"):
             record["metrics"] = score(result, labels, ref)
-        elif record["case"] in dict(configs) and result["status"] == "ok":
+        elif is_image03 and record["case"] in dict(configs) and result["status"] == "ok":
             ra, dec = np.deg2rad([result["ra_deg"], result["dec_deg"]])
             ref_ra, ref_dec = np.deg2rad([48.773, 41.364])  # Rounded screenshot, NOT WCS.
             cosine = np.sin(dec)*np.sin(ref_dec) + np.cos(dec)*np.cos(ref_dec)*np.cos(ra-ref_ra)
             record["approx_boresight_error_deg"] = float(np.rad2deg(np.arccos(np.clip(cosine, -1, 1))))
     report = {
         "track": "DEVELOPMENT_ABLATION_NOT_HELD_OUT",
+        "image_path": str(image_path),
+        "image_processing": "Input pixels used as supplied; no additional dark subtraction",
         "image_sha256": hashlib.sha256(image_path.read_bytes()).hexdigest(),
         "database_sha256": hashlib.sha256(baseline.database.read_bytes()).hexdigest(),
         "config_sha256": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
@@ -117,7 +124,7 @@ def main():
                   "Timing is a single development run with soft timeouts, not a performance benchmark."
     }
     (args.output_dir / "results.json").write_text(json.dumps(report, indent=2, allow_nan=False) + "\n")
-    rows = ["# Image03: thử nghiệm verifier và candidate selection", "",
+    rows = [f"# {image_path.name}: thử nghiệm verifier và candidate selection", "",
             "Development trên ảnh đã biết, không phải held-out benchmark. Không đọc RA/Dec, roll hay nhãn trước inference.", "",
             "| Cấu hình | Trạng thái | Matches | RA / Dec (°) | Sai lệch tâm xấp xỉ (°) |",
             "|---|---|---:|---|---:|"]
@@ -153,6 +160,9 @@ def main():
              "- Không kết luận cải thiện DUST hoặc benchmark LOST đầy đủ từ smoke test này.", "",
              "## Chạy lại", "", "```bash", "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m examples.check_image03_experimental", "```", "",
              "Chi tiết config, source checksum và mọi kết quả: [results.json](results.json). Overlay chỉ vẽ ID thực sự do solver trả về."]
+    if not is_image03:
+        rows.insert(2, "Ảnh mới dùng lại preset/FOV image03; chưa xác nhận calibration quang học. Không chấm sai lệch tâm theo reference ảnh03.")
+        rows = [row for row in rows if "Tâm tham khảo48.773" not in row]
     (args.output_dir / "summary.md").write_text("\n".join(rows) + "\n")
     image = cv2.imread(str(image_path), cv2.IMREAD_GRAYSCALE)
     overlay = cv2.cvtColor(np.clip(image.astype(float)*8, 0, 255).astype(np.uint8), cv2.COLOR_GRAY2BGR)
@@ -161,7 +171,7 @@ def main():
         y, x = np.rint(point).astype(int)
         cv2.circle(overlay, (x, y), 8, (0, 255, 0), 1)
         cv2.putText(overlay, f"HIP {hip}", (x+9, y), cv2.FONT_HERSHEY_SIMPLEX, .4, (0, 255, 0), 1)
-    if not cv2.imwrite(str(args.output_dir / "image03-overlay.png"), overlay):
+    if not cv2.imwrite(str(args.output_dir / ("image03-overlay.png" if is_image03 else f"{image_path.stem}-overlay.png")), overlay):
         raise OSError("Could not write overlay")
 
 

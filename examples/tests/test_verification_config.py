@@ -29,16 +29,16 @@ def test_cli_preserves_opt_in_limits():
     assert config.max_input_stars is None
     assert config.verification_catalog_stars is None
     args = build_parser(config).parse_args([
-        "--image", "03.bmp", "--max-input-stars", "40", "--verification-catalog-stars", "90"])
+        "--image", "dataset/calibration/openmv/session_01/03_calibrated.bmp", "--max-input-stars", "40", "--verification-catalog-stars", "90"])
     assert args.max_input_stars == 40
     assert args.verification_catalog_stars == 90
 
 
-def test_raw_image03_blind_experimental_solution():
+def test_calibrated_image03_blind_experimental_solution():
     """Development regression, not a held-out accuracy measurement."""
     config = PipelineConfig.from_json(ROOT / "configs/examples/image03-experimental.json")
     pipeline = StarTrackerPipeline(config)
-    result = pipeline.run(ROOT / "dataset/03.bmp")
+    result = pipeline.run(ROOT / "dataset/calibration/openmv/session_01/03_calibrated.bmp")
     assert result["status"] == "ok"
     assert result["num_matches"] == 7
     # Post-inference assertions against the independently checked star field.
@@ -49,7 +49,7 @@ def test_raw_image03_blind_experimental_solution():
     assert result["mismatch_probability"] < config.match_threshold
     # No detector change: selected top20 remain exactly the old detections.
     import cv2
-    image = cv2.imread(str(ROOT / "dataset/03.bmp"), cv2.IMREAD_GRAYSCALE)
+    image = cv2.imread(str(ROOT / "dataset/calibration/openmv/session_01/03_calibrated.bmp"), cv2.IMREAD_GRAYSCALE)
     old = PipelineConfig.from_json(ROOT / "configs/examples/image03.json")
     pipeline.config = replace(old, fov_deg=16.8)
     previous = pipeline.detect_stars(image)

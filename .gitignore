@@ -70,3 +70,6 @@ data/hip_main.dat*
 
 # Local camera calibration arrays
 /data/calibration/**/*.npy
+
+# Calibrated image03 regression fixture
+!dataset/calibration/openmv/session_01/03_calibrated.bmp
