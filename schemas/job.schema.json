@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "title": "USSEG draft job1.0",
+  "required": [
+    "schema_version",
+    "job_id",
+    "payload",
+    "payload_size_bytes",
+    "payload_sha256",
+    "camera_profile_id",
+    "width",
+    "height",
+    "pixel_format",
+    "processing_stage"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "job_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,95}$"
+    },
+    "payload": {
+      "type": "string",
+      "minLength": 1
+    },
+    "payload_size_bytes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 67108864
+    },
+    "payload_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "camera_profile_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,95}$"
+    },
+    "width": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 32768
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 32768
+    },
+    "pixel_format": {
+      "type": "string",
+      "minLength": 1
+    },
+    "processing_stage": {
+      "enum": [
+        "sensor_raw",
+        "already_corrected"
+      ]
+    },
+    "capture_timestamp_utc": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "timestamp_reference": {
+      "type": "string"
+    },
+    "clock_source": {
+      "type": "string"
+    },
+    "packing": {
+      "type": "string"
+    },
+    "storage_bits": {
+      "enum": [
+        8,
+        16
+      ]
+    },
+    "valid_bits": {
+      "enum": [
+        8,
+        10,
+        12
+      ]
+    },
+    "endianness": {
+      "enum": [
+        "little",
+        "big"
+      ]
+    },
+    "bit_alignment": {
+      "enum": [
+        "lsb",
+        "msb"
+      ]
+    },
+    "stride_bytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "header_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "trailer_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "roi_origin_xy": {
+      "const": [
+        0,
+        0
+      ]
+    },
+    "binning_xy": {
+      "const": [
+        1,
+        1
+      ]
+    },
+    "bayer_pattern_at_roi_origin": {
+      "type": "string"
+    },
+    "orientation": {
+      "const": "sensor_native"
+    },
+    "exposure_us": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "gain_db": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "sensor_temperature_c": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "calibration_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

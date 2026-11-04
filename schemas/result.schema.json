@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "title": "USSEG result1.0",
+  "required": [
+    "schema_version",
+    "run_id",
+    "marker_relative",
+    "job_id",
+    "status",
+    "pose",
+    "reference_status",
+    "attempt",
+    "provenance",
+    "processed_at_utc",
+    "supervisor_frame_ns",
+    "result_path"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "marker_relative": {
+      "type": "string"
+    },
+    "job_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "metadata_sha256": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "enum": [
+        "solved",
+        "no_solve",
+        "invalid_input",
+        "unsupported_format",
+        "timeout",
+        "runtime_error",
+        "interrupted"
+      ]
+    },
+    "pose": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": [
+            "quaternion_wxyz",
+            "direction",
+            "camera_axes",
+            "inertial_reference",
+            "ra_deg",
+            "dec_deg",
+            "roll_deg",
+            "solved_fov_deg"
+          ],
+          "properties": {
+            "quaternion_wxyz": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "items": {
+                "type": "number"
+              }
+            },
+            "direction": {
+              "const": "catalog_to_camera"
+            }
+          }
+        }
+      ]
+    },
+    "reference_status": {
+      "const": "unavailable"
+    },
+    "attempt": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "provenance": {
+      "type": "object"
+    },
+    "processed_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "supervisor_frame_ns": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "result_path": {
+      "type": "string"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "solved"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "pose": {
+            "type": "object"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "pose": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ]
+}

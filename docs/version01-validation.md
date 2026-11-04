@@ -1,5 +1,10 @@
 # dev/version01 validation
 
+> Historical audit of version01 snapshots. Statements about current branch,
+> uncommitted files, test counts and unresolved image03 refer to those snapshots.
+> For current evidence see [current-results.md](current-results.md); for the
+> proposed Podman deployment see [version3-plan.md](version3-plan.md).
+
 Branch created from `abed141fead5b76e99f8bed2e31f1a2d8c653708`.
 Results live in the sibling evaluator repository under `out/version01/`.
 

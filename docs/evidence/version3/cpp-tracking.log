@@ -1,0 +1,27 @@
+==================================================
+  TEST: TRACKING MODE — CENTROID MATCH + ATTITUDE
+  (No OpenCV — pure algorithmic verification)
+==================================================
+
+Camera parameters:
+  Resolution : 1536 x 2048
+  Center     : (768, 1024)
+  Focal len  : 1313.15 px
+
+Previous frame: 5 stars
+Current frame : 7 centroids (incl. 2 outliers)
+CentroidMatcher found 5 pairs:
+  [0 -> 0] OK
+  [1 -> 1] OK
+  [2 -> 2] OK
+  [3 -> 3] OK
+  [4 -> 4] OK
+All true stars matched. All outliers rejected.
+
+Running QUEST on matched tracking stars...
+QUEST estimated orientation (current frame):
+ -0.0188773    0.999246  -0.0339241
+    0.85747 -0.00126934   -0.514533
+  -0.514188  -0.0388018   -0.856799
+Euler angles (Yaw, Pitch, Roll) in deg: 91.2612, 30.9432, -177.407
+>>> Tracking Mode Verification: SUCCESS! <<<

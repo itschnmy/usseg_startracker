@@ -1,0 +1,20 @@
+==================================================
+  TEST: IMAGE PREPROCESSOR (ESA Tetra3 Model)
+==================================================
+
+Loading input image: /home/daniel/TGMT/usseg_startracker/dataset/calibration/openmv/session_01/03_calibrated.bmp ...
+Original image size: 640 x 480
+
+Configuring Cropping (ROI Selection):
+  Requested Size   : 1024 x 1024
+  Requested Offset : (50, -30)
+Preprocessing Succeeded:
+  Actual Crop Offset : (0, 0)
+  Processed ROI Size : 640 x 480
+  Execution Time     : 0.793099 ms
+
+Saving clean (background subtracted) image to: test/results/image_preprocessing/clean.png ...
+Saving binary (thresholded & opened) mask to: test/results/image_preprocessing/binary.png ...
+Saving cropped ROI visualization to: test/results/image_preprocessing/cropped_roi.png ...
+
+>>> Preprocessor test: SUCCESS! <<<

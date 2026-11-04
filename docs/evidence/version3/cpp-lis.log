@@ -1,0 +1,37 @@
+==================================================
+  TEST: LIS MODE — ATTITUDE DETERMINATION
+  (No OpenCV — pure algorithmic verification)
+==================================================
+
+Camera parameters:
+  Resolution : 1536 x 2048
+  Center     : (768, 1024)
+  Focal len  : 1313.15 px
+
+Loaded 500 catalog stars.
+Loaded K-Vector DB (range: [0.01, 1.4] rad).
+Selected 5 test stars.
+
+True orientation (R):
+         0   0.866854  -0.498563
+  0.997426 -0.0357515 -0.0621612
+ -0.071709  -0.497279  -0.864622
+Euler angles (Yaw, Pitch, Roll) in deg: 90, 4.11215, -150.095
+Projected 5 stars to pixel coordinates.
+VotingIdentifier matched 5 star pairs.
+
+QUEST estimated orientation (R_est):
+7.4547e-12   0.997426  -0.071709
+  0.866854 -0.0357515  -0.497279
+ -0.498563 -0.0621612  -0.864622
+Euler angles (Yaw, Pitch, Roll) in deg: 90, 29.905, -175.888
+
+Match Details:
+  Detected Star 0 (pos: [783.384, 1097.36]) -> Matched Catalog ID: 60718 | True Catalog ID: 60718 [CORRECT]
+  Detected Star 1 (pos: [712.599, 1030.55]) -> Matched Catalog ID: 62434 | True Catalog ID: 62434 [CORRECT]
+  Detected Star 2 (pos: [750.643, 963.407]) -> Matched Catalog ID: 61084 | True Catalog ID: 61084 [CORRECT]
+  Detected Star 3 (pos: [803.658, 994.591]) -> Matched Catalog ID: 59747 | True Catalog ID: 59747 [CORRECT]
+  Detected Star 4 (pos: [789.696, 1034.13]) -> Matched Catalog ID: 60260 | True Catalog ID: 60260 [CORRECT]
+
+Orientation Error: 4.94338e-10 deg
+>>> LIS Mode Verification: SUCCESS! <<<

@@ -1,0 +1,335 @@
+{
+  "case": "image03",
+  "config_file": "/home/daniel/TGMT/usseg_startracker/configs/examples/image03-experimental.json",
+  "result": {
+    "status": "ok",
+    "message": null,
+    "image": "/home/daniel/TGMT/usseg_startracker/dataset/03.bmp",
+    "image_size_hw": [
+      480,
+      640
+    ],
+    "num_centroids": 40,
+    "num_matches": 7,
+    "centroids_xy": [
+      [
+        58.886577181208054,
+        442.3409395973154
+      ],
+      [
+        369.09215955983495,
+        129.80330123796423
+      ],
+      [
+        309.6952662721894,
+        188.06065088757396
+      ],
+      [
+        566.7589498806683,
+        84.32696897374701
+      ],
+      [
+        369.5511811023622,
+        450.40944881889766
+      ],
+      [
+        140.35087719298247,
+        446.5043859649123
+      ],
+      [
+        147.05228758169935,
+        353.4575163398693
+      ],
+      [
+        96.8840579710145,
+        210.1159420289855
+      ],
+      [
+        23.58823529411765,
+        354.65546218487395
+      ],
+      [
+        84.6036036036036,
+        464.9189189189189
+      ],
+      [
+        532.5049504950495,
+        41.23762376237624
+      ],
+      [
+        178.66666666666666,
+        382.1222222222222
+      ],
+      [
+        104.63636363636364,
+        435.5
+      ],
+      [
+        15.662790697674419,
+        438.75581395348837
+      ],
+      [
+        563.6986301369863,
+        439.3013698630137
+      ],
+      [
+        99.66197183098592,
+        374.6478873239437
+      ],
+      [
+        577.3188405797101,
+        431.2173913043478
+      ],
+      [
+        624.3582089552239,
+        339.65671641791045
+      ],
+      [
+        23.59090909090909,
+        89.28787878787878
+      ],
+      [
+        433.1666666666667,
+        454.77272727272725
+      ],
+      [
+        423.1587301587302,
+        454.1746031746032
+      ],
+      [
+        23.551724137931036,
+        455.1551724137931
+      ],
+      [
+        600.6851851851852,
+        434.6296296296296
+      ],
+      [
+        17.9811320754717,
+        426.0188679245283
+      ],
+      [
+        94.56862745098039,
+        259.5098039215686
+      ],
+      [
+        584.1836734693877,
+        431.6938775510204
+      ],
+      [
+        16.306122448979593,
+        464.85714285714283
+      ],
+      [
+        620.6666666666666,
+        451.15555555555557
+      ],
+      [
+        23.65909090909091,
+        464.0
+      ],
+      [
+        70.02325581395348,
+        423.16279069767444
+      ],
+      [
+        578.8333333333334,
+        439.1666666666667
+      ],
+      [
+        184.4,
+        267.5
+      ],
+      [
+        576.5384615384615,
+        463.35897435897436
+      ],
+      [
+        626.2105263157895,
+        170.42105263157896
+      ],
+      [
+        424.02702702702703,
+        448.3783783783784
+      ],
+      [
+        573.8055555555555,
+        408.3888888888889
+      ],
+      [
+        29.38888888888889,
+        419.19444444444446
+      ],
+      [
+        467.51612903225805,
+        40.45161290322581
+      ],
+      [
+        38.53333333333333,
+        12.5
+      ],
+      [
+        24.0,
+        161.5
+      ]
+    ],
+    "matched_centroids_yx": [
+      [
+        442.3409395973154,
+        58.886577181208054
+      ],
+      [
+        188.06065088757396,
+        309.6952662721894
+      ],
+      [
+        129.80330123796423,
+        369.09215955983495
+      ],
+      [
+        450.40944881889766,
+        369.5511811023622
+      ],
+      [
+        267.5,
+        184.4
+      ],
+      [
+        354.65546218487395,
+        23.58823529411765
+      ],
+      [
+        446.5043859649123,
+        140.35087719298247
+      ]
+    ],
+    "matched_stars_radec": [
+      [
+        51.08094787597656,
+        49.86101150512695
+      ],
+      [
+        47.042232513427734,
+        40.95563507080078
+      ],
+      [
+        46.29519271850586,
+        38.83959197998047
+      ],
+      [
+        56.298336029052734,
+        42.578556060791016
+      ],
+      [
+        47.37560272216797,
+        44.856632232666016
+      ],
+      [
+        47.27919006347656,
+        49.61268997192383
+      ],
+      [
+        52.64369201660156,
+        47.995330810546875
+      ]
+    ],
+    "matched_catalog_ids": [
+      15863,
+      14576,
+      14354,
+      17529,
+      14668,
+      14632,
+      16335
+    ],
+    "quaternion_wxyz": [
+      0.3137189580105515,
+      -0.8053998180482747,
+      -0.1656859485013591,
+      -0.4748259838528057
+    ],
+    "quaternion_lost_wxyz": [
+      0.3137189580105515,
+      -0.8053998180482747,
+      -0.1656859485013591,
+      -0.4748259838528057
+    ],
+    "quaternion_inertial_to_body_wxyz": [
+      0.3137189580105515,
+      -0.8053998180482747,
+      -0.1656859485013591,
+      -0.4748259838528057
+    ],
+    "quaternion_body_to_inertial_wxyz": [
+      0.3137189580105515,
+      0.8053998180482747,
+      0.1656859485013591,
+      0.4748259838528057
+    ],
+    "quaternion_internal_wxyz": [
+      0.3137189580105515,
+      0.8053998180482747,
+      0.1656859485013591,
+      0.4748259838528057
+    ],
+    "ra_deg": 48.81633613525443,
+    "dec_deg": 41.369726334352976,
+    "roll_deg": 117.99210787753236,
+    "solved_fov_deg": 16.747192890922307,
+    "rmse_arcsec": 38.89627233431413,
+    "mismatch_probability": 7.411419955099162e-05,
+    "fps": 1.5164767090029052,
+    "timings": {
+      "image_load_ns": 1166580,
+      "detection_ns": 102451230,
+      "star_id_ns": 546604200,
+      "attitude_ns": 8893620,
+      "pipeline_ns": 657949050,
+      "total_ns": 659423250
+    },
+    "config": {
+      "database": "/home/daniel/TGMT/usseg_startracker/data/default_database.npz",
+      "fov_deg": 16.8,
+      "fov_max_error_deg": 0.8,
+      "sigma_threshold": 3.0,
+      "min_area": 3,
+      "max_area": 300,
+      "use_tophat": true,
+      "tophat_kernel_size": 31,
+      "component_mask": true,
+      "border_margin_px": 12,
+      "star_ranking": "flux",
+      "max_stars": 40,
+      "pattern_checking_stars": 16,
+      "max_input_stars": 40,
+      "verification_catalog_stars": 90,
+      "match_radius": 0.003,
+      "match_threshold": 0.001,
+      "solve_timeout_ms": 10000,
+      "attitude_method": "SVD"
+    }
+  },
+  "image_sha256": "0ffe9418ff9e5d5a1beecfb9e39142dbc5f70b17783e004c1c30f2b6062d9493",
+  "config_sha256": "aec531c31a3674aa3c0d685d3008ae05d1ada0d5101bf7a3b43d5ee4ca28fb82",
+  "source_sha256": {
+    "models/__init__.py": "bc5763ccc9449cdd213b5a3b0ae98e56b7b8117358015955da68dbb1a67e0611",
+    "models/attitude/__init__.py": "0553dcba58818ca6b3f999062e03f774921b92e7447e9887c5b35a2a7666df22",
+    "models/attitude/attitude_control_system.py": "9b26a3a5062038f2fdadde74e4c4036563626d23824a2bb88c6d6b6c73d6bc56",
+    "models/attitude/attitude_determinator.py": "23ab40a32d8fcaa0e917b0299d7f1d458ff30a990b28119afc5f79bf476551c0",
+    "models/attitude/estimators.py": "534cb828411d1c25821d601959ff251ae4813f9297c62f7e72a6d85ce3ce0d93",
+    "models/attitude/math_utils.py": "de84e3f879db45f55063ee1dda8f9a26d5b702ebc419fdb2dfb8412d6944f07e",
+    "models/attitude/mekf.py": "2a2ac0a7f915afc1e2e1553bfa165f139a1c069b3ab494bc32fb27345c0bfb08",
+    "models/attitude/relative_attitude_determinator.py": "cae26076e73c8bc8dd93e2e76d836b41f039e4eb13354460fb78013482cbd8e9",
+    "models/detector/__init__.py": "5e605da89fd26db583124c768f270d6b6218c00a7d4cffc454296e9b59b93469",
+    "models/detector/star_detector.py": "c08fa5255a07a985275426337c8c863fc2d7f386d3fedb208def9068c3c1c48d",
+    "models/identifier/__init__.py": "1c299cd26b028dfed7c99d11a4a5975e69c475db1551534589a4f6f1ab8d3999",
+    "models/identifier/plate_solver.py": "498746cc68774c1022ba94b8ea0e74913191dee5ebe13431dd5bc550b06cde6d",
+    "models/pipeline/__init__.py": "1ec6ccdfa241e3f50bff990eeda1b010ff74c177381a9c14cf5efa93ffa691d1",
+    "models/pipeline/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "models/pipeline/cli.py": "5d2f46ee00a23c79f5173744fe375435e326dafdaf4e9b651e58424a0737b82b",
+    "models/pipeline/pipeline.py": "df67570b0f5046f2f6d0bba1f7e3a0d09200aadc3998d16d1add0758a9fca42c"
+  },
+  "acquisition": "hardware/camera capture, as confirmed by the user; camera/exposure metadata unavailable",
+  "reference_status": "rounded Astrometry screenshot center only; original WCS unavailable; full attitude error unavailable",
+  "approx_boresight_error_deg": 0.033023747389955296
+}

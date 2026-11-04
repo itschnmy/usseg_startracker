@@ -1,0 +1,48 @@
+{
+  "checks": [
+    {
+      "detail": "exit=3",
+      "name": "batch_error_exit",
+      "passed": true
+    },
+    {
+      "detail": "status=solved, matches=7",
+      "name": "image03",
+      "passed": true
+    },
+    {
+      "detail": "status=solved, matches=16",
+      "name": "stellarium",
+      "passed": true
+    },
+    {
+      "detail": "black frame",
+      "name": "black_no_solve",
+      "passed": true
+    },
+    {
+      "detail": "bad payload",
+      "name": "corrupt_rejected",
+      "passed": true
+    },
+    {
+      "detail": "attitude_error_deg=0.002737686386468914",
+      "name": "stellarium_reference",
+      "passed": true
+    },
+    {
+      "detail": "unit quaternion",
+      "name": "quaternion_norm",
+      "passed": true
+    },
+    {
+      "detail": "results_before=4, after=4, exit=0",
+      "name": "resume_no_duplicates",
+      "passed": true
+    }
+  ],
+  "completed_at_utc": "2026-11-04T07:36:07.012523+00:00",
+  "failed": 0,
+  "passed": 8,
+  "schema_version": "1.0"
+}
