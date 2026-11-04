@@ -3,7 +3,9 @@
 Nhánh `dev/version3` đã có implementation batch/watch/self-test, worker watchdog,
 ready protocol và persistent output. Config kèm repo là **profile lab**, Python3.10.
 Architecture, camera SDK layout, quota và deadline bay vẫn chờ bên phần cứng.
-Containerfile/scripts đã chuẩn bị; máy thực hiện lượt này chưa có Podman để build/run OCI.
+Container đã build/load/run bằng Podman4.9.3 rootless trên WSL2 amd64;
+self-test8/8, camera batch4/4 solved và resume không trùng kết quả.
+Xem [bằng chứng Podman](evidence/version3/podman-validation.json).
 
 ## 1. Một lệnh test trên máy phát triển
 
@@ -240,5 +242,5 @@ OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m pytest examples/tes
 
 Smoke publisher xử lý03/200701 raw/calibrated/Stellarium, xuất JSON và overlay chỉ
 vẽ IDs solver trả về. Camera images thiếu WCS nên không tự gán correct. Cần thêm
-SDK RAW sample, Podman build/run thật, đúng architecture, quota/OOM/power-loss,
+SDK RAW sample, Podman acceptance trên host bay đúng architecture, quota/OOM/power-loss,
 cadence/soak và camera holdout trước ký nhận release bay.

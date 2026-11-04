@@ -1,0 +1,1734 @@
+{
+  "podman_version": "podman version 4.9.3",
+  "host_kernel": "6.6.87.2-microsoft-standard-WSL2",
+  "architecture": "x86_64",
+  "image_id": "4052931d2a591628eff24e954a9a880e7d53fa2149f8165f99c40cff8fb03f6c",
+  "source_revision": "5719b7b91a16b7c80bb1fffe6757d7a61882d510",
+  "archive_checksums": "d11118f20090b96586115f7088ffad62083874159cea1dc6eb0a3632fcd32dd3  usseg-v3.oci.tar\n19d36a71133f88ca27d9e4e4531a08e324a6f54d90df9a686889e1fa7122b1d9  image-inspect.json\n",
+  "archive_bytes": 221710848,
+  "oci_load_passed": true,
+  "volume_probe": {
+    "uid": 1000,
+    "interfaces": [
+      "lo"
+    ],
+    "app_write_errno": 30,
+    "input_write_errno": 30,
+    "output_writable": true
+  },
+  "self_tests": [
+    {
+      "checks": [
+        {
+          "detail": "exit=3",
+          "name": "batch_error_exit",
+          "passed": true
+        },
+        {
+          "detail": "status=solved, matches=7",
+          "name": "image03",
+          "passed": true
+        },
+        {
+          "detail": "status=solved, matches=16",
+          "name": "stellarium",
+          "passed": true
+        },
+        {
+          "detail": "black frame",
+          "name": "black_no_solve",
+          "passed": true
+        },
+        {
+          "detail": "bad payload",
+          "name": "corrupt_rejected",
+          "passed": true
+        },
+        {
+          "detail": "attitude_error_deg=0.002737686386468914",
+          "name": "stellarium_reference",
+          "passed": true
+        },
+        {
+          "detail": "unit quaternion",
+          "name": "quaternion_norm",
+          "passed": true
+        },
+        {
+          "detail": "results_before=4, after=4, exit=0",
+          "name": "resume_no_duplicates",
+          "passed": true
+        }
+      ],
+      "completed_at_utc": "2026-11-04T08:02:25.688755+00:00",
+      "failed": 0,
+      "passed": 8,
+      "schema_version": "1.0"
+    },
+    {
+      "checks": [
+        {
+          "detail": "exit=3",
+          "name": "batch_error_exit",
+          "passed": true
+        },
+        {
+          "detail": "status=solved, matches=7",
+          "name": "image03",
+          "passed": true
+        },
+        {
+          "detail": "status=solved, matches=16",
+          "name": "stellarium",
+          "passed": true
+        },
+        {
+          "detail": "black frame",
+          "name": "black_no_solve",
+          "passed": true
+        },
+        {
+          "detail": "bad payload",
+          "name": "corrupt_rejected",
+          "passed": true
+        },
+        {
+          "detail": "attitude_error_deg=0.002737686386468914",
+          "name": "stellarium_reference",
+          "passed": true
+        },
+        {
+          "detail": "unit quaternion",
+          "name": "quaternion_norm",
+          "passed": true
+        },
+        {
+          "detail": "results_before=4, after=4, exit=0",
+          "name": "resume_no_duplicates",
+          "passed": true
+        }
+      ],
+      "completed_at_utc": "2026-11-04T08:02:57.831403+00:00",
+      "failed": 0,
+      "passed": 8,
+      "schema_version": "1.0"
+    }
+  ],
+  "batch_summaries": [
+    {
+      "compute_fps": 6.19536536704923,
+      "database_load_ns": [
+        1767925978
+      ],
+      "frames_this_run": 4,
+      "peak_worker_rss_kib": 225548,
+      "run_id": "20261104T080229Z-d761db72bfbe",
+      "schema_version": "1.0",
+      "solved_updates_per_compute_second": 6.19536536704923,
+      "statuses_latest": {
+        "solved": 4
+      },
+      "statuses_this_run": {
+        "solved": 4
+      },
+      "timing_ns": {
+        "supervisor_frame_ns": {
+          "p50": 107637295.5,
+          "p95": 384050491.1999999,
+          "p99": 416798773.43999994
+        },
+        "worker_total_ns": {
+          "p50": 95143368.5,
+          "p95": 369365443.5499999,
+          "p99": 401573967.1099999
+        }
+      },
+      "unique_markers_total": 4,
+      "updated_at_utc": "2026-11-04T08:02:32.621285+00:00",
+      "worker_starts": 1
+    },
+    {
+      "compute_fps": null,
+      "database_load_ns": [
+        1043690788
+      ],
+      "frames_this_run": 0,
+      "peak_worker_rss_kib": 0,
+      "run_id": "20261104T080301Z-f3702eeb3189",
+      "schema_version": "1.0",
+      "solved_updates_per_compute_second": null,
+      "statuses_latest": {
+        "solved": 4
+      },
+      "statuses_this_run": {},
+      "timing_ns": {
+        "supervisor_frame_ns": null,
+        "worker_total_ns": null
+      },
+      "unique_markers_total": 4,
+      "updated_at_utc": "2026-11-04T08:03:03.099251+00:00",
+      "worker_starts": 1
+    }
+  ],
+  "result_count_after_two_batches": 4,
+  "baseline_ids_and_pose_equal_within_deg": 1e-09,
+  "stellarium_metrics": {
+    "label_count": 82,
+    "selected_centroids": 20,
+    "selected_label_matches_3px": 19,
+    "label_recall_selected_pct": 23.170731707317074,
+    "selected_without_label": 1,
+    "centroid_residual_p50_px": 0.12028855344270195,
+    "centroid_residual_p95_px": 0.5596025523298152,
+    "attitude_error_deg": 0.002737686386468914,
+    "boresight_error_deg": 0.0022887066360223777,
+    "pairwise_star_id_correct": 16,
+    "pairwise_star_id_labelled": 16,
+    "star_id_pairs": [
+      {
+        "hip_label": 97165,
+        "pixel_error": 0.0253077645717721,
+        "catalog_separation_deg": 0.0003991599527197094,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 95947,
+        "pixel_error": 0.05870087718362784,
+        "catalog_separation_deg": 7.343446050712403e-05,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 93194,
+        "pixel_error": 0.213892419516768,
+        "catalog_separation_deg": 2.564165271600967e-05,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 92420,
+        "pixel_error": 0.16263442597150155,
+        "catalog_separation_deg": 3.795213526971475e-05,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 95853,
+        "pixel_error": 0.16648593930058914,
+        "catalog_separation_deg": 0.0008237017701489638,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 99675,
+        "pixel_error": 0.14666474163639534,
+        "catalog_separation_deg": 1.4713668590566475e-05,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 94779,
+        "pixel_error": 0.04931773903689253,
+        "catalog_separation_deg": 0.0008674130161357006,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 98110,
+        "pixel_error": 0.1431549500627232,
+        "catalog_separation_deg": 0.00029301232917291613,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 92862,
+        "pixel_error": 0.036465192674884676,
+        "catalog_separation_deg": 0.0005207235390964671,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 92791,
+        "pixel_error": 2.240472428609146,
+        "catalog_separation_deg": 6.87009324372242e-05,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 91971,
+        "pixel_error": 0.12028855344270195,
+        "catalog_separation_deg": 0.00025039450441195597,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 94713,
+        "pixel_error": 0.08798479247578843,
+        "catalog_separation_deg": 1.5972642350651042e-05,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 94481,
+        "pixel_error": 0.3728392327432273,
+        "catalog_separation_deg": 1.4787793334711022e-05,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 91926,
+        "pixel_error": 0.06350714287208566,
+        "catalog_separation_deg": 0.0003289212142756425,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 96683,
+        "pixel_error": 0.1281563539415193,
+        "catalog_separation_deg": 0.00022970795422197547,
+        "correct_within_0_05deg": true
+      },
+      {
+        "hip_label": 96052,
+        "pixel_error": 0.019116439833859862,
+        "catalog_separation_deg": 2.7979818039477206e-05,
+        "correct_within_0_05deg": true
+      }
+    ]
+  },
+  "records": [
+    {
+      "algorithm": {
+        "centroids_xy": [
+          [
+            32.16053019145803,
+            156.77835051546393
+          ],
+          [
+            23.753246753246753,
+            260.6199134199134
+          ],
+          [
+            151.69489981785063,
+            27.33242258652095
+          ],
+          [
+            241.28390596745027,
+            119.02350813743219
+          ],
+          [
+            188.48340248962654,
+            395.05809128630705
+          ],
+          [
+            565.5391849529781,
+            84.38244514106583
+          ],
+          [
+            246.0,
+            116.92727272727272
+          ],
+          [
+            532.5555555555555,
+            41.148148148148145
+          ],
+          [
+            146.68085106382978,
+            353.5744680851064
+          ],
+          [
+            622.1111111111111,
+            108.5111111111111
+          ],
+          [
+            18.886363636363637,
+            261.90909090909093
+          ],
+          [
+            16.61904761904762,
+            466.1190476190476
+          ],
+          [
+            29.23076923076923,
+            259.1025641025641
+          ],
+          [
+            420.6,
+            133.25714285714287
+          ],
+          [
+            37.0,
+            153.125
+          ],
+          [
+            243.46875,
+            115.9375
+          ],
+          [
+            19.4,
+            138.2
+          ],
+          [
+            564.0,
+            81.0
+          ],
+          [
+            241.125,
+            126.0
+          ],
+          [
+            19.5,
+            459.5
+          ],
+          [
+            17.0,
+            258.04761904761904
+          ],
+          [
+            15.0,
+            455.0
+          ]
+        ],
+        "config": {
+          "attitude_method": "SVD",
+          "border_margin_px": 12,
+          "component_mask": true,
+          "dark_frame": null,
+          "database": "/app/data/default_database.npz",
+          "fov_deg": 16.8,
+          "fov_max_error_deg": 0.8,
+          "match_radius": 0.003,
+          "match_threshold": 0.001,
+          "max_area": 300,
+          "max_input_stars": 40,
+          "max_stars": 40,
+          "min_area": 3,
+          "pattern_checking_stars": 16,
+          "sigma_threshold": 3.0,
+          "solve_timeout_ms": 10000,
+          "star_ranking": "flux",
+          "tophat_kernel_size": 31,
+          "use_tophat": true,
+          "verification_catalog_stars": 90
+        },
+        "dec_deg": -31.68342153897061,
+        "fps": 37.78880900292678,
+        "image": "frame.bmp",
+        "image_size_hw": [
+          480,
+          640
+        ],
+        "matched_catalog_ids": [
+          90185,
+          89931,
+          88635,
+          89642,
+          87261,
+          87072,
+          85755
+        ],
+        "matched_centroids_yx": [
+          [
+            156.77835051546393,
+            32.16053019145803
+          ],
+          [
+            27.33242258652095,
+            151.69489981785063
+          ],
+          [
+            119.02350813743219,
+            241.28390596745027
+          ],
+          [
+            260.6199134199134,
+            23.753246753246753
+          ],
+          [
+            395.05809128630705,
+            188.48340248962654
+          ],
+          [
+            133.25714285714287,
+            420.6
+          ],
+          [
+            108.5111111111111,
+            622.1111111111111
+          ]
+        ],
+        "matched_stars_radec": [
+          [
+            276.0426940917969,
+            -34.385406494140625
+          ],
+          [
+            275.24871826171875,
+            -29.828271865844727
+          ],
+          [
+            271.45159912109375,
+            -30.425251007080078
+          ],
+          [
+            274.40576171875,
+            -36.76274871826172
+          ],
+          [
+            267.46484375,
+            -37.043121337890625
+          ],
+          [
+            266.89007568359375,
+            -27.830856323242188
+          ],
+          [
+            262.85400390625,
+            -23.962806701660156
+          ]
+        ],
+        "message": null,
+        "mismatch_probability": 2.699628954000759e-06,
+        "num_centroids": 22,
+        "num_matches": 7,
+        "quaternion_body_to_inertial_wxyz": [
+          0.6917497809155075,
+          -0.033056868858339965,
+          0.40806203651071876,
+          -0.5948738171943313
+        ],
+        "quaternion_inertial_to_body_wxyz": [
+          0.6917497809155075,
+          0.033056868858339965,
+          -0.40806203651071876,
+          0.5948738171943313
+        ],
+        "quaternion_internal_wxyz": [
+          0.6917497809155075,
+          -0.033056868858339965,
+          0.40806203651071876,
+          -0.5948738171943313
+        ],
+        "quaternion_lost_wxyz": [
+          0.6917497809155075,
+          0.033056868858339965,
+          -0.40806203651071876,
+          0.5948738171943313
+        ],
+        "quaternion_wxyz": [
+          0.6917497809155075,
+          0.033056868858339965,
+          -0.40806203651071876,
+          0.5948738171943313
+        ],
+        "ra_deg": 267.25096615882285,
+        "rmse_arcsec": 42.41776218408315,
+        "roll_deg": 321.3707177767416,
+        "solved_fov_deg": 16.767347618341248,
+        "status": "ok",
+        "timings": {
+          "attitude_ns": 190667,
+          "detection_ns": 23423290,
+          "image_load_ns": 0,
+          "pipeline_ns": 26327288,
+          "star_id_ns": 2713331,
+          "total_ns": 26462861
+        }
+      },
+      "attempt": 1,
+      "conversion": {
+        "black_level": 0,
+        "calibration_id": "lab-no-dark8",
+        "calibration_ns": 5464796,
+        "clipped_high_fraction": 0.0,
+        "clipped_low_fraction": 0.0,
+        "conversion": "fixed_linear_uint8",
+        "dark_applied": false,
+        "decode_ns": 12766682,
+        "native_range": [
+          0.0,
+          179.0
+        ],
+        "saturation_fraction": 0.0,
+        "valid_bits": 8,
+        "white_level": 255
+      },
+      "input": {
+        "camera_profile_id": "lab640",
+        "capture_timestamp_utc": null,
+        "clock_source": "unknown",
+        "height": 480,
+        "job_id": "image200701",
+        "payload": "frame.bmp",
+        "payload_sha256": "925024e5130a09ddd2dfea46db5621301da016e94d1d8f5aa49e8804c93deb92",
+        "payload_size_bytes": 921654,
+        "pixel_format": "encoded8",
+        "processing_stage": "sensor_raw",
+        "schema_version": "1.0",
+        "timestamp_reference": "unknown",
+        "width": 640
+      },
+      "job_id": "image200701",
+      "marker_relative": "image200701/frame.ready",
+      "metadata_sha256": "bf7ab72e2cf77addee13284ad263b7fa6c2069347ea2daac79415961d87ef704",
+      "peak_rss_kib": 199572,
+      "pose": {
+        "camera_axes": "+X boresight,+Y image-left,+Z image-up",
+        "dec_deg": -31.68342153897061,
+        "direction": "catalog_to_camera",
+        "inertial_reference": "database catalog; epoch/frame not certified for flight",
+        "quaternion_wxyz": [
+          0.6917497809155075,
+          0.033056868858339965,
+          -0.40806203651071876,
+          0.5948738171943313
+        ],
+        "ra_deg": 267.25096615882285,
+        "roll_deg": 321.3707177767416,
+        "solved_fov_deg": 16.767347618341248
+      },
+      "processed_at_utc": "2026-11-04T08:02:31.997664+00:00",
+      "provenance": {
+        "config_sha256": "d5df2afb8a1a253de6dc0acd55671f1bef6e206e62efda9d28f409f241c0be02",
+        "database_sha256": "4fad84d8d7d922e240abbb557dd6329ed94468c76657eebd4a3d9d042ab0f412",
+        "dependencies": {
+          "Pillow": "10.4.0",
+          "numpy": "1.24.4",
+          "opencv-python-headless": "4.7.0.72",
+          "scipy": "1.10.1"
+        },
+        "profiles": {
+          "lab640": "6bcc6107d5da4f1bcff4e0043dea3131d28a51f94aa3101aac33dc74aa19a9ba",
+          "stellarium1920": "423279678f54230191adcb43205ac415d244fbebc14a4bacde9738c5d1a8ee3a"
+        },
+        "python": "3.10.22",
+        "schema_version": "1.0",
+        "source_sha256": "705d7d97a79ba460d115910408a7edb188d77c898d082d294149c7f93aefaaa8"
+      },
+      "reference_status": "unavailable",
+      "result_path": "runs/20261104T080229Z-d761db72bfbe/results/067f6d316a7d73a0ce0d4dcd9d4b6022a7711544ffe8c88db61ed849f53fa4c5.json",
+      "run_id": "20261104T080229Z-d761db72bfbe",
+      "schema_version": "1.0",
+      "status": "solved",
+      "supervisor_frame_ns": 57069053,
+      "timings_ns": {
+        "attitude_ns": 190667,
+        "calibration_ns": 5464796,
+        "decode_ns": 12766682,
+        "detection_ns": 23423290,
+        "image_load_ns": 0,
+        "pipeline_ns": 26327288,
+        "star_id_ns": 2713331,
+        "total_ns": 26462861
+      },
+      "worker_total_ns": 45731088
+    },
+    {
+      "algorithm": {
+        "centroids_xy": [
+          [
+            146.75961733349547,
+            300.48931857797237
+          ],
+          [
+            1459.3896222410865,
+            147.1244906621392
+          ],
+          [
+            1255.8598528428095,
+            413.8066889632107
+          ],
+          [
+            687.2156770385968,
+            92.20902718129173
+          ],
+          [
+            359.7272428229665,
+            794.8051435406699
+          ],
+          [
+            1524.3251706382468,
+            149.79089330619087
+          ],
+          [
+            619.1137987406152,
+            894.7403426979898
+          ],
+          [
+            1700.6230382354724,
+            824.5533842331697
+          ],
+          [
+            384.2043985664839,
+            919.5473090942506
+          ],
+          [
+            531.640053640348,
+            122.45375155360765
+          ],
+          [
+            1622.7515917163728,
+            680.2470343810736
+          ],
+          [
+            1063.8676122931442,
+            945.8067554982449
+          ],
+          [
+            1544.810767725807,
+            590.5550523531756
+          ],
+          [
+            646.3933306252077,
+            1021.4444034122382
+          ],
+          [
+            744.5258421091941,
+            634.2038987228322
+          ],
+          [
+            317.41837527182355,
+            219.10368126747437
+          ],
+          [
+            775.2154421416922,
+            1041.1390270098254
+          ],
+          [
+            800.590434549835,
+            678.5985990898546
+          ],
+          [
+            565.940206185567,
+            190.82257731958762
+          ],
+          [
+            560.5177600675569,
+            390.00707235974033
+          ]
+        ],
+        "config": {
+          "attitude_method": "SVD",
+          "border_margin_px": 12,
+          "component_mask": true,
+          "dark_frame": null,
+          "database": "/app/data/default_database.npz",
+          "fov_deg": 29.7178167624,
+          "fov_max_error_deg": 2,
+          "match_radius": 0.015,
+          "match_threshold": 0.001,
+          "max_area": 500,
+          "max_input_stars": null,
+          "max_stars": 20,
+          "min_area": 3,
+          "pattern_checking_stars": 12,
+          "sigma_threshold": 3,
+          "solve_timeout_ms": 5000,
+          "star_ranking": "flux",
+          "tophat_kernel_size": 7,
+          "use_tophat": false,
+          "verification_catalog_stars": null
+        },
+        "dec_deg": 41.128079538967356,
+        "fps": 4.432132335387325,
+        "image": "frame.png",
+        "image_size_hw": [
+          1080,
+          1920
+        ],
+        "matched_catalog_ids": [
+          97165,
+          95947,
+          93194,
+          92420,
+          95853,
+          99675,
+          94779,
+          98110,
+          92862,
+          92791,
+          91971,
+          94713,
+          94481,
+          91926,
+          96683,
+          96052
+        ],
+        "matched_centroids_yx": [
+          [
+            413.8066889632107,
+            1255.8598528428095
+          ],
+          [
+            300.48931857797237,
+            146.75961733349547
+          ],
+          [
+            794.8051435406699,
+            359.7272428229665
+          ],
+          [
+            919.5473090942506,
+            384.2043985664839
+          ],
+          [
+            680.2470343810736,
+            1622.7515917163728
+          ],
+          [
+            147.1244906621392,
+            1459.3896222410865
+          ],
+          [
+            824.5533842331697,
+            1700.6230382354724
+          ],
+          [
+            92.20902718129173,
+            687.2156770385968
+          ],
+          [
+            945.8067554982449,
+            1063.8676122931442
+          ],
+          [
+            894.7403426979898,
+            619.1137987406152
+          ],
+          [
+            1021.4444034122382,
+            646.3933306252077
+          ],
+          [
+            634.2038987228322,
+            744.5258421091941
+          ],
+          [
+            678.5985990898546,
+            800.590434549835
+          ],
+          [
+            1041.1390270098254,
+            775.2154421416922
+          ],
+          [
+            219.10368126747437,
+            317.41837527182355
+          ],
+          [
+            390.00707235974033,
+            560.5177600675569
+          ]
+        ],
+        "matched_stars_radec": [
+          [
+            296.2440185546875,
+            45.13111877441406
+          ],
+          [
+            292.6802673339844,
+            27.959644317626953
+          ],
+          [
+            284.73590087890625,
+            32.68956756591797
+          ],
+          [
+            282.51995849609375,
+            33.36263656616211
+          ],
+          [
+            292.42669677734375,
+            51.730594635009766
+          ],
+          [
+            303.407958984375,
+            46.741336822509766
+          ],
+          [
+            289.2763366699219,
+            53.369239807128906
+          ],
+          [
+            299.0762634277344,
+            35.08324432373047
+          ],
+          [
+            283.8338928222656,
+            43.94660186767578
+          ],
+          [
+            283.6260986328125,
+            36.89863204956055
+          ],
+          [
+            281.1933898925781,
+            37.605281829833984
+          ],
+          [
+            289.092041015625,
+            38.13373565673828
+          ],
+          [
+            288.43951416015625,
+            39.14596176147461
+          ],
+          [
+            281.0949401855469,
+            39.6130485534668
+          ],
+          [
+            294.8442077636719,
+            30.153549194335938
+          ],
+          [
+            292.9429931640625,
+            34.452945709228516
+          ]
+        ],
+        "message": null,
+        "mismatch_probability": 3.263623372227731e-22,
+        "num_centroids": 20,
+        "num_matches": 16,
+        "quaternion_body_to_inertial_wxyz": [
+          0.32564267775684236,
+          -0.7312613807417818,
+          0.23150072840961297,
+          -0.5528300391664648
+        ],
+        "quaternion_inertial_to_body_wxyz": [
+          0.32564267775684236,
+          0.7312613807417818,
+          -0.23150072840961297,
+          0.5528300391664648
+        ],
+        "quaternion_internal_wxyz": [
+          0.32564267775684236,
+          -0.7312613807417818,
+          0.23150072840961297,
+          -0.5528300391664648
+        ],
+        "quaternion_lost_wxyz": [
+          0.32564267775684236,
+          0.7312613807417818,
+          -0.23150072840961297,
+          0.5528300391664648
+        ],
+        "quaternion_wxyz": [
+          0.32564267775684236,
+          0.7312613807417818,
+          -0.23150072840961297,
+          0.5528300391664648
+        ],
+        "ra_deg": 291.9504090582572,
+        "rmse_arcsec": 46.25069401880202,
+        "roll_deg": 256.4354542250502,
+        "solved_fov_deg": 29.71297359911519,
+        "status": "ok",
+        "timings": {
+          "attitude_ns": 254924,
+          "detection_ns": 221261428,
+          "image_load_ns": 0,
+          "pipeline_ns": 224741366,
+          "star_id_ns": 3225014,
+          "total_ns": 225625032
+        }
+      },
+      "attempt": 1,
+      "conversion": {
+        "black_level": 0,
+        "calibration_id": "stellarium-no-dark8",
+        "calibration_ns": 64662805,
+        "clipped_high_fraction": 0.0,
+        "clipped_low_fraction": 0.0,
+        "conversion": "fixed_linear_uint8",
+        "dark_applied": false,
+        "decode_ns": 114078523,
+        "native_range": [
+          0.0,
+          255.0
+        ],
+        "saturation_fraction": 0.0004938271604938272,
+        "valid_bits": 8,
+        "white_level": 255
+      },
+      "input": {
+        "camera_profile_id": "stellarium1920",
+        "capture_timestamp_utc": null,
+        "clock_source": "unknown",
+        "height": 1080,
+        "job_id": "stellarium",
+        "payload": "frame.png",
+        "payload_sha256": "f064540359f44e574767b7e04d495f3135c417cceb3e3942e882b021791229d2",
+        "payload_size_bytes": 1817165,
+        "pixel_format": "encoded8",
+        "processing_stage": "sensor_raw",
+        "schema_version": "1.0",
+        "timestamp_reference": "unknown",
+        "width": 1920
+      },
+      "job_id": "stellarium",
+      "marker_relative": "stellarium/frame.ready",
+      "metadata_sha256": "d01ccffa265e6539d3ab4a35ffca4db87d84a54c3f47153acafffb4f6b3773c6",
+      "peak_rss_kib": 225548,
+      "pose": {
+        "camera_axes": "+X boresight,+Y image-left,+Z image-up",
+        "dec_deg": 41.128079538967356,
+        "direction": "catalog_to_camera",
+        "inertial_reference": "database catalog; epoch/frame not certified for flight",
+        "quaternion_wxyz": [
+          0.32564267775684236,
+          0.7312613807417818,
+          -0.23150072840961297,
+          0.5528300391664648
+        ],
+        "ra_deg": 291.9504090582572,
+        "roll_deg": 256.4354542250502,
+        "solved_fov_deg": 29.71297359911519
+      },
+      "processed_at_utc": "2026-11-04T08:02:32.176901+00:00",
+      "provenance": {
+        "config_sha256": "d5df2afb8a1a253de6dc0acd55671f1bef6e206e62efda9d28f409f241c0be02",
+        "database_sha256": "4fad84d8d7d922e240abbb557dd6329ed94468c76657eebd4a3d9d042ab0f412",
+        "dependencies": {
+          "Pillow": "10.4.0",
+          "numpy": "1.24.4",
+          "opencv-python-headless": "4.7.0.72",
+          "scipy": "1.10.1"
+        },
+        "profiles": {
+          "lab640": "6bcc6107d5da4f1bcff4e0043dea3131d28a51f94aa3101aac33dc74aa19a9ba",
+          "stellarium1920": "423279678f54230191adcb43205ac415d244fbebc14a4bacde9738c5d1a8ee3a"
+        },
+        "python": "3.10.22",
+        "schema_version": "1.0",
+        "source_sha256": "705d7d97a79ba460d115910408a7edb188d77c898d082d294149c7f93aefaaa8"
+      },
+      "reference_status": "unavailable",
+      "result_path": "runs/20261104T080229Z-d761db72bfbe/results/a35b600903b7a00f446c319aa166fda11f167d35e3fc6ac8501b397220353aff.json",
+      "run_id": "20261104T080229Z-d761db72bfbe",
+      "schema_version": "1.0",
+      "status": "solved",
+      "supervisor_frame_ns": 424985844,
+      "timings_ns": {
+        "attitude_ns": 254924,
+        "calibration_ns": 64662805,
+        "decode_ns": 114078523,
+        "detection_ns": 221261428,
+        "image_load_ns": 0,
+        "pipeline_ns": 224741366,
+        "star_id_ns": 3225014,
+        "total_ns": 225625032
+      },
+      "worker_total_ns": 409626098
+    },
+    {
+      "algorithm": {
+        "centroids_xy": [
+          [
+            32.1115569823435,
+            156.84189406099517
+          ],
+          [
+            23.70505617977528,
+            260.84737827715355
+          ],
+          [
+            151.95875139353402,
+            27.382385730211816
+          ],
+          [
+            241.27272727272728,
+            119.01325757575758
+          ],
+          [
+            188.52402745995423,
+            395.091533180778
+          ],
+          [
+            565.6021897810219,
+            84.37956204379562
+          ],
+          [
+            532.5555555555555,
+            41.148148148148145
+          ],
+          [
+            622.1111111111111,
+            108.5111111111111
+          ],
+          [
+            18.886363636363637,
+            261.90909090909093
+          ],
+          [
+            16.61904761904762,
+            466.1190476190476
+          ],
+          [
+            146.95,
+            353.5
+          ],
+          [
+            420.625,
+            133.21875
+          ],
+          [
+            19.4,
+            138.2
+          ],
+          [
+            37.0,
+            153.07142857142858
+          ],
+          [
+            29.25,
+            258.9642857142857
+          ],
+          [
+            169.53846153846155,
+            464.3076923076923
+          ],
+          [
+            19.5,
+            459.5
+          ],
+          [
+            564.0,
+            81.0
+          ],
+          [
+            243.31578947368422,
+            115.63157894736842
+          ],
+          [
+            15.0,
+            455.0
+          ]
+        ],
+        "config": {
+          "attitude_method": "SVD",
+          "border_margin_px": 12,
+          "component_mask": true,
+          "dark_frame": null,
+          "database": "/app/data/default_database.npz",
+          "fov_deg": 16.8,
+          "fov_max_error_deg": 0.8,
+          "match_radius": 0.003,
+          "match_threshold": 0.001,
+          "max_area": 300,
+          "max_input_stars": 40,
+          "max_stars": 40,
+          "min_area": 3,
+          "pattern_checking_stars": 16,
+          "sigma_threshold": 3.0,
+          "solve_timeout_ms": 10000,
+          "star_ranking": "flux",
+          "tophat_kernel_size": 31,
+          "use_tophat": true,
+          "verification_catalog_stars": 90
+        },
+        "dec_deg": -31.683187826955994,
+        "fps": 28.06531393537417,
+        "image": "frame.bmp",
+        "image_size_hw": [
+          480,
+          640
+        ],
+        "matched_catalog_ids": [
+          90185,
+          89931,
+          88635,
+          89642,
+          87261,
+          87072,
+          85755
+        ],
+        "matched_centroids_yx": [
+          [
+            156.84189406099517,
+            32.1115569823435
+          ],
+          [
+            27.382385730211816,
+            151.95875139353402
+          ],
+          [
+            119.01325757575758,
+            241.27272727272728
+          ],
+          [
+            260.84737827715355,
+            23.70505617977528
+          ],
+          [
+            395.091533180778,
+            188.52402745995423
+          ],
+          [
+            133.21875,
+            420.625
+          ],
+          [
+            108.5111111111111,
+            622.1111111111111
+          ]
+        ],
+        "matched_stars_radec": [
+          [
+            276.0426940917969,
+            -34.385406494140625
+          ],
+          [
+            275.24871826171875,
+            -29.828271865844727
+          ],
+          [
+            271.45159912109375,
+            -30.425251007080078
+          ],
+          [
+            274.40576171875,
+            -36.76274871826172
+          ],
+          [
+            267.46484375,
+            -37.043121337890625
+          ],
+          [
+            266.89007568359375,
+            -27.830856323242188
+          ],
+          [
+            262.85400390625,
+            -23.962806701660156
+          ]
+        ],
+        "message": null,
+        "mismatch_probability": 1.5905605951420332e-06,
+        "num_centroids": 20,
+        "num_matches": 7,
+        "quaternion_body_to_inertial_wxyz": [
+          0.6917625084690091,
+          -0.033018328245871816,
+          0.4080207793668524,
+          -0.594889456522284
+        ],
+        "quaternion_inertial_to_body_wxyz": [
+          0.6917625084690091,
+          0.033018328245871816,
+          -0.4080207793668524,
+          0.594889456522284
+        ],
+        "quaternion_internal_wxyz": [
+          0.6917625084690091,
+          -0.033018328245871816,
+          0.4080207793668524,
+          -0.594889456522284
+        ],
+        "quaternion_lost_wxyz": [
+          0.6917625084690091,
+          0.033018328245871816,
+          -0.4080207793668524,
+          0.594889456522284
+        ],
+        "quaternion_wxyz": [
+          0.6917625084690091,
+          0.033018328245871816,
+          -0.4080207793668524,
+          0.594889456522284
+        ],
+        "ra_deg": 267.2564134869964,
+        "rmse_arcsec": 42.697810921766944,
+        "roll_deg": 321.3801867023378,
+        "solved_fov_deg": 16.765450058933595,
+        "status": "ok",
+        "timings": {
+          "attitude_ns": 586025,
+          "detection_ns": 28631051,
+          "image_load_ns": 0,
+          "pipeline_ns": 35467179,
+          "star_id_ns": 6250103,
+          "total_ns": 35631171
+        }
+      },
+      "attempt": 1,
+      "conversion": {
+        "black_level": 0,
+        "calibration_id": "lab-no-dark8",
+        "calibration_ns": 9415350,
+        "clipped_high_fraction": 0.0,
+        "clipped_low_fraction": 0.0,
+        "conversion": "fixed_linear_uint8",
+        "dark_applied": false,
+        "decode_ns": 2942498,
+        "native_range": [
+          0.0,
+          177.0
+        ],
+        "saturation_fraction": 0.0,
+        "valid_bits": 8,
+        "white_level": 255
+      },
+      "input": {
+        "camera_profile_id": "lab640",
+        "capture_timestamp_utc": null,
+        "clock_source": "unknown",
+        "height": 480,
+        "job_id": "image200701-calibrated",
+        "payload": "frame.bmp",
+        "payload_sha256": "eac2a02b5c0d11615d05394dcaad6bf908c07577d93bf89a620479481f94de52",
+        "payload_size_bytes": 308278,
+        "pixel_format": "encoded8",
+        "processing_stage": "sensor_raw",
+        "schema_version": "1.0",
+        "timestamp_reference": "unknown",
+        "width": 640
+      },
+      "job_id": "image200701-calibrated",
+      "marker_relative": "image200701-calibrated/frame.ready",
+      "metadata_sha256": "6babf189f19bff64a582e84a7098a5e0f4a9871f24fda4fcb33a080d2132397b",
+      "peak_rss_kib": 199572,
+      "pose": {
+        "camera_axes": "+X boresight,+Y image-left,+Z image-up",
+        "dec_deg": -31.683187826955994,
+        "direction": "catalog_to_camera",
+        "inertial_reference": "database catalog; epoch/frame not certified for flight",
+        "quaternion_wxyz": [
+          0.6917625084690091,
+          0.033018328245871816,
+          -0.4080207793668524,
+          0.594889456522284
+        ],
+        "ra_deg": 267.2564134869964,
+        "roll_deg": 321.3801867023378,
+        "solved_fov_deg": 16.765450058933595
+      },
+      "processed_at_utc": "2026-11-04T08:02:32.086536+00:00",
+      "provenance": {
+        "config_sha256": "d5df2afb8a1a253de6dc0acd55671f1bef6e206e62efda9d28f409f241c0be02",
+        "database_sha256": "4fad84d8d7d922e240abbb557dd6329ed94468c76657eebd4a3d9d042ab0f412",
+        "dependencies": {
+          "Pillow": "10.4.0",
+          "numpy": "1.24.4",
+          "opencv-python-headless": "4.7.0.72",
+          "scipy": "1.10.1"
+        },
+        "profiles": {
+          "lab640": "6bcc6107d5da4f1bcff4e0043dea3131d28a51f94aa3101aac33dc74aa19a9ba",
+          "stellarium1920": "423279678f54230191adcb43205ac415d244fbebc14a4bacde9738c5d1a8ee3a"
+        },
+        "python": "3.10.22",
+        "schema_version": "1.0",
+        "source_sha256": "705d7d97a79ba460d115910408a7edb188d77c898d082d294149c7f93aefaaa8"
+      },
+      "reference_status": "unavailable",
+      "result_path": "runs/20261104T080229Z-d761db72bfbe/results/eab5dc8a91e48e374e102873df9bb86b07370c8e3d80bc553f604e9cefbc91de.json",
+      "run_id": "20261104T080229Z-d761db72bfbe",
+      "schema_version": "1.0",
+      "status": "solved",
+      "supervisor_frame_ns": 63191099,
+      "timings_ns": {
+        "attitude_ns": 586025,
+        "calibration_ns": 9415350,
+        "decode_ns": 2942498,
+        "detection_ns": 28631051,
+        "image_load_ns": 0,
+        "pipeline_ns": 35467179,
+        "star_id_ns": 6250103,
+        "total_ns": 35631171
+      },
+      "worker_total_ns": 49065002
+    },
+    {
+      "algorithm": {
+        "centroids_xy": [
+          [
+            58.886577181208054,
+            442.3409395973154
+          ],
+          [
+            369.09215955983495,
+            129.80330123796423
+          ],
+          [
+            309.6952662721894,
+            188.06065088757396
+          ],
+          [
+            566.7589498806683,
+            84.32696897374701
+          ],
+          [
+            369.5511811023622,
+            450.40944881889766
+          ],
+          [
+            140.35087719298247,
+            446.5043859649123
+          ],
+          [
+            147.05228758169935,
+            353.4575163398693
+          ],
+          [
+            96.8840579710145,
+            210.1159420289855
+          ],
+          [
+            23.58823529411765,
+            354.65546218487395
+          ],
+          [
+            84.6036036036036,
+            464.9189189189189
+          ],
+          [
+            532.5049504950495,
+            41.23762376237624
+          ],
+          [
+            178.66666666666666,
+            382.1222222222222
+          ],
+          [
+            104.63636363636364,
+            435.5
+          ],
+          [
+            15.662790697674419,
+            438.75581395348837
+          ],
+          [
+            563.6986301369863,
+            439.3013698630137
+          ],
+          [
+            99.66197183098592,
+            374.6478873239437
+          ],
+          [
+            577.3188405797101,
+            431.2173913043478
+          ],
+          [
+            624.3582089552239,
+            339.65671641791045
+          ],
+          [
+            23.59090909090909,
+            89.28787878787878
+          ],
+          [
+            433.1666666666667,
+            454.77272727272725
+          ],
+          [
+            423.1587301587302,
+            454.1746031746032
+          ],
+          [
+            23.551724137931036,
+            455.1551724137931
+          ],
+          [
+            600.6851851851852,
+            434.6296296296296
+          ],
+          [
+            17.9811320754717,
+            426.0188679245283
+          ],
+          [
+            94.56862745098039,
+            259.5098039215686
+          ],
+          [
+            584.1836734693877,
+            431.6938775510204
+          ],
+          [
+            16.306122448979593,
+            464.85714285714283
+          ],
+          [
+            620.6666666666666,
+            451.15555555555557
+          ],
+          [
+            23.65909090909091,
+            464.0
+          ],
+          [
+            70.02325581395348,
+            423.16279069767444
+          ],
+          [
+            578.8333333333334,
+            439.1666666666667
+          ],
+          [
+            184.4,
+            267.5
+          ],
+          [
+            576.5384615384615,
+            463.35897435897436
+          ],
+          [
+            626.2105263157895,
+            170.42105263157896
+          ],
+          [
+            424.02702702702703,
+            448.3783783783784
+          ],
+          [
+            573.8055555555555,
+            408.3888888888889
+          ],
+          [
+            29.38888888888889,
+            419.19444444444446
+          ],
+          [
+            467.51612903225805,
+            40.45161290322581
+          ],
+          [
+            38.53333333333333,
+            12.5
+          ],
+          [
+            24.0,
+            161.5
+          ]
+        ],
+        "config": {
+          "attitude_method": "SVD",
+          "border_margin_px": 12,
+          "component_mask": true,
+          "dark_frame": null,
+          "database": "/app/data/default_database.npz",
+          "fov_deg": 16.8,
+          "fov_max_error_deg": 0.8,
+          "match_radius": 0.003,
+          "match_threshold": 0.001,
+          "max_area": 300,
+          "max_input_stars": 40,
+          "max_stars": 40,
+          "min_area": 3,
+          "pattern_checking_stars": 16,
+          "sigma_threshold": 3.0,
+          "solve_timeout_ms": 10000,
+          "star_ranking": "flux",
+          "tophat_kernel_size": 31,
+          "use_tophat": true,
+          "verification_catalog_stars": 90
+        },
+        "dec_deg": 41.369726334352976,
+        "fps": 7.8157059659511114,
+        "image": "frame.bmp",
+        "image_size_hw": [
+          480,
+          640
+        ],
+        "matched_catalog_ids": [
+          15863,
+          14576,
+          14354,
+          17529,
+          14668,
+          14632,
+          16335
+        ],
+        "matched_centroids_yx": [
+          [
+            442.3409395973154,
+            58.886577181208054
+          ],
+          [
+            188.06065088757396,
+            309.6952662721894
+          ],
+          [
+            129.80330123796423,
+            369.09215955983495
+          ],
+          [
+            450.40944881889766,
+            369.5511811023622
+          ],
+          [
+            267.5,
+            184.4
+          ],
+          [
+            354.65546218487395,
+            23.58823529411765
+          ],
+          [
+            446.5043859649123,
+            140.35087719298247
+          ]
+        ],
+        "matched_stars_radec": [
+          [
+            51.08094787597656,
+            49.86101150512695
+          ],
+          [
+            47.042232513427734,
+            40.95563507080078
+          ],
+          [
+            46.29519271850586,
+            38.83959197998047
+          ],
+          [
+            56.298336029052734,
+            42.578556060791016
+          ],
+          [
+            47.37560272216797,
+            44.856632232666016
+          ],
+          [
+            47.27919006347656,
+            49.61268997192383
+          ],
+          [
+            52.64369201660156,
+            47.995330810546875
+          ]
+        ],
+        "message": null,
+        "mismatch_probability": 7.411419955099162e-05,
+        "num_centroids": 40,
+        "num_matches": 7,
+        "quaternion_body_to_inertial_wxyz": [
+          0.3137189580105515,
+          0.8053998180482747,
+          0.1656859485013591,
+          0.4748259838528057
+        ],
+        "quaternion_inertial_to_body_wxyz": [
+          0.3137189580105515,
+          -0.8053998180482747,
+          -0.1656859485013591,
+          -0.4748259838528057
+        ],
+        "quaternion_internal_wxyz": [
+          0.3137189580105515,
+          0.8053998180482747,
+          0.1656859485013591,
+          0.4748259838528057
+        ],
+        "quaternion_lost_wxyz": [
+          0.3137189580105515,
+          -0.8053998180482747,
+          -0.1656859485013591,
+          -0.4748259838528057
+        ],
+        "quaternion_wxyz": [
+          0.3137189580105515,
+          -0.8053998180482747,
+          -0.1656859485013591,
+          -0.4748259838528057
+        ],
+        "ra_deg": 48.81633613525443,
+        "rmse_arcsec": 38.89627233431413,
+        "roll_deg": 117.99210787753236,
+        "solved_fov_deg": 16.747192890922307,
+        "status": "ok",
+        "timings": {
+          "attitude_ns": 239525,
+          "detection_ns": 18420310,
+          "image_load_ns": 0,
+          "pipeline_ns": 127571846,
+          "star_id_ns": 108912011,
+          "total_ns": 127947495
+        }
+      },
+      "attempt": 1,
+      "conversion": {
+        "black_level": 0,
+        "calibration_id": "lab-no-dark8",
+        "calibration_ns": 8318835,
+        "clipped_high_fraction": 0.0,
+        "clipped_low_fraction": 0.0,
+        "conversion": "fixed_linear_uint8",
+        "dark_applied": false,
+        "decode_ns": 4212263,
+        "native_range": [
+          0.0,
+          145.0
+        ],
+        "saturation_fraction": 0.0,
+        "valid_bits": 8,
+        "white_level": 255
+      },
+      "input": {
+        "camera_profile_id": "lab640",
+        "capture_timestamp_utc": null,
+        "clock_source": "unknown",
+        "height": 480,
+        "job_id": "image03",
+        "payload": "frame.bmp",
+        "payload_sha256": "0ffe9418ff9e5d5a1beecfb9e39142dbc5f70b17783e004c1c30f2b6062d9493",
+        "payload_size_bytes": 921654,
+        "pixel_format": "encoded8",
+        "processing_stage": "sensor_raw",
+        "schema_version": "1.0",
+        "timestamp_reference": "unknown",
+        "width": 640
+      },
+      "job_id": "image03",
+      "marker_relative": "image03/frame.ready",
+      "metadata_sha256": "3107180cee3947d7d74e899e8db283c01b2f2f8e0635f16157f10a3d7af848f1",
+      "peak_rss_kib": 196324,
+      "pose": {
+        "camera_axes": "+X boresight,+Y image-left,+Z image-up",
+        "dec_deg": 41.369726334352976,
+        "direction": "catalog_to_camera",
+        "inertial_reference": "database catalog; epoch/frame not certified for flight",
+        "quaternion_wxyz": [
+          0.3137189580105515,
+          -0.8053998180482747,
+          -0.1656859485013591,
+          -0.4748259838528057
+        ],
+        "ra_deg": 48.81633613525443,
+        "roll_deg": 117.99210787753236,
+        "solved_fov_deg": 16.747192890922307
+      },
+      "processed_at_utc": "2026-11-04T08:02:31.816682+00:00",
+      "provenance": {
+        "config_sha256": "d5df2afb8a1a253de6dc0acd55671f1bef6e206e62efda9d28f409f241c0be02",
+        "database_sha256": "4fad84d8d7d922e240abbb557dd6329ed94468c76657eebd4a3d9d042ab0f412",
+        "dependencies": {
+          "Pillow": "10.4.0",
+          "numpy": "1.24.4",
+          "opencv-python-headless": "4.7.0.72",
+          "scipy": "1.10.1"
+        },
+        "profiles": {
+          "lab640": "6bcc6107d5da4f1bcff4e0043dea3131d28a51f94aa3101aac33dc74aa19a9ba",
+          "stellarium1920": "423279678f54230191adcb43205ac415d244fbebc14a4bacde9738c5d1a8ee3a"
+        },
+        "python": "3.10.22",
+        "schema_version": "1.0",
+        "source_sha256": "705d7d97a79ba460d115910408a7edb188d77c898d082d294149c7f93aefaaa8"
+      },
+      "reference_status": "unavailable",
+      "result_path": "runs/20261104T080229Z-d761db72bfbe/results/f6653cba696cf0a8ac73d3a59625f690b07325529a057090bdabe65ecded7fd3.json",
+      "run_id": "20261104T080229Z-d761db72bfbe",
+      "schema_version": "1.0",
+      "status": "solved",
+      "supervisor_frame_ns": 152083492,
+      "timings_ns": {
+        "attitude_ns": 239525,
+        "calibration_ns": 8318835,
+        "decode_ns": 4212263,
+        "detection_ns": 18420310,
+        "image_load_ns": 0,
+        "pipeline_ns": 127571846,
+        "star_id_ns": 108912011,
+        "total_ns": 127947495
+      },
+      "worker_total_ns": 141221735
+    }
+  ],
+  "limitations": [
+    "Development WSL2 host only",
+    "No physical camera RAW SDK sample",
+    "No flight host resource or soak acceptance"
+  ]
+}

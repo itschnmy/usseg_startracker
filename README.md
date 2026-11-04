@@ -56,7 +56,8 @@ Chạy một ảnh:
 | Ảnh03 camera / preset experimental | 7 matches, tâm lệch khoảng0.033° so Astrometry screenshot | Chưa có WCS gốc để chấm full attitude |
 | Ảnh200701 raw và calibrated | Cùng7 matches | Chưa có WCS/reference riêng; dùng FOV lab16.8° |
 | Stellarium fixture | 16/16 ID pairs đúng, attitude error0.002738° | Reference từ simulator |
-| Python tests version3, 2026-11-04 | 105 passed, 2 skipped | Chưa nghiệm thu Podman hoặc RAW camera bay |
+| Python tests version3, 2026-11-04 | 105 passed, 2 skipped | RAW camera bay chưa được nghiệm thu |
+| Podman4.9.3 rootless / WSL2 amd64 | Self-test8/8, camera4/4 solved; OCI load và resume pass | [Evidence](docs/evidence/version3/podman-validation.json); chưa nghiệm thu host bay |
 
 [Báo cáo chi tiết](docs/current-results.md) chứa số liệu LOST-evals/DUST lịch sử,
 source evidence và các hạn chế. Chưa có bằng chứng flight readiness.

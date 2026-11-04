@@ -39,8 +39,9 @@ test decoder, file đang copy, khởi động/dừng, resume, timeout, hết dis
 | Tài nguyên | Chưa đo trên máy đích | Đo RSS, CPU, startup, throughput, backlog, dung lượng output |
 | Container | Chưa có Containerfile/runner | Image Podman offline, pinned dependencies, OCI archive |
 
-Máy phát triển hiện chưa có lệnh `podman`. Nghiệm thu container phải thực hiện
-trên host có Podman; không coi Python tests trên host là container tests.
+Cập nhật sau triển khai: Podman4.9.3 đã được cài trên máy phát triển WSL2 amd64;
+build/load/run offline, self-test và batch/resume đã pass. Xem báo cáo triển khai.
+Nghiệm thu container trên host bay vẫn cần thực hiện riêng.
 
 Bảng mục2 mô tả khoảng cách của baseline v2 tại lúc lập kế hoạch. Implementation
 hiện tại đã giải quyết một phần các cột cần làm; trạng thái cụ thể nằm trong report.

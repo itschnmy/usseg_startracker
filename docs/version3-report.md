@@ -58,7 +58,27 @@ riêng với đánh giá `correct`; các ảnh không có WCS không được t�
 | C++ LIS | 5/5 IDs đúng, rotation error khoảng4.94e−10° | [Log](evidence/version3/cpp-lis.log) |
 | C++ tracking | 5/5 true matches, loại2 outliers; QUEST path chạy thành công | [Log](evidence/version3/cpp-tracking.log) |
 | C++ preprocessing | **Pass**, đọc calibrated BMP, ROI và xuất3 ảnh | [Log](evidence/version3/cpp-preprocessing.log) |
-| Podman build/run | **Chưa thực hiện**: không có Podman, sudo yêu cầu mật khẩu | Build/run scripts trả lỗi preflight rõ ràng |
+| Podman build/load/run | **Pass** trên Podman4.9.3 rootless, Ubuntu24.04/WSL2 amd64 | [Container evidence](evidence/version3/podman-validation.json) |
+
+Container build từ commit `5719b7b`, image ID
+`4052931d2a591628eff24e954a9a880e7d53fa2149f8165f99c40cff8fb03f6c`.
+Đã xuất OCI archive, kiểm SHA256, nạp lại bằng `podman load` và chạy script
+`run_test.sh` hai lần: mỗi lượt self-test **8/8**, batch đầu **4/4 solved**,
+batch sau không tạo thêm kết quả (tổng vẫn4). HIP IDs giống baseline;
+RA/Dec/HFOV lệch dưới1e−9°. Stellarium attitude error **0.002737686°**.
+Probe trong container xác nhận UID1000, chỉ có network interface loopback,
+`/app` và `/input` từ chối ghi với EROFS, `/output` ghi được.
+Cảnh báo shared mount ban đầu không gây lỗi các bind mounts đã kiểm tra.
+Đây là kiểm chứng trên máy phát triển, chưa phải nghiệm thu phần cứng bay.
+
+| Ảnh trong Podman | Matches | Worker time (ms), một lượt |
+|---|---:|---:|
+| 03.bmp | 7 | 141.222 |
+| 200701.bmp | 7 | 45.731 |
+| 200701_calibrated.bmp | 7 | 49.065 |
+| Stellarium | 16 | 409.626 |
+
+Timing smoke trên WSL2 không dùng để kết luận container nhanh hơn host.
 
 Hai Python skips là các suite CSV ngoài repo; không che lỗi runtime-required.
 RAW golden tests tổng hợp kiểm ramp, Bayer phase,10/12-bit LSB/MSB, endian và row
@@ -122,7 +142,10 @@ bash scripts/run_test.sh /srv/usseg/input /srv/usseg/output /srv/usseg/config
 
 Chi tiết publish RAW/ready, exit codes, stop/resume, schema và layout output:
 [version3-runtime.md](version3-runtime.md). Hợp đồng producer vẫn draft, cần thống
-nhất với hardware. Nhánh có code build nhưng chưa có OCI archive đã nghiệm thu.
+nhất với hardware. OCI development đã build và kiểm trên WSL2, nằm tại
+`out/podman-release/usseg-v3.oci.tar` cùng `SHA256SUMS` và `image-inspect.json`;
+archive không đưa vào Git. Image chứa source commit `5719b7b`; các cập nhật
+báo cáo sau commit đó không thay source runtime trong archive.
 
 ## 6. Các mục còn chờ trước bàn giao bay
 
