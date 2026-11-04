@@ -1,0 +1,11 @@
+{
+    "sensor": {
+        "width": 500.0,
+        "height": 500.0,
+        "fov_deg": 17.0
+    },
+    "simulation": {
+        "num_frames": 50,
+        "fps": 10.0
+    }
+}
