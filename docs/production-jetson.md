@@ -11,15 +11,45 @@ nghiệm thu trên phần cứng VinSpace.
 
 ## 1. Cấu hình triển khai
 
-| Hạng mục | Yêu cầu |
+### 1.1. Đối chiếu hệ thống thử nghiệm và hệ thống triển khai
+
+| Hạng mục | Hệ thống thử nghiệm hiện tại | Hệ thống VinSpace |
+|---|---|---|
+| Camera | OpenMV, nền tảng STM32; bảng thiết bị ghi Cam H7 Plus | Camera 16 MP / 24 MP, có cận hồng ngoại |
+| Ống kính | Lens 12 mm, ngàm M12 theo bảng thiết bị | Tiêu cự 100 mm |
+| Độ phân giải | 2592×1944 theo bảng thiết bị; ảnh mẫu đang xử lý 640×480 | Khoảng 5000×4000; cần kích thước thực theo camera |
+| Góc nhìn | FOV chéo 21,7° theo bảng thiết bị; cấu hình xử lý dùng HFOV 16,8° | Ngang 8,1°; dọc 6,3°; chéo 9,96° |
+| Thu nhận ảnh | OpenMV/STM32; ảnh mẫu xuất ra để xử lý trên máy tính | Ảnh JPG được mount vào thư mục input |
+| Máy chạy thuật toán | Linux WSL2 amd64, Podman; chưa kiểm chứng pipeline Python chạy trên STM32 | Jetson CPU ARM, RAM thiết bị 8 GB; model/OS chờ xác nhận |
+| Tài nguyên cấp cho phần mềm | Chưa áp quota trong lượt kiểm thử hiện tại | 4 GB RAM, 4 core; xác nhận aarch64 và GB/GiB |
+| Cấu hình xử lý | Profile `lab640`, ảnh BMP/PNG 8-bit | Profile riêng theo camera; JPG và resize cần bổ sung |
+| Chế độ | Kiểm thử từng ảnh và batch mẫu | Gom một đợt, xử lý lần lượt rồi thoát |
+| Kết quả | JSON hướng camera, số sao nhận dạng, trạng thái và thời gian | JSON từng ảnh, trả hướng camera đang nhìn |
+
+Thông tin OpenMV/STM32 và lens 12 mm do nhóm cung cấp. Tên model trong bảng
+là **H7 Plus**; tên “12 Plus” cần được đối chiếu với thiết bị thực tế.
+Các giá trị FOV chéo 21,7° và độ phân giải 2592×1944 là thông số tham khảo,
+chưa xác nhận tương ứng với ROI/crop của từng ảnh mẫu. Không dùng FOV chéo
+thay trực tiếp cho HFOV trong solver. Bảng thiết bị có giá trị tiêu cự 190 mm
+và đường kính khẩu độ 50 mm ở cột lens 12 mm; hai giá trị này chưa được dùng
+làm thông số hiệu chuẩn do chưa xác minh đơn vị và cách ghi.
+
+### 1.2. Cấu hình xử lý ảnh lab đã kiểm thử
+
+| Thông số | Giá trị trong `configs/runtime/profiles/lab640.json` |
 |---|---|
-| Thiết bị | Jetson, CPU ARM, RAM thiết bị 8 GB; model và hệ điều hành chờ xác nhận |
-| Ngân sách | 4 GB RAM, 4 core CPU ARM; xác nhận aarch64 và GB/GiB |
-| Camera | 16 MP / 24 MP, có cận hồng ngoại; ảnh khoảng 5000×4000 |
-| File | JPG; có resize; mount folder input |
-| Quang học | Tiêu cự 100 mm; FOV ngang 8,1°, dọc 6,3°, chéo 9,96° |
-| Chế độ | Gom một đợt, xử lý lần lượt rồi thoát |
-| Kết quả | JSON từng ảnh, trả hướng camera đang nhìn |
+| Kích thước đầu vào | 640×480 pixel |
+| HFOV ước lượng | 16,8° ± 0,8° |
+| Ngưỡng phát hiện | Sigma 3; diện tích 3–300 pixel |
+| Lọc nền / vùng biên | Top-Hat 31×31; loại biên 12 pixel; mask theo component |
+| Chọn sao | Xếp theo tổng tín hiệu; tối đa 40 tâm sao; 16 sao tạo pattern |
+| Xác minh catalog | Tối đa 90 sao; match radius 0,003 lần chiều rộng ảnh |
+| Thời gian tìm nghiệm | Soft timeout 10.000 ms |
+| Ước lượng tư thế | SVD |
+| Hiệu chỉnh dark | Không bật trong profile lab mặc định |
+
+Đây là cấu hình cho ảnh lab hiện tại; cấu hình Jetson phải được kiểm thử với
+ảnh và thông số camera VinSpace trước khi áp dụng.
 
 5000×4000 là **20 MP**, nên cần kích thước thực theo từng camera.
 Chức năng xử lý theo đợt đã được triển khai. Hỗ trợ JPG, resize và cấu hình
