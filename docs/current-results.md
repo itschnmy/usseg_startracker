@@ -157,16 +157,3 @@ OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m examples.check_imag
 
 `--noise-trials 0` bỏ negatives; không diễn giải 0/0 là đã pass test false-positive.
 Output cũ được giữ để đối chiếu, không gán thời gian chạy hiện tại cho số liệu cũ.
-
-## 6. Dọn tài liệu
-
-Thay README dài/lặp ngôn ngữ và docs index bằng mục lục ngắn. Xóa7 tài liệu
-đánh số01–07 khỏi working tree version3 vì trùng nội dung, có schema/hướng chạy
-chưa khớp code hoặc trộn benchmark cũ với nhận định production. Nội dung cần thiết
-được thay bằng báo cáo này và hợp đồng version3. Git commit `33d9c17` lưu toàn bộ
-bản cũ; không xóa code, ảnh gốc, database hoặc output thí nghiệm.
-
-Audit `version01-validation.md` và các kế hoạch/báo cáo version3 cũ đã được dọn
-khỏi cây hiện tại; khôi phục bằng Git tại `d494f0f`. Giữ hướng dẫn Ubuntu,
-Stellarium, dark-frame và preset để tái hiện. Người mới đọc `quickstart.md`;
-tiêu chí bàn giao hiện hành nằm trong `production-jetson.md`.

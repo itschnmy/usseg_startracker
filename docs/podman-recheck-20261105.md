@@ -7,8 +7,8 @@ Podman rootless 4.9.3, WSL2 amd64, Python 3.10; image
 `00a911d7dfae216e877aa2f0a028a7c074975a7a63dd7be919729d20d19c6d2c`.
 Source revision `d494f0f97ea783ed9baec19520ba12bfd4677923`.
 
-Chạy lại image có sẵn, không build mới từ docs đang sửa. SHA256 của **38 file
-Python/JSON** trong models/utils/usseg_runtime/configs khớp working tree.
+Chạy lại image revision trên. SHA256 của **38 file Python/JSON** trong
+models/utils/usseg_runtime/configs khớp source local tại thời điểm kiểm tra.
 Network none, root/input/config chỉ đọc, output mount ghi. Chưa áp giới hạn
 4 GB/4 core và chưa chạy Jetson.
 
@@ -55,12 +55,7 @@ Raw evidence local, không tự commit:
 
 Run ID dùng UTC; lượt chạy diễn ra tối 05/11/2026 tại Việt Nam.
 
-## Kết luận audit tài liệu
-
-Đã sửa câu lỗi thời trong `current-results.md`: máy chưa có Podman, chưa có
-RAW adapter/queue/watchdog/resume. Số 67 test được đánh dấu baseline lịch sử.
-Timing 156,7 ms/442,1 ms từng được trích từ lượt **04/11**. Tài liệu production
-hiện dẫn đến bảng đo mới ở trang này; không gán timing mới cho lượt cũ.
+## Phạm vi hỗ trợ
 
 Source vẫn xác nhận decoder runtime từ chối JPEG, max_pixels 16.777.216,
 database 10–30°, chưa resize và chưa nghiệm thu ARM64/FOV 8,1°.
