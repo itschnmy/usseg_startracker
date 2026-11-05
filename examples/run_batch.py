@@ -58,7 +58,7 @@ def main():
         atomic_bytes(args.output/f"{job}-result.png", data.tobytes())
         rows.extend(["", f"![{job} solver result]({job}-result.png)", ""])
     # Reference is loaded after every blind inference has completed.
-    from examples.check_stellarium import reference, score
+    from usseg_runtime.reference import reference, score
     labels = json.loads((ROOT/"dataset/stellarium_test/stars_labels.json").read_text())
     ref, _, _ = reference(labels)
     report["stellarium_metrics"] = score(by_job["stellarium"]["algorithm"], labels, ref)

@@ -10,7 +10,7 @@ import cv2
 import numpy as np
 
 from models.pipeline import PipelineConfig, StarTrackerPipeline
-from examples.check_stellarium import reference, score
+from usseg_runtime.reference import reference, score
 
 
 ROOT = Path(__file__).resolve().parents[1]

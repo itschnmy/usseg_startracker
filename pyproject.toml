@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "usseg-startracker"
 version = "0.3.0.dev0"
 description = "USSEG image-to-attitude star tracker pipeline"
-requires-python = ">=3.10,<3.15"
+requires-python = ">=3.10,<3.11"
 dynamic = ["dependencies"]
 
 [project.scripts]
@@ -17,12 +17,12 @@ usseg-runtime = "usseg_runtime.cli:main"
 dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools.packages.find]
-include = ["models*", "utils*", "configs*", "examples*", "usseg_runtime*"]
-exclude = ["examples.tests*"]
+include = ["models*", "utils*", "configs*", "usseg_runtime*"]
+exclude = ["tests*", "tools*", "examples*"]
 
 [tool.setuptools.package-data]
 configs = ["examples/*.json", "runtime/*.json", "runtime/profiles/*.json"]
 
 [tool.pytest.ini_options]
-testpaths = ["examples/tests"]
+testpaths = ["tests/python"]
 pythonpath = ["."]

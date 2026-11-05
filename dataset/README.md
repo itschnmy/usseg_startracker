@@ -7,14 +7,14 @@
   the matching pipeline preset uses horizontal 29.717817 deg. Labels are read
   only after blind inference and are a pseudo-reference, not physical ground truth.
   The screenshot was collected with the former `data/extract_star.py`, now
-  `tools/stellarium/extract_star.py`. See `docs/stellarium_image.md` to collect
+  `tools/stellarium/extract_star.py`. See `tools/stellarium/README.md` to collect
   your own captures via Remote Control API.
 
 The original source files are preserved. Generated annotated/debug images are
 not fixtures and are ignored by Git, except the reviewed documentation snapshots
 in `docs/assets/image03-*.png`. Run `examples/run_image_examples.py` to
 create overlays from actual detections/matches. Databases are external assets;
-see `examples/materialize_assets.sh` and `examples/generate_tetra_database.py`.
+see `scripts/materialize_assets.sh` and `tools/database/generate_tetra_database.py`.
 
 ## Image03 hardware camera capture
 
@@ -69,4 +69,4 @@ So với preset image03 trước: giữ nguyên detector/Top-Hat31/component mas
 ranking, đổi FOV28±10° thành16.8±0.8°, giữ40 candidate và input cap40,
 verification catalog tối đa90 sao, siết radius9.6→1.92px. Ngưỡng xác suất0.001
 không đổi. Preset cũ `image03.json` và mặc định benchmark được giữ nguyên.
-Xem [phân tích và đối chứng](../docs/image03-experimental.md).
+Xem [phân tích và đối chứng](../tools/diagnostics/image03.md).

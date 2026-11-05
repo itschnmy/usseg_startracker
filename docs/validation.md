@@ -44,7 +44,7 @@ USSEG_IMAGE=localhost/usseg:prod-version1 bash scripts/run_test.sh \
 ```
 
 Đây là lệnh đã chạy trên workspace có sẵn bốn job. Người mới dùng
-[quickstart](quickstart.md) để tạo input; chọn output mới để đo lại.
+[quickstart](operation.md) để tạo input; chọn output mới để đo lại.
 
 Raw evidence local, không tự commit:
 

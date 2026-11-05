@@ -1,6 +1,6 @@
 import numpy as np
 
-from examples.check_stellarium import reference, score
+from usseg_runtime.reference import reference, score
 
 
 def test_stellarium_reference_axes_and_roll():

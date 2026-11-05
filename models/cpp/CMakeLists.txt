@@ -29,10 +29,10 @@ set(TEST_SOURCES
 )
 
 # LIS Mode Test (Star Identificator + Attitude Determinator)
-add_executable(test_lis ../../examples/tests/test_lis.cpp ${TEST_SOURCES})
+add_executable(test_lis ../../tests/cpp/test_lis.cpp ${TEST_SOURCES})
 
 # Tracking Mode Test (CentroidMatcher + Attitude Determinator)
-add_executable(test_tracking ../../examples/tests/test_tracking.cpp ${TEST_SOURCES})
+add_executable(test_tracking ../../tests/cpp/test_tracking.cpp ${TEST_SOURCES})
 
 enable_testing()
 add_test(NAME lis COMMAND test_lis)
@@ -47,7 +47,7 @@ if(OpenCV_FOUND)
     message(STATUS "OpenCV found. Enabling test_image_preprocessing target.")
     include_directories(${OpenCV_INCLUDE_DIRS})
     add_executable(test_image_preprocessing 
-        ../../examples/tests/test_image_preprocessing.cpp
+        ../../tests/cpp/test_image_preprocessing.cpp
         ImagePreprocessor/ImagePreprocessor.cpp
     )
     add_test(NAME image_preprocessing COMMAND test_image_preprocessing

@@ -1,6 +1,6 @@
 import json
 
-from examples.investigate_image03 import read_records, summarize, trial_key
+from tools.diagnostics.investigate_image03 import read_records, summarize, trial_key
 
 
 def test_interrupted_log_is_preserved_and_reported(tmp_path):

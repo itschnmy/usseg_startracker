@@ -1,13 +1,13 @@
 # Đặc tả triển khai USSEG trên Jetson — VinSpace
 
-Ngày cập nhật: **05/11/2026**. Nhánh: `prod/version1`.
+Ngày cập nhật: **05/11/2026**. Nhánh: `prod/version2`.
 Mã nguồn thuật toán/runtime được kiểm thử tại revision `d494f0f`.
 
 Phần mềm nhận ảnh sao theo đợt, xác định hướng camera và lưu kết quả JSON.
 Tài liệu quy định kiến trúc triển khai, giao tiếp dữ liệu và các điều kiện
 nghiệm thu trên phần cứng VinSpace.
 
-[Hướng dẫn vận hành](quickstart.md) · [Báo cáo kiểm thử](podman-recheck-20261105.md)
+[Hướng dẫn vận hành](operation.md) · [Báo cáo kiểm thử](validation.md)
 
 ## 1. Cấu hình triển khai
 
@@ -158,7 +158,7 @@ Dùng output mới khi đổi source/config/database.
 Không solve thì `pose=null`. `solved` chưa chứng minh hướng đúng; JSON kết quả
 không phải nhãn ground truth. Camera→body không nằm trong yêu cầu hiện tại.
 Epoch/frame catalog phải được xác minh nếu cần accuracy cao.
-Chi tiết schema và phạm vi timing: [runtime](version3-runtime.md).
+Chi tiết schema và phạm vi timing: [hướng dẫn vận hành](operation.md).
 
 ## 5. Đóng gói và tài nguyên
 
@@ -204,7 +204,7 @@ Throughput toàn batch khác compute FPS và tốc độ chụp camera.
 
 ## 7. Kết quả kiểm thử và thông tin cần xác nhận
 
-[Podman 05/11/2026](podman-recheck-20261105.md): self-test **8/8**, batch **4/4**
+[Podman 05/11/2026](validation.md): self-test **8/8**, batch **4/4**
 có nghiệm; ảnh03 **7 match**, Stellarium **16/16 cặp đúng**, attitude error
 **0,002738°**. Đo trên WSL2 amd64 với ảnh lab, chưa phải Jetson/camera mới.
 Test decoder/service local: **38 passed**, Python 3.10.

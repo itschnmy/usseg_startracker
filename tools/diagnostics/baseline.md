@@ -1,8 +1,8 @@
 # USSEG — kết quả lab và benchmark lịch sử
 
 Ngày tổng hợp: 2026-11-04. Code baseline: `33d9c17` (`dev/version2`).
-Đây là báo cáo baseline trước runtime. Lượt mới xem [Podman 05/11/2026](podman-recheck-20261105.md). Version3 đã có implementation;
-xem [audit production](production-jetson.md). Chưa build/test container trên máy đích.
+Đây là báo cáo baseline trước runtime. Lượt mới xem [Podman 05/11/2026](../../docs/validation.md). Version3 đã có implementation;
+xem [audit production](../../docs/deployment.md). Chưa build/test container trên máy đích.
 
 ## 1. Pipeline Python đang có
 
@@ -55,19 +55,19 @@ giảm22→20 candidate nhưng chưa chứng minh attitude tốt hơn.
 
 ### Ảnh03
 
-![03 input — pixels gốc](assets/image03-input.png)
+![03 input — pixels gốc](../../docs/assets/image03-input.png)
 
-![03 — 7 matches, display gain8](assets/image03-result.png)
+![03 — 7 matches, display gain8](../../docs/assets/image03-result.png)
 
 ### Ảnh200701
 
-Input: [BMP gốc](../dataset/200701.bmp) và
-[BMP calibrated](../dataset/calibration/openmv/session_01/200701_calibrated.bmp).
+Input: [BMP gốc](../../dataset/200701.bmp) và
+[BMP calibrated](../../dataset/calibration/openmv/session_01/200701_calibrated.bmp).
 Ảnh dưới là solver annotation, gain8 chỉ để hiển thị.
 
-![200701 raw — 7 matches](assets/image200701-raw-result.png)
+![200701 raw — 7 matches](../../docs/assets/image200701-raw-result.png)
 
-![200701 calibrated — 7 matches](assets/image200701-calibrated-result.png)
+![200701 calibrated — 7 matches](../../docs/assets/image200701-calibrated-result.png)
 
 ### Đối chứng thay đổi cho ảnh03
 
@@ -120,7 +120,7 @@ Không dùng catalog-set overlap làm correspondence-level star-ID precision.
 ## 4. Kiểm chứng hiện tại và mức sẵn sàng
 
 2026-11-04, Python3.10.21, OpenCV/BLAS một thread:
-`python -m pytest examples/tests -q` → **67 passed, 2 skipped** (external CSV).
+`python -m pytest tests/python -q` → **67 passed, 2 skipped** (external CSV).
 Số 67 test là baseline lịch sử, không phải tổng test production hiện tại.
 Podman đã chạy trên WSL2 amd64; runtime có test queue/watchdog/resume.
 Lượt 05/11/2026 chạy lại 38 test decoder/service và Podman self-test 8/8.
@@ -137,20 +137,20 @@ input và khả năng vận hành; chưa có cơ sở gọi là flight-ready ho�
 
 ## 5. Bằng chứng và tái hiện
 
-- [03 JSON](evidence/image03.json), [Stellarium JSON](evidence/stellarium.json).
-- [200701 raw JSON](evidence/image200701-raw.json), [200701 calibrated JSON](evidence/image200701-calibrated.json).
-- [Ablation03](evidence/image03-ablation.json).
-- [Synthetic CSV](evidence/synthetic-version01.csv), [DUST baseline report](evidence/dust-version01.md).
-- [Nguồn của từng snapshot](evidence/README.md).
+- [03 JSON](../../docs/evidence/image03.json), [Stellarium JSON](../../docs/evidence/stellarium.json).
+- [200701 raw JSON](../../docs/evidence/image200701-raw.json), [200701 calibrated JSON](../../docs/evidence/image200701-calibrated.json).
+- [Ablation03](../../docs/evidence/image03-ablation.json).
+- [Synthetic CSV](../../docs/evidence/synthetic-version01.csv), [DUST baseline report](../../docs/evidence/dust-version01.md).
+- [Nguồn của từng snapshot](../../docs/evidence/README.md).
 - Metadata trong JSON có source/input/config hashes; absolute paths là đường dẫn
   máy thực hiện lần đo, không phải yêu cầu của container tương lai.
 
 ```bash
 # Python 3.10, repo root; cần database đã materialize
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m examples.run_image_examples
-OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m examples.check_image03_experimental \
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m tools.diagnostics.check_image03_experimental \
   --image dataset/200701.bmp --output-dir out/image200701-raw-new --noise-trials 0
-OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m examples.check_image03_experimental \
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m tools.diagnostics.check_image03_experimental \
   --image dataset/calibration/openmv/session_01/200701_calibrated.bmp \
   --output-dir out/image200701-calibrated-new --noise-trials 0
 ```

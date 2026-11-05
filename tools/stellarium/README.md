@@ -1,6 +1,6 @@
 # Ubuntu Linux / dev/version2
 
-For native Ubuntu X11 capture, use the [Ubuntu setup guide](ubuntu.md).
+For native Ubuntu X11 capture, use the [Ubuntu setup guide](../../docs/operation.md).
 The Windows-specific instructions and historical validation below remain useful
 for Windows; Linux uses xdotool and MSS instead of Win32/PyGetWindow.
 The Remote Control API, scene preparation and labeling workflow are shared.
@@ -11,7 +11,7 @@ The Remote Control API, scene preparation and labeling workflow are shared.
 
 `dataset/stellarium_test/stellarium_view.png` được người dùng thu bằng script
 `data/extract_star.py`. Script đã chuyển đến
-[`tools/stellarium/extract_star.py`](../tools/stellarium/extract_star.py): đây là
+[`tools/stellarium/extract_star.py`](../../tools/stellarium/extract_star.py): đây là
 công cụ thu dữ liệu, không phải catalog asset nên không còn đặt trong `data/`.
 Đường dẫn cũ đã bỏ; cập nhật shortcut/lệnh đang dùng.
 
@@ -178,7 +178,7 @@ Từ root repo, môi trường đánh giá Python 3.10:
 python3.10 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
-bash examples/materialize_assets.sh
+bash scripts/materialize_assets.sh
 ```
 
 Trên Windows có thể cài `-e .` bằng interpreter capture ở trên và dùng
@@ -198,7 +198,7 @@ Không sửa preset fixture để hợp với ảnh mới. Ví dụ ảnh mới 
 Để chấm cùng nhãn sau inference (đổi `--vertical-fov` theo phiên thu):
 
 ```bash
-.venv/bin/python examples/check_stellarium.py \
+.venv/bin/python tools/diagnostics/check_stellarium.py \
   --dataset captures/stellarium/session-001 \
   --database data/default_database.npz --vertical-fov 16.9761 \
   --config configs/examples/stellarium.json \
@@ -235,9 +235,9 @@ Không dùng đúng một ảnh đã tuning để công bố accuracy hoặc FPS
 Lý do: Top-Hat 7×7 trên ảnh render này làm nhiều lõi sao sáng xuống dưới
 ngưỡng; top-20 cũ không khớp sao trong danh sách nhãn. Config mới là opt-in,
 không thay default benchmark cũ. Code chính:
-[`star_detector.py`](../models/detector/star_detector.py),
-[`pipeline.py`](../models/pipeline/pipeline.py),
-[`stellarium.json`](../configs/examples/stellarium.json).
+[`star_detector.py`](../../models/detector/star_detector.py),
+[`pipeline.py`](../../models/pipeline/pipeline.py),
+[`stellarium.json`](../../configs/examples/stellarium.json).
 
 Trên fixture hiện tại: **16 matches, 16/16 cặp đúng**, full attitude error
 **0.002738°**, boresight error **0.002289°** so với reference nhãn; 19/20

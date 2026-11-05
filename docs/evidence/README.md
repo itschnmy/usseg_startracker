@@ -21,7 +21,7 @@ vào container runtime chỉ vì chúng được nhắc tới ở đây.
 `dust-version01.md` là nguyên bản báo cáo cũ. Cột Star-ID precision/recall đo
 catalog-set overlap, không chứng minh correspondence từng centroid đúng. Các
 CSV strata được nhắc trong đó vẫn nằm ở evaluator gốc. Đọc diễn giải hiện tại
-trong [current-results.md](../current-results.md) trước khi dùng số liệu.
+trong [current-results.md](../../tools/diagnostics/baseline.md) trước khi dùng số liệu.
 
 Ảnh overlay200701 trong `docs/assets/` copy từ output cùng JSON tương ứng.
 Gain8 chỉ phục vụ hiển thị. Các snapshot bất biến không thay cho regression run

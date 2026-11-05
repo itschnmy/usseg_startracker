@@ -19,8 +19,6 @@ dataset/stellarium_test/*
 !dataset/stellarium_test/stars_labels.json
 data/*
 !data/default_database.npz
-examples/*
-!examples/__init__.py
-!examples/check_stellarium.py
-examples/tests
+examples
+tests
 schemas

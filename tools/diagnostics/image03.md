@@ -6,7 +6,7 @@ image, **not** a held-out DUST/LOST benchmark or proof of flight readiness.
 Image03 was acquired from hardware/camera according to the user, unlike the
 direct Stellarium screenshot fixture. Camera model, exposure and whether it
 captures the physical sky or a simulator display have not been documented.
-See the [fixture README with original/result images](../dataset/README.md#image03-hardware-camera-capture).
+See the [fixture README with original/result images](../../dataset/README.md#image03-hardware-camera-capture).
 The standard `examples/run_image_examples.py` now uses this preset for image03.
 
 ## Reproduce
@@ -17,7 +17,7 @@ The standard `examples/run_image_examples.py` now uses this preset for image03.
   --image dataset/03.bmp --output out/image03-experimental/single.json
 
 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python \
-  -m examples.check_image03_experimental
+  -m tools.diagnostics.check_image03_experimental
 ```
 
 The second command writes `out/image03-experimental/summary.md`, `results.json`

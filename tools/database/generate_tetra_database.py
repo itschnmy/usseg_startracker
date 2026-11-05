@@ -29,7 +29,7 @@ def main() -> None:
     parser.add_argument("--catalog", required=True, type=Path, help="Full CDS hip_main.dat[.gz]")
     args = parser.parse_args()
 
-    repo = Path(__file__).resolve().parents[1]
+    repo = Path(__file__).resolve().parents[2]
     output = args.output.resolve()
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="usseg-tetra-generator-") as temp_name:

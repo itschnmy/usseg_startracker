@@ -15,7 +15,7 @@ import numpy as np
 from models.pipeline import PipelineConfig, StarTrackerPipeline
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 
 
 def read_records(path):

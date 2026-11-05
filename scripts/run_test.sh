@@ -10,7 +10,7 @@ input_dir=$(realpath -e -- "$1")
 mkdir -p -- "$2"
 output_dir=$(realpath -e -- "$2")
 config_dir=$(realpath -e -- "$3")
-image_name=${USSEG_IMAGE:-localhost/usseg:v3-dev}
+image_name=${USSEG_IMAGE:-localhost/usseg:prod-version2}
 # --userns=keep-id runs with the host user's UID/GID; output must be host-writable.
 common=(--rm --pull=never --network=none --read-only --userns=keep-id
   --cap-drop=all --security-opt=no-new-privileges --stop-timeout=10

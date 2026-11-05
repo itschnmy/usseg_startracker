@@ -13,7 +13,7 @@ fi
 sources=(models/cpp/estimator.cpp models/cpp/function.cpp models/cpp/CentroidMatcher.cpp
   models/cpp/StarCatalog.cpp models/cpp/PairCatalog.cpp models/cpp/VotingIdentifier.cpp)
 for test_name in lis tracking; do
-  g++ -std=c++14 -O2 -I models/cpp "examples/tests/test_$test_name.cpp" "${sources[@]}" -o "$output_dir/test_$test_name"
+  g++ -std=c++14 -O2 -I models/cpp "tests/cpp/test_$test_name.cpp" "${sources[@]}" -o "$output_dir/test_$test_name"
   (cd data && "$output_dir/test_$test_name") 2>&1 | tee "$output_dir/$test_name.log"
 done
 if command -v pkg-config >/dev/null && pkg-config --exists opencv4; then
@@ -21,7 +21,7 @@ if command -v pkg-config >/dev/null && pkg-config --exists opencv4; then
   read -r -a cv_flags <<< "$(pkg-config --cflags opencv4)"
   read -r -a cv_libs <<< "$(pkg-config --libs opencv4)"
   g++ -std=c++14 -O2 -I models/cpp/ImagePreprocessor "${cv_flags[@]}" \
-    examples/tests/test_image_preprocessing.cpp models/cpp/ImagePreprocessor/ImagePreprocessor.cpp \
+    tests/cpp/test_image_preprocessing.cpp models/cpp/ImagePreprocessor/ImagePreprocessor.cpp \
     "${cv_libs[@]}" -o "$output_dir/test_image_preprocessing"
   (cd "$output_dir" && ./test_image_preprocessing "$repo_dir/dataset/calibration/openmv/session_01/03_calibrated.bmp") \
     2>&1 | tee "$output_dir/image_preprocessing.log"

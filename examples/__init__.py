@@ -1,1 +1,1 @@
-"""Example scripts and database generation tools."""
+"""Image and batch examples for the USSEG pipeline."""

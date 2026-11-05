@@ -1,6 +1,6 @@
 """Blind development ablation; reference metadata is used ONLY after inference.
 
-Run: python -m examples.check_image03_experimental
+Run: python -m tools.diagnostics.check_image03_experimental
 This is not a held-out benchmark, nor a full WCS attitude validation.
 """
 from __future__ import annotations
@@ -17,7 +17,7 @@ import numpy as np
 
 from models.pipeline import PipelineConfig, StarTrackerPipeline
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 
 
 def main():
@@ -93,7 +93,7 @@ def main():
         print("negative", index, records[-1]["result"]["status"], flush=True)
 
     # References are read only AFTER every blind run above is finished.
-    from examples.check_stellarium import reference, score
+    from usseg_runtime.reference import reference, score
     labels = json.loads((ROOT / "dataset/stellarium_test/stars_labels.json").read_text())
     ref, _, _ = reference(labels)
     for record in records:
@@ -160,7 +160,7 @@ def main():
              "- Các trường mới mặc định null giữ hành vi baseline. Preset cũ không bị ghi đè.",
              "- Tâm tham khảo48.773°/41.364° lấy từ screenshot Astrometry job17182488; chưa có WCS gốc để chấm roll/quaternion đầy đủ.",
              "- Không kết luận cải thiện DUST hoặc benchmark LOST đầy đủ từ smoke test này.", "",
-             "## Chạy lại", "", "```bash", "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m examples.check_image03_experimental", "```", "",
+             "## Chạy lại", "", "```bash", "OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m tools.diagnostics.check_image03_experimental", "```", "",
              "Chi tiết config, source checksum và mọi kết quả: [results.json](results.json). Overlay chỉ vẽ ID thực sự do solver trả về."]
     if not is_image03:
         rows.insert(2, "Ảnh mới dùng lại preset/FOV image03; chưa xác nhận calibration quang học. Không chấm sai lệch tâm theo reference ảnh03.")

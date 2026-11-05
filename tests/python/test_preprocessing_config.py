@@ -100,7 +100,7 @@ def test_cli_reports_bad_override_as_error_json(tmp_path):
 
 def test_stellarium_preset_solves_blind_then_agrees_with_labels():
     from models.pipeline import StarTrackerPipeline
-    from examples.check_stellarium import reference, score
+    from usseg_runtime.reference import reference, score
 
     root = Path(__file__).resolve().parents[2]
     image = root / "dataset/stellarium_test/stellarium_view.png"

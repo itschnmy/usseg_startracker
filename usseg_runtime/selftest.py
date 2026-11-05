@@ -46,7 +46,7 @@ def self_test(output_dir: Path, config_path: Path):
     checks.append(("black_no_solve", records.get("black", {}).get("status") == "no_solve", "black frame"))
     checks.append(("corrupt_rejected", records.get("corrupt", {}).get("status") == "invalid_input", "bad payload"))
     # Check numerical attitude against independent simulator label metadata after inference.
-    from examples.check_stellarium import reference, score
+    from usseg_runtime.reference import reference, score
     labels = json.loads((ROOT/"dataset/stellarium_test/stars_labels.json").read_text())
     ref, _, _ = reference(labels)
     result = records.get("stellarium", {}).get("algorithm")

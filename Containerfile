@@ -3,7 +3,7 @@ FROM ${BASE_IMAGE}
 ARG SOURCE_REVISION=development
 LABEL org.opencontainers.image.title="USSEG file runtime" \
       org.opencontainers.image.revision="${SOURCE_REVISION}" \
-      org.opencontainers.image.version="0.3.0-dev"
+      org.opencontainers.image.version="prod-version2"
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 \
     OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 NUMEXPR_NUM_THREADS=1
 WORKDIR /app
@@ -13,7 +13,6 @@ COPY models /app/models
 COPY utils /app/utils
 COPY usseg_runtime /app/usseg_runtime
 COPY configs /app/configs
-COPY examples/__init__.py examples/check_stellarium.py /app/examples/
 COPY dataset/03.bmp /app/dataset/03.bmp
 COPY dataset/stellarium_test/stellarium_view.png dataset/stellarium_test/stars_labels.json /app/dataset/stellarium_test/
 COPY data/default_database.npz /app/data/default_database.npz

@@ -573,7 +573,7 @@ def main(argv=None):
     global STELLARIUM_URL, API_AUTH
     args = build_parser().parse_args(argv)
     if sys.platform not in ("win32", "linux"):
-        raise SystemExit("Capture requires Ubuntu X11 or Windows. See docs/ubuntu.md.")
+        raise SystemExit("Capture requires Ubuntu X11 or Windows. See tools/stellarium/README.md.")
     # WSL/PowerShell redirection can give Windows Python a cp1252 stdout.
     # Vietnamese progress messages must not abort capture before API setup.
     for stream in (sys.stdout, sys.stderr):
