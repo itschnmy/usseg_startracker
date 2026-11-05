@@ -2,7 +2,8 @@
 
 Nhánh `dev/version3` đã có implementation batch/watch/self-test, worker watchdog,
 ready protocol và persistent output. Config kèm repo là **profile lab**, Python3.10.
-Architecture, camera SDK layout, quota và deadline bay vẫn chờ bên phần cứng.
+Yêu cầu Jetson/JPG mới xem [production](production-jetson.md).
+Người mới bắt đầu bằng [quickstart](quickstart.md).
 Container đã build/load/run bằng Podman4.9.3 rootless trên WSL2 amd64;
 self-test8/8, camera batch4/4 solved và resume không trùng kết quả.
 Xem [bằng chứng Podman](evidence/version3/podman-validation.json).

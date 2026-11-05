@@ -1,8 +1,8 @@
-# USSEG — hiện trạng và kết quả làm baseline cho version 3
+# USSEG — kết quả lab và benchmark lịch sử
 
 Ngày tổng hợp: 2026-11-04. Code baseline: `33d9c17` (`dev/version2`).
-Đây là báo cáo baseline trước runtime. Version3 đã có implementation;
-xem [báo cáo triển khai](version3-report.md). Chưa build/test container trên máy đích.
+Đây là báo cáo baseline trước runtime. Lượt mới xem [Podman 05/11/2026](podman-recheck-20261105.md). Version3 đã có implementation;
+xem [audit production](production-jetson.md). Chưa build/test container trên máy đích.
 
 ## 1. Pipeline Python đang có
 
@@ -28,10 +28,10 @@ Public solver accepts centroid XY; internal Tetra uses YX. Quaternion public
 `wxyz` maps inertial catalog → camera. C++ voting/QUEST/tracking là nhánh xử lý
 khác; test C++ không xác nhận độ chính xác pipeline Python trên ảnh camera.
 
-Chưa có raw RG10/RG12 decoder, directory queue, supervisor hard deadline, resume
-và container entrypoint. File loader hiện đọc grayscale; detector vẫn ép uint8.
-Dark subtraction hiện chỉ nhận ảnh 8-bit. Các giới hạn này phải giải quyết trước
-khi áp dụng cho buffer RAW camera bên bay.
+Baseline trước runtime chưa có RAW adapter/queue/watchdog/resume; production
+hiện đã có các phần này, native-depth calibration cho RAW unpacked và container
+entrypoint. Pipeline Python vẫn nhận uint8; dark ở API pipeline trực tiếp là
+8-bit. JPG/resize/camera mới còn cần hoàn thiện theo tài liệu production.
 
 ## 2. Kết quả ảnh development đã đo
 
@@ -121,10 +121,11 @@ Không dùng catalog-set overlap làm correspondence-level star-ID precision.
 
 2026-11-04, Python3.10.21, OpenCV/BLAS một thread:
 `python -m pytest examples/tests -q` → **67 passed, 2 skipped** (external CSV).
-Không phải tất cả test nghiệm thu bay: chưa test RAW hardware, Podman target,
-power-loss, persistent queue, memory/time budget và soak theo cadence máy đích.
-Máy hiện tại chưa có Podman. Chưa chứng nhận Python3.11–3.14 hay ARM64 dù
-pyproject v2 mở dải Python rộng hơn.
+Số 67 test là baseline lịch sử, không phải tổng test production hiện tại.
+Podman đã chạy trên WSL2 amd64; runtime có test queue/watchdog/resume.
+Lượt 05/11/2026 chạy lại 38 test decoder/service và Podman self-test 8/8.
+Chưa nghiệm thu camera bay, Jetson ARM64, mất điện vật lý, ngân sách tài nguyên
+và soak trên máy đích. Chưa chứng nhận Python3.11–3.14.
 
 NPZ default49,414,085 bytes; pattern table giải nén98,952,736 bytes, chưa gồm
 các array/temporary khác. Cần đo peak RSS/cgroup trên máy đích. Tetra database
@@ -165,6 +166,7 @@ chưa khớp code hoặc trộn benchmark cũ với nhận định production. N
 được thay bằng báo cáo này và hợp đồng version3. Git commit `33d9c17` lưu toàn bộ
 bản cũ; không xóa code, ảnh gốc, database hoặc output thí nghiệm.
 
-Giữ `version01-validation.md` như lịch sử audit có gắn nhãn; giữ hướng dẫn Ubuntu,
-Stellarium, dark-frame và các preset để tái hiện. Mục lục vận hành chỉ trỏ vào docs
-còn hiệu lực; tài liệu cũ không dùng làm tiêu chí nghiệm thu version3.
+Audit `version01-validation.md` và các kế hoạch/báo cáo version3 cũ đã được dọn
+khỏi cây hiện tại; khôi phục bằng Git tại `d494f0f`. Giữ hướng dẫn Ubuntu,
+Stellarium, dark-frame và preset để tái hiện. Người mới đọc `quickstart.md`;
+tiêu chí bàn giao hiện hành nằm trong `production-jetson.md`.

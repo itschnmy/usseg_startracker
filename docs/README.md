@@ -1,27 +1,32 @@
 # Tài liệu USSEG
 
-## Tài liệu chính của version3
+## Lộ trình cho người mới
 
-| Tài liệu | Nội dung |
-|---|---|
-| [Kế hoạch version3](version3-plan.md) | Podman, camera RAW, input/output, lifecycle, test matrix và acceptance gates |
-| [Hướng dẫn runtime](version3-runtime.md) | Lệnh đã triển khai, schema draft, stop/resume, build/run Podman |
-| [Báo cáo triển khai](version3-report.md) | Kết quả kiểm thử thực tế, camera smoke, các phần chờ hardware |
-| [Hiện trạng và kết quả](current-results.md) | Pipeline đang chạy, ảnh03/200701/Stellarium, LOST-evals/DUST và giới hạn |
+| Thứ tự | Tài liệu | Mục đích |
+|---|---|---|
+| 1 | [Bắt đầu chạy code](quickstart.md) | Cài môi trường, chạy mẫu, batch/Podman và đọc JSON |
+| 2 | [Production Jetson / VinSpace](production-jetson.md) | Kiến trúc, input/output, phần còn thiếu và test bàn giao |
+| 3 | [Runtime chi tiết](version3-runtime.md) | Schema, watchdog, stop/resume |
 
-Version3 đã có runtime và Containerfile; chưa kiểm chứng Podman trên máy đích.
-Bên phần cứng đọc hướng dẫn runtime và các điều kiện nghiệm thu trong kế hoạch.
+## Chỉ đọc khi cần
 
-## Hướng dẫn còn dùng
+- [Kiểm chứng Podman 05/11/2026](podman-recheck-20261105.md): kết quả mới và audit docs.
 
-- [Fixtures và ảnh kết quả](../dataset/README.md).
-- [Dark-frame8-bit](dark-frame.md).
-- [Stellarium capture](stellarium_image.md).
-- [Ubuntu setup](ubuntu.md).
-- [Preprocessing/presets](image-example-configs.md).
-- [Đối chứng ảnh03](image03-experimental.md).
-- [Audit version01](version01-validation.md): lịch sử, không phải trạng thái v3.
+- [Kết quả và bằng chứng](current-results.md): ảnh mẫu và benchmark lịch sử.
+- [Nguồn ảnh mẫu](../dataset/README.md).
+- [Preset ảnh](image-example-configs.md) và [đối chứng ảnh03](image03-experimental.md).
+- [Dark frame](dark-frame.md).
+- [Tạo ảnh Stellarium](stellarium_image.md).
+- [Thiết lập Ubuntu mở rộng](ubuntu.md).
 
-Docs01–07 cũ được loại khỏi version3; Git commit `33d9c17` giữ nguyên nội dung.
-Các báo cáo cũ trong `out/` là evidence lịch sử; không đọc một kết luận no_solve
-cũ thành kết quả của preset mới.
+## Tài liệu cũ đã dọn
+
+Đã bỏ `version3-plan.md`, `version3-report.md`, `version01-validation.md` và `summary_old.html` khỏi cây tài liệu hiện hành. Kế hoạch mới ở `production-jetson.md`; evidence và ảnh minh họa được giữ lại.
+
+Có thể khôi phục từ commit `d494f0f`, ví dụ:
+
+```bash
+git show d494f0f:docs/version3-report.md
+```
+
+Số liệu lịch sử trong `current-results.md` không phải cam kết hiệu năng Jetson/camera mới.
