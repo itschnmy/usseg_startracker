@@ -1,4 +1,42 @@
-# Kiểm chứng docs và Podman — 05/11/2026
+# Báo cáo kiểm thử — prod/version2
+
+Ngày thực hiện: **05/11/2026**. Môi trường Linux WSL2 amd64, Podman 4.9.3,
+Python 3.10. Thuật toán và preset được giữ nguyên khi tổ chức lại mã nguồn.
+
+## Kết quả version2
+
+| Hạng mục | Kết quả |
+|---|---|
+| Python | 105 passed, 2 skipped do thiếu CSV bên ngoài |
+| C++ | LIS, tracking và preprocessing đạt |
+| Batch local | 4/4 ảnh có nghiệm |
+| Podman self-test | 8/8 đạt, gồm kiểm tra resume và xử lý input lỗi |
+| Batch Podman | 4/4 ảnh có nghiệm, exit 0 |
+| Đối chiếu version1 | Quaternion, RA/Dec và ID sao giống hệt trên bốn ảnh mẫu |
+| Nội dung image | Không chứa examples, tools hoặc tests |
+| OCI archive | Đã export, kiểm tra SHA256 đạt |
+
+Revision mã nguồn runtime: `bf3d2ad7dc27dbbfc7bd6fb55b4b580d983c76fb`.
+Image `localhost/usseg:prod-version2`:
+`3e29c8d47e84599a8b68e547cc3419b3d28cad743ef23a6407ea21468ce1fb2b`.
+
+| Ảnh | Sao nhận dạng | Worker time (ms) |
+|---|---:|---:|
+| 03.bmp | 7 | 108.405 |
+| 200701 raw | 7 | 27.018 |
+| 200701 calibrated | 7 | 101.745 |
+| Stellarium | 16 | 274.690 |
+
+Timing là một lượt smoke trên bốn ảnh, không dùng để kết luận cải thiện tốc độ.
+Image sử dụng lại layer dependency đã kiểm chứng, cùng lockfile; chưa hoàn tất
+phép build từ base sạch qua mạng trong lượt này. Chưa nghiệm thu ARM64,
+JPG lớn hoặc giới hạn 4 GB/4 core.
+
+[Kết quả máy đọc](evidence/prod-version2-validation.json).
+Raw output: `out/prod-version2-podman/`, `out/prod-version2-validation-local/`,
+`out/prod-version2-cpp/`. Bản export: `out/prod-version2-release/`.
+
+## Đối chứng version1 — 05/11/2026
 
 ## Phạm vi kiểm tra
 

@@ -1,0 +1,229 @@
+{
+  "date": "2026-11-05",
+  "architecture": "amd64",
+  "source_revision": "bf3d2ad7dc27dbbfc7bd6fb55b4b580d983c76fb",
+  "image_id": "3e29c8d47e84599a8b68e547cc3419b3d28cad743ef23a6407ea21468ce1fb2b",
+  "build_dependency_base": "5b6a423022729f1ccb6f5ec6c36c7523a3b952ad311cc804ea8bedaa1f5c5440",
+  "build_note": "Reused previously validated dependency-only image layer; default cold build downloading NumPy was interrupted due to slow network. Runtime dependencies unchanged.",
+  "python_tests": {
+    "passed": 105,
+    "skipped": 2
+  },
+  "cpp_suites": [
+    "LIS passed",
+    "tracking passed",
+    "image preprocessing passed"
+  ],
+  "selftest": {
+    "checks": [
+      {
+        "detail": "exit=3",
+        "name": "batch_error_exit",
+        "passed": true
+      },
+      {
+        "detail": "status=solved, matches=7",
+        "name": "image03",
+        "passed": true
+      },
+      {
+        "detail": "status=solved, matches=16",
+        "name": "stellarium",
+        "passed": true
+      },
+      {
+        "detail": "black frame",
+        "name": "black_no_solve",
+        "passed": true
+      },
+      {
+        "detail": "bad payload",
+        "name": "corrupt_rejected",
+        "passed": true
+      },
+      {
+        "detail": "attitude_error_deg=0.002737686386468914",
+        "name": "stellarium_reference",
+        "passed": true
+      },
+      {
+        "detail": "unit quaternion",
+        "name": "quaternion_norm",
+        "passed": true
+      },
+      {
+        "detail": "results_before=4, after=4, exit=0",
+        "name": "resume_no_duplicates",
+        "passed": true
+      }
+    ],
+    "completed_at_utc": "2026-11-05T15:42:54.958495+00:00",
+    "failed": 0,
+    "passed": 8,
+    "schema_version": "1.0"
+  },
+  "summary": {
+    "compute_fps": 7.814656967427025,
+    "database_load_ns": [
+      1171835645
+    ],
+    "frames_this_run": 4,
+    "peak_worker_rss_kib": 225072,
+    "run_id": "20261105T154315Z-34b2f4fdffd6",
+    "schema_version": "1.0",
+    "solved_updates_per_compute_second": 7.814656967427025,
+    "statuses_latest": {
+      "solved": 4
+    },
+    "statuses_this_run": {
+      "solved": 4
+    },
+    "timing_ns": {
+      "supervisor_frame_ns": {
+        "p50": 240574935.0,
+        "p95": 508067103.04999995,
+        "p99": 538176789.41
+      },
+      "worker_total_ns": {
+        "p50": 105075200.0,
+        "p95": 249747066.39999995,
+        "p99": 269701247.67999995
+      }
+    },
+    "unique_markers_total": 4,
+    "updated_at_utc": "2026-11-05T15:43:23.165157+00:00",
+    "worker_starts": 1
+  },
+  "pose_and_catalog_ids_equal_prod_version1": true,
+  "frames": [
+    {
+      "job_id": "image200701-raw",
+      "status": "solved",
+      "pose": {
+        "camera_axes": "+X boresight,+Y image-left,+Z image-up",
+        "dec_deg": -31.68342153897061,
+        "direction": "catalog_to_camera",
+        "inertial_reference": "database catalog; epoch/frame not certified for flight",
+        "quaternion_wxyz": [
+          0.6917497809155075,
+          0.033056868858339965,
+          -0.40806203651071876,
+          0.5948738171943313
+        ],
+        "ra_deg": 267.25096615882285,
+        "roll_deg": 321.3707177767416,
+        "solved_fov_deg": 16.767347618341248
+      },
+      "num_matches": 7,
+      "matched_catalog_ids": [
+        90185,
+        89931,
+        88635,
+        89642,
+        87261,
+        87072,
+        85755
+      ],
+      "worker_total_ns": 27018487
+    },
+    {
+      "job_id": "stellarium",
+      "status": "solved",
+      "pose": {
+        "camera_axes": "+X boresight,+Y image-left,+Z image-up",
+        "dec_deg": 41.128079538967356,
+        "direction": "catalog_to_camera",
+        "inertial_reference": "database catalog; epoch/frame not certified for flight",
+        "quaternion_wxyz": [
+          0.32564267775684236,
+          0.7312613807417818,
+          -0.23150072840961297,
+          0.5528300391664648
+        ],
+        "ra_deg": 291.9504090582572,
+        "roll_deg": 256.4354542250502,
+        "solved_fov_deg": 29.71297359911519
+      },
+      "num_matches": 16,
+      "matched_catalog_ids": [
+        97165,
+        95947,
+        93194,
+        92420,
+        95853,
+        99675,
+        94779,
+        98110,
+        92862,
+        92791,
+        91971,
+        94713,
+        94481,
+        91926,
+        96683,
+        96052
+      ],
+      "worker_total_ns": 274689793
+    },
+    {
+      "job_id": "image200701-calibrated",
+      "status": "solved",
+      "pose": {
+        "camera_axes": "+X boresight,+Y image-left,+Z image-up",
+        "dec_deg": -31.683187826955994,
+        "direction": "catalog_to_camera",
+        "inertial_reference": "database catalog; epoch/frame not certified for flight",
+        "quaternion_wxyz": [
+          0.6917625084690091,
+          0.033018328245871816,
+          -0.4080207793668524,
+          0.594889456522284
+        ],
+        "ra_deg": 267.2564134869964,
+        "roll_deg": 321.3801867023378,
+        "solved_fov_deg": 16.765450058933595
+      },
+      "num_matches": 7,
+      "matched_catalog_ids": [
+        90185,
+        89931,
+        88635,
+        89642,
+        87261,
+        87072,
+        85755
+      ],
+      "worker_total_ns": 101745451
+    },
+    {
+      "job_id": "image03",
+      "status": "solved",
+      "pose": {
+        "camera_axes": "+X boresight,+Y image-left,+Z image-up",
+        "dec_deg": 41.369726334352976,
+        "direction": "catalog_to_camera",
+        "inertial_reference": "database catalog; epoch/frame not certified for flight",
+        "quaternion_wxyz": [
+          0.3137189580105515,
+          -0.8053998180482747,
+          -0.1656859485013591,
+          -0.4748259838528057
+        ],
+        "ra_deg": 48.81633613525443,
+        "roll_deg": 117.99210787753236,
+        "solved_fov_deg": 16.747192890922307
+      },
+      "num_matches": 7,
+      "matched_catalog_ids": [
+        15863,
+        14576,
+        14354,
+        17529,
+        14668,
+        14632,
+        16335
+      ],
+      "worker_total_ns": 108404949
+    }
+  ]
+}
