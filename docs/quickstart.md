@@ -1,13 +1,11 @@
-# Bắt đầu chạy USSEG
+# Hướng dẫn cài đặt và vận hành
 
-## 1. Đọc theo thứ tự
+## 1. Phạm vi áp dụng
 
-1. Trang này: chạy thử và đọc kết quả.
-2. [Production Jetson](production-jetson.md): yêu cầu VinSpace và phần còn thiếu.
-3. [Runtime chi tiết](version3-runtime.md): schema, timeout, stop/resume.
-
-Các lệnh dưới dùng ảnh mẫu BMP/PNG đã kiểm chứng trên amd64. JPG lớn, resize,
-FOV 8,1° và Jetson ARM64 chưa được nghiệm thu. Pipeline chạy LIS từng ảnh.
+Quy trình áp dụng cho `prod/version1`, Python 3.10 trên Linux amd64, sử dụng
+ảnh BMP/PNG và cấu hình mẫu đã kiểm thử. Hệ thống xử lý từng ảnh theo chế độ
+Lost-in-Space (LIS). Các yêu cầu triển khai JPG, HFOV 8,1° và Jetson ARM64
+được mô tả trong [đặc tả Jetson](production-jetson.md).
 
 ## 2. Cài môi trường — Linux, Python 3.10
 
@@ -20,11 +18,11 @@ python -m pip install --only-binary=:all: --require-hashes -r requirements-runti
 bash examples/materialize_assets.sh
 ```
 
-Nếu đã clone, dùng repo hiện có. Luôn chạy từ thư mục gốc repo.
+Các lệnh được thực hiện tại thư mục gốc của repository.
 Script materialize lấy database từ `origin/main` khi thiếu; clone single-branch
 cần fetch ref đó trước.
 
-## 3. Chạy tự kiểm tra và hai ảnh mẫu
+## 3. Kiểm tra hệ thống và xử lý ảnh mẫu
 
 ```bash
 python -m usseg_runtime.cli self-test \
@@ -39,10 +37,11 @@ python -m models.pipeline.cli \
   --image dataset/stellarium_test/stellarium_view.png --output out/stellarium.json
 ```
 
-Self-test: xem `out/first-selftest/self-test/<ID>/report.json`; baseline **8/8 pass**.
-Có ảnh đen/payload lỗi cố ý, nên không yêu cầu mọi ảnh đều solved.
-Ảnh03 có **7 match**, Stellarium **16 match**. Không cần mở Stellarium.
-[Đo lại Podman 05/11/2026](podman-recheck-20261105.md) có số liệu và giới hạn.
+Báo cáo tự kiểm tra lưu tại `out/first-selftest/self-test/<ID>/report.json`.
+Kết quả đã xác nhận: **8/8 phép kiểm tra đạt**, ảnh03 có **7 sao nhận dạng**,
+ảnh Stellarium có **16 sao nhận dạng**. Bộ kiểm tra bao gồm ảnh đen và dữ liệu
+hỏng để xác nhận xử lý lỗi. Ảnh Stellarium được lưu sẵn trong repository.
+Chi tiết: [báo cáo kiểm thử Podman](podman-recheck-20261105.md).
 
 ## 4. Chuẩn bị input và chạy batch
 
@@ -56,9 +55,10 @@ python -m usseg_runtime.cli batch \
   --input out/demo-input --output out/demo-output --config configs/runtime/development.json
 ```
 
-Helper tạo metadata và ready marker; chỉ copy ảnh vào folder chưa đủ.
-Job đã tồn tại không bị ghi đè. Chạy lại batch cùng deployment/output sẽ resume;
-muốn đo lại, dùng output mới. Đổi source/config/database cũng cần output mới.
+Lệnh `prepare-input` tạo metadata và dấu hiệu ảnh đã sẵn sàng (`.ready`).
+Mỗi job có mã định danh riêng và không bị ghi đè. Khi chạy lại cùng cấu hình,
+hệ thống bỏ qua kết quả đã hoàn tất. Sử dụng thư mục output mới để đo lại hoặc
+khi thay đổi mã nguồn, cấu hình hay database.
 
 Kết quả: `out/demo-output/runs/<run_id>/summary.json`, `summary.csv` và
 `results/*.json`. CSV ánh xạ job với file kết quả.
@@ -91,7 +91,7 @@ Archive phải đúng kiến trúc host. Build hiện theo kiến trúc máy bui
 archive amd64 không chạy native trên Jetson ARM64. Tên archive vẫn là
 `usseg-v3.oci.tar` theo script hiện tại.
 
-## 6. Đọc JSON
+## 6. Tra cứu kết quả
 
 | Nội dung | CLI một ảnh | Runtime / Podman |
 |---|---|---|
@@ -106,5 +106,5 @@ Quaternion là catalog→camera, wxyz; tên legacy “body” ở CLI chưa có 
 transform. Có nghiệm chưa chứng minh đúng: accuracy cần reference độc lập.
 Timing ns chia 1.000.000 ra ms; không coi compute FPS là tốc độ chụp camera.
 
-Muốn chỉnh preset: [cấu hình ảnh](image-example-configs.md).
-Muốn tự tạo dữ liệu: [Stellarium](stellarium_image.md).
+Tài liệu liên quan: [cấu hình xử lý ảnh](image-example-configs.md),
+[thu thập ảnh Stellarium](stellarium_image.md).

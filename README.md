@@ -1,16 +1,16 @@
 # USSEG Star Tracker
 
-`prod/version1` — ảnh → phát hiện sao → Tetra → hướng camera. Python **3.10**, chạy local hoặc **Podman**; batch xuất JSON từng ảnh.
+Phần mềm xác định hướng camera từ ảnh sao, gồm phát hiện tâm sao, nhận dạng bằng Tetra và ước lượng tư thế bằng SVD. Phiên bản `prod/version1` sử dụng Python 3.10, triển khai bằng Podman và xuất kết quả JSON theo từng ảnh.
 
-## Người mới đọc theo thứ tự
+## Tài liệu triển khai
 
-1. [Bắt đầu chạy code](docs/quickstart.md): cài môi trường, chạy ảnh03, Stellarium, batch và Podman; nơi đọc kết quả.
-2. [Production Jetson / VinSpace](docs/production-jetson.md): kiến trúc, yêu cầu camera và các bước trước bàn giao.
-3. [Runtime chi tiết](docs/version3-runtime.md): schema, watchdog và stop/resume.
+1. [Hướng dẫn cài đặt và vận hành](docs/quickstart.md).
+2. [Đặc tả triển khai Jetson / VinSpace](docs/production-jetson.md).
+3. [Đặc tả runtime và giao tiếp dữ liệu](docs/version3-runtime.md).
 
 **Hiện trạng 05/11/2026:** JPG độ phân giải lớn, resize, database HFOV 8,1° và nghiệm thu ARM64 còn cần hoàn thiện. Preset hiện có là preset lab.
 
-## Chạy nhanh khi đã có môi trường và database
+## Kiểm tra hệ thống
 
 Từ thư mục gốc repo:
 
@@ -19,7 +19,7 @@ Từ thư mục gốc repo:
   --config configs/runtime/development.json --output out/first-selftest
 ```
 
-Nếu chưa có môi trường, làm theo [quickstart](docs/quickstart.md). Kết quả nằm ở `out/first-selftest/self-test/<ID>/report.json`.
+Quy trình cài đặt được mô tả trong [hướng dẫn vận hành](docs/quickstart.md). Kết quả kiểm tra lưu tại `out/first-selftest/self-test/<ID>/report.json`.
 
 ## Kết quả đã kiểm chứng
 
@@ -29,9 +29,9 @@ Nếu chưa có môi trường, làm theo [quickstart](docs/quickstart.md). Kế
 | Stellarium fixture | 16/16 ID đúng; attitude error 0,002738° | Reference mô phỏng |
 | Podman rootless WSL2 amd64 | Self-test 8/8, batch mẫu 4/4 có nghiệm | Chưa nghiệm thu Jetson |
 
-`solved` / `ok` nghĩa là có nghiệm, chưa chứng minh hướng đúng. [Kết quả và bằng chứng](docs/current-results.md).
+Trạng thái `solved` / `ok` cho biết thuật toán đã trả nghiệm. Độ chính xác được đánh giá riêng bằng dữ liệu tham chiếu. [Báo cáo kết quả](docs/current-results.md).
 
-## Cấu trúc cần biết
+## Cấu trúc mã nguồn
 
 | Thư mục | Nội dung |
 |---|---|

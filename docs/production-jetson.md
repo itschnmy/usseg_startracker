@@ -1,13 +1,19 @@
-# USSEG Production — Jetson / VinSpace
+# Đặc tả triển khai USSEG trên Jetson — VinSpace
 
-Cập nhật **05/11/2026**, audit code baseline `d494f0f` trên `prod/version1`.
-[Chạy thử](quickstart.md) · [Bằng chứng Podman mới](podman-recheck-20261105.md)
+Ngày cập nhật: **05/11/2026**. Nhánh: `prod/version1`.
+Mã nguồn thuật toán/runtime được kiểm thử tại revision `d494f0f`.
 
-## 1. Yêu cầu sau buổi họp
+Phần mềm nhận ảnh sao theo đợt, xác định hướng camera và lưu kết quả JSON.
+Tài liệu quy định kiến trúc triển khai, giao tiếp dữ liệu và các điều kiện
+nghiệm thu trên phần cứng VinSpace.
 
-| Hạng mục | Thông tin nhận được |
+[Hướng dẫn vận hành](quickstart.md) · [Báo cáo kiểm thử](podman-recheck-20261105.md)
+
+## 1. Cấu hình triển khai
+
+| Hạng mục | Yêu cầu |
 |---|---|
-| Thiết bị | Jetson “origin nano” 8 GB, dự kiến Orin Nano; cần xác nhận model/OS |
+| Thiết bị | Jetson, CPU ARM, RAM thiết bị 8 GB; model và hệ điều hành chờ xác nhận |
 | Ngân sách | 4 GB RAM, 4 core CPU ARM; xác nhận aarch64 và GB/GiB |
 | Camera | 16 MP / 24 MP, có cận hồng ngoại; ảnh khoảng 5000×4000 |
 | File | JPG; có resize; mount folder input |
@@ -16,9 +22,10 @@ Cập nhật **05/11/2026**, audit code baseline `d494f0f` trên `prod/version1`
 | Kết quả | JSON từng ảnh, trả hướng camera đang nhìn |
 
 5000×4000 là **20 MP**, nên cần kích thước thực theo từng camera.
-Bản runtime batch phù hợp; **chưa đủ để bàn giao nguyên trạng cho JPG/camera mới**.
+Chức năng xử lý theo đợt đã được triển khai. Hỗ trợ JPG, resize và cấu hình
+camera mới thuộc các hạng mục cần hoàn thiện trước nghiệm thu.
 
-## 2. Pipeline bàn giao dự kiến
+## 2. Kiến trúc triển khai
 
 ```mermaid
 flowchart LR
@@ -52,7 +59,7 @@ flowchart LR
 Xanh: khối đã có, cần kiểm chứng với camera mới. Vàng: cần thích ứng cho JPG/batch.
 Bản này dùng LIS độc lập từng ảnh; tracking chưa tích hợp.
 
-## 3. Khoảng cách giữa source hiện tại và yêu cầu
+## 3. Trạng thái thực hiện
 
 | Hạng mục | Hiện tại | Cần hoàn thiện |
 |---|---|---|
@@ -68,7 +75,7 @@ Bản này dùng LIS độc lập từng ảnh; tracking chưa tích hợp.
 Worker chỉ kiểm tra khoảng FOV có giao với database. Nới tolerance để vượt
 kiểm tra không chứng minh database phù hợp camera.
 
-### Hình học và resize
+### Thông số quang học và kích thước ảnh
 
 Theo pinhole lý tưởng/pixel vuông: FOV 8,1° × 6,3° suy tỷ lệ ảnh **1,2866**
 và diagonal **10,2487°**, khác 5000/4000 = **1,25** và diagonal 9,96°.
@@ -76,18 +83,18 @@ Với ảnh 5:4, HFOV 8,1° suy VFOV **6,4839°**. Có thể do làm tròn, crop
 distortion hoặc thông số thuộc camera khác; cần xác minh theo camera/mode.
 
 Resize toàn ảnh giữ tỷ lệ thì giữ FOV; crop làm đổi FOV/tâm quang học.
-Không kéo giãn sang tỷ lệ khác. Pipeline hiện suy focal pixel từ width/HFOV,
+Ảnh xử lý cần giữ nguyên tỷ lệ kích thước. Pipeline hiện suy focal pixel từ width/HFOV,
 chưa dùng intrinsics tổng quát hoặc distortion calibration.
 
 Nếu ảnh đúng 5000×4000, thử **5000×4000 → 2500×2000 → 1250×1000** trên cùng
-dữ liệu, rồi chọn theo accuracy và timing. Đây là ứng viên thử, chưa tối ưu.
+dữ liệu, rồi chọn theo accuracy và timing. Kích thước xử lý chính thức được lựa chọn sau kiểm thử.
 Không áp dark RAW trực tiếp vào JPG đã xử lý/nén hoặc giải Bayer lần nữa.
 NIR có phân bố độ sáng sao khác catalog quang học.
 
-## 4. Input/output thống nhất
+## 4. Giao tiếp dữ liệu
 
 Bên vận hành đưa JPG vào input; script dự kiến tự tạo job. Khi có nhiều camera,
-cần ánh xạ ảnh→profile và timestamp nếu có; không đoán camera từ kích thước.
+cần ánh xạ ảnh→profile và timestamp nếu có; profile phải được xác định theo mã camera.
 
 ```text
 input/                          # chỉ đọc, ảnh của một đợt
@@ -123,12 +130,12 @@ không phải nhãn ground truth. Camera→body không nằm trong yêu cầu hi
 Epoch/frame catalog phải được xác minh nếu cần accuracy cao.
 Chi tiết schema và phạm vi timing: [runtime](version3-runtime.md).
 
-## 5. Tinh gọn bản bàn giao
+## 5. Đóng gói và tài nguyên
 
 - Giữ Python 3.10, NumPy/SciPy/OpenCV headless, pipeline, runtime và database cần dùng.
   Pipeline hiện dùng CPU; chưa cần thêm CUDA/PyTorch.
-- Container đã loại docs/out/captures/C++ qua `.containerignore`; số file repo
-  không bằng kích thước image hoặc RAM. Giữ fixture đủ self-test.
+- Image sử dụng `.containerignore` để giới hạn thành phần đóng gói.
+  Bộ ảnh tự kiểm tra được cung cấp cùng runtime.
 - Cấu hình production tách preset lab; build ARM64, ghi revision/digest, xuất OCI
   và checksum. Archive amd64 không dùng làm bản native Jetson.
 - Áp quota cho self-test và batch, xác minh cgroup trên máy đích. Ví dụ dự kiến
@@ -137,7 +144,7 @@ Chi tiết schema và phạm vi timing: [runtime](version3-runtime.md).
 - Đo peak RAM toàn container. Ảnh 20 MP riêng gray uint8 ~20 MB, float32 ~80 MB;
   decoder/detector có nhiều buffer nên không suy RAM tổng từ dung lượng JPG.
 
-## 6. Test cần làm trước bàn giao
+## 6. Kiểm thử nghiệm thu
 
 ```mermaid
 flowchart TB
@@ -165,7 +172,7 @@ Ngưỡng 0,5° của DUST chưa phải tiêu chí VinSpace. Runtime tự đo đ
 tài nguyên và solve rate; accuracy cần reference độc lập.
 Throughput toàn batch khác compute FPS và tốc độ chụp camera.
 
-## 7. Bằng chứng và việc cần chốt
+## 7. Kết quả kiểm thử và thông tin cần xác nhận
 
 [Podman 05/11/2026](podman-recheck-20261105.md): self-test **8/8**, batch **4/4**
 có nghiệm; ảnh03 **7 match**, Stellarium **16/16 cặp đúng**, attitude error
@@ -176,7 +183,7 @@ Phía phần cứng cần xác nhận: model/OS/Podman; kích thước và FOV t
 JPG mẫu/mức nén/orientation; reference; đơn vị RAM; sai số và deadline chấp nhận.
 USSEG chịu trách nhiệm chọn resize, chuẩn bị script và đo performance.
 
-## 8. Điểm vào source
+## 8. Thành phần mã nguồn
 
 | Thành phần | File |
 |---|---|
@@ -186,4 +193,6 @@ USSEG chịu trách nhiệm chọn resize, chuẩn bị script và đo performan
 | Thuật toán | `models/pipeline/`, `models/detector/`, `models/identifier/`, `models/attitude/` |
 | JSON | `schemas/job.schema.json`, `schemas/result.schema.json` |
 
-Đây là audit và kiến trúc đích; các phần JPG/resize/ARM64 chưa được tuyên bố hoàn thành.
+Phạm vi kiểm thử hiện tại là ảnh mẫu trên amd64. Nghiệm thu Jetson ARM64,
+JPG độ phân giải lớn và camera HFOV 8,1° được thực hiện sau khi hoàn thiện
+các hạng mục tại phần 3.
