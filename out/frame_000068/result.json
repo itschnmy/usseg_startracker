@@ -1,0 +1,60 @@
+{
+  "status": "no_solve",
+  "message": "plate solver found no unique solution",
+  "config": {
+    "database": "/home/alex/Star Tracker/dev_version2/data/default_database.npz",
+    "fov_deg": 16.8,
+    "fov_max_error_deg": 0.8,
+    "sigma_threshold": 3.0,
+    "min_area": 3,
+    "max_area": 300,
+    "use_tophat": true,
+    "tophat_kernel_size": 31,
+    "component_mask": true,
+    "border_margin_px": 12,
+    "star_ranking": "flux",
+    "max_stars": 40,
+    "pattern_checking_stars": 16,
+    "max_input_stars": 40,
+    "verification_catalog_stars": 90,
+    "match_radius": 0.003,
+    "match_threshold": 0.001,
+    "solve_timeout_ms": 10000,
+    "attitude_method": "SVD",
+    "dark_frame": null
+  },
+  "num_centroids": 5,
+  "num_matches": 0,
+  "centroids_xy": [
+    [
+      272.6758793969849,
+      70.05778894472361
+    ],
+    [
+      233.56521739130434,
+      222.91304347826087
+    ],
+    [
+      109.77272727272727,
+      108.04545454545455
+    ],
+    [
+      113.61904761904762,
+      133.47619047619048
+    ],
+    [
+      232.25,
+      16.375
+    ]
+  ],
+  "quaternion_wxyz": null,
+  "fps": 9.083288294605266,
+  "timings": {
+    "image_load_ns": 18519289,
+    "detection_ns": 36235485,
+    "star_id_ns": 54936245,
+    "attitude_ns": 0,
+    "pipeline_ns": 91171730,
+    "total_ns": 110092289
+  }
+}
